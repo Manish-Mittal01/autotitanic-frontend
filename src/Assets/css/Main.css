@@ -1,0 +1,136 @@
+header.siteHeader {
+    box-shadow: 0 2px 5px 6px rgba(211,210,244,.3);
+    z-index: 999;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background-color: rgba(255,255,255,.65);
+}
+.backBtn svg {
+    height: 20px;
+    width: 20px;
+}
+table.table td p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+}
+header.siteHeader .navbar-brand img {
+    height: 40px;
+    object-fit: contain;
+}
+header.siteHeader .navLink {
+    color: #3E404C;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.4s;
+}
+header.siteHeader .navLink:hover , footer.siteFooter a:hover {
+    color: #a44cf6;
+}
+header.siteHeader .navLink.active {
+    color: #443fde;
+}
+footer.siteFooter {
+    color: #030407;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+}
+footer.siteFooter a {color: #030407;}
+footer .flogo img {
+    filter: grayscale(1);
+}
+
+.loader-wrapper > div {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    margin: 20px;
+    background-image: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(0,0,0,0) 100%);
+    animation: bounce 1.5s 0.5s linear infinite;
+}
+.loader-wrapper .yellow {
+    background-color: #7330ed;
+}
+.loader-wrapper .red {
+    background-color: #ac38fa;
+    animation-delay: 0.1s !important;
+}
+.loader-wrapper .blue {
+    background-color: #7330ed;
+    animation-delay: 0.2s !important;
+}
+.loader-wrapper .violet {
+    background-color: #ac38fa;
+    animation-delay: 0.3s !important;
+}
+.commonList span.icn {
+    height: 25px;
+    width: 25px;
+    background: #7330ed;
+    position: relative;
+    top: -3px;
+}
+.commonBtn.bg-white {
+    border: 1px solid #d6d7e0;
+    background-color: #d6d7e0;
+    background-image: linear-gradient(to bottom,white,#ebebef);
+    color: #7330ed;
+}
+.underLineTab .nav-link:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(270deg, #7330ed, #ac38fa);
+    border-radius: 5px;
+    opacity: 0;
+}
+.underLineTab .nav-link.active:after {
+    opacity: 1;
+}
+.underLineTab .nav-link.active {
+    color: #8031f0;
+}
+.underLineTab .nav-link {
+    font-weight: 500;
+    color: #444;
+    font-size: 12px;
+}
+table.table td {
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.notLastBorder > *:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+  
+@keyframes bounce {
+    0%, 50%, 100% {
+        transform: scale(1);
+        filter: blur(0px);
+    }
+
+    25% {
+        transform: scale(0.6);
+        filter: blur(3px);
+    }
+    75% {
+        filter: blur(3px);
+        transform: scale(1.4);
+    }
+}
+header.header select.form-select {
+    max-width: 200px;
+  }
+  .textEllipses {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+}
