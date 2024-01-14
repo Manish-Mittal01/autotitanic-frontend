@@ -24,3 +24,12 @@ export const getVehicleList = createAsyncThunk(
     }
   }
 );
+
+export const addVehicle = createAsyncThunk("vehicles/addVehicle", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`addVehicle`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});

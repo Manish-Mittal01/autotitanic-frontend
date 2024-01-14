@@ -16,3 +16,9 @@ export const categories = [
   { value: "Car Rentals", label: "Car Rentals" },
   { value: "Part & Accessories", label: "Part & Accessories" },
 ];
+
+export const preventMinusAndMinValue = (e, min, max) => {
+  if (e.code === "Minus" || e.code === "KeyE" || (min && e.target.value < min)) {
+    e.preventDefault();
+  }
+};

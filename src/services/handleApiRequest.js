@@ -9,7 +9,7 @@ export async function handleApiRequest(
 ) {
   try {
     const response = await store.dispatch(method(request)).unwrap();
-    if (!response.isSuccess) {
+    if (!response.status) {
       onError();
       showErrorToast && errorMsg(response.error);
       return {};

@@ -4,12 +4,17 @@ import { getVehicleCount, getVehicleList } from "./thunk";
 const initialState = {
   vehiclesList: {},
   vehiclesCount: {},
+  gallery: {},
 };
 
 const vehiclesSlice = createSlice({
   name: "vehiclesSlice",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    mediaGallery: (state, action) => {
+      state.gallery = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getVehicleList.pending, (state, action) => {})
@@ -26,4 +31,5 @@ const vehiclesSlice = createSlice({
   },
 });
 
+export const { mediaGallery } = vehiclesSlice.actions;
 export default vehiclesSlice.reducer;

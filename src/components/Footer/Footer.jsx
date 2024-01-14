@@ -34,25 +34,25 @@ const Footer = () => {
         <Row>
           <Col lg={12}>
             <Row>
-              <Col lg={3} className="socialLink d-flex justify-content-between py-2">
+              <Col lg={3} sm={6} className="socialLink d-flex justify-content-between py-2">
                 <p className="m-0">FACEBOOK</p>
                 <p className="m-0">
                   <FacebookIcon />
                 </p>
               </Col>
-              <Col lg={3} className="socialLink d-flex justify-content-between py-2">
+              <Col lg={3} sm={6} className="socialLink d-flex justify-content-between py-2">
                 <p className="m-0">INSTAGRAM</p>
                 <p className="m-0">
                   <InstagramIcon />
                 </p>
               </Col>
-              <Col lg={3} className="socialLink d-flex justify-content-between py-2">
+              <Col lg={3} sm={6} className="socialLink d-flex justify-content-between py-2">
                 <p className="m-0">YOUTUBE</p>
                 <p className="m-0">
                   <YoutubeIcon />
                 </p>
               </Col>
-              <Col lg={3} className="socialLink d-flex justify-content-between py-2">
+              <Col lg={3} sm={6} className="socialLink d-flex justify-content-between py-2">
                 <p className="m-0">TWITTER</p>
                 <p className="m-0">
                   <TwitterIcon />
@@ -64,7 +64,7 @@ const Footer = () => {
           <Col lg="12" className="my-2">
             <Row className="d-flex align-items-start gap-10 flex-wrap">
               {Array.from({ length: 2 }).map((page, i) => (
-                <Col lg={3} className="p-0">
+                <Col key={i} lg={3} className="p-0">
                   <ul className="list-unstyled ps-0 mb-0">
                     {i === 0 && (
                       <li className="py-1">
@@ -75,7 +75,7 @@ const Footer = () => {
                       </li>
                     )}
                     {contentPageList.data?.slice(i * 4, i * 4 + 4 + i).map((link) => (
-                      <li className="py-1">
+                      <li key={link._id} className="py-1">
                         <Link to={`page/${link._id}`} className="text-dark">
                           <FastforwardIcon />
                           {link.page}

@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { Navigate, useParams } from "react-router-dom";
 import VehiclesList from "../vehiclesList";
-import Home from "../home";
+import { useSelector } from "react-redux";
+import SellVehicle from "../SellVehicle";
 
 export default function NavComponent() {
   const { categoryFilter } = useParams();
+  const { loggedinUser } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (categoryFilter.includes("sell")) {
-      return <VehiclesList />;
-    } else {
-      return <Home />;
-    }
-  }, []);
-
-  return null;
+  return categoryFilter === "new" || categoryFilter === "used" ? (
+    <VehiclesList />
+  ) : loggedinUser.data?.token ? (
+    <SellVehicle />
+  ) : (
+    <Navigate to="/login" />
+  );
 }

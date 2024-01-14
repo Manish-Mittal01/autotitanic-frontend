@@ -92,118 +92,131 @@ export default function CarFilters() {
   //   console.log("allVariants", allVariants);
   // console.log("filters", filters);
   // console.log("allCountries", allCountries);
+  // console.log("vehiclesList", vehiclesList);
 
   return (
-    <div className="border rounded py-3">
-      <h4 className="text-center">{vehiclesList.data?.totalCount} Cars found</h4>
-      {/* <p className="text-center">0 filters selected</p> */}
+    <>
+      <div className="border rounded py-3">
+        <h4 className="text-center">{vehiclesList.data?.totalCount} Cars found</h4>
+        {/* <p className="text-center">0 filters selected</p> */}
 
-      <ul className="list-unstyled">
-        {filtersList.map((filter, i) => (
-          <Fragment key={filter.label}>
-            <li
-              key={filter.label}
-              className={`d-flex justify-content-between px-3 py-2 border-top ${
-                (!filters.make && filter.label === "Model") ||
-                (!filters.model && filter.label === "Variant")
-                  ? "disabled"
-                  : ""
-              }`}
-            >
-              <span className="text-danger">{filter.label}</span>
-              {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
-                <Tooltip
-                  text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}
-                  showTooltip={() => setShowFilterOptions(i)}
-                >
-                  <div
-                    className="tooltiptext"
-                    style={showFilterOptions === i ? { visibility: "visible", opacity: 1 } : {}}
+        <ul className="list-unstyled">
+          {filtersList.map((filter, i) => (
+            <Fragment key={filter.label}>
+              <li
+                key={filter.label}
+                className={`d-flex justify-content-between px-3 py-2 border-top ${
+                  (!filters.make && filter.label === "Model") ||
+                  (!filters.model && filter.label === "Variant")
+                    ? "disabled"
+                    : ""
+                }`}
+              >
+                <span className="text-danger">{filter.label}</span>
+                {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
+                  <Tooltip
+                    text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}
+                    showTooltip={() => setShowFilterOptions(i)}
                   >
-                    <div className="d-flex justify-content-between align-items-center border-bottom">
-                      <h5 className="filterModelHeading">Select {filter.label}</h5>
-                      <Button
-                        variant="link"
-                        className="text-decoration-none"
-                        onClick={() => setShowFilterOptions(null)}
-                      >
-                        Close
-                      </Button>
-                    </div>
+                    <div
+                      className="tooltiptext"
+                      style={showFilterOptions === i ? { visibility: "visible", opacity: 1 } : {}}
+                    >
+                      <div className="d-flex justify-content-between align-items-center border-bottom">
+                        <h5 className="filterModelHeading">Select {filter.label}</h5>
+                        <Button
+                          variant="link"
+                          className="text-decoration-none"
+                          onClick={() => setShowFilterOptions(null)}
+                        >
+                          Close
+                        </Button>
+                      </div>
 
-                    <table className="my-3 w-100">
-                      <tbody>
-                        {Array.from({ length: Math.ceil(filter.filterOptions.length / 4) }).map(
-                          (_, i) => (
-                            <tr key={i}>
-                              {isArray(filter.filterOptions)
-                                .slice(i * 4, i * 4 + 4)
-                                .map((filterValue) => (
-                                  <td key={filterValue.label} className="filterOption pointer">
-                                    <p
-                                      className="m-0 text-primary"
-                                      onClick={() =>
-                                        handleSelectFilter(
-                                          filter.name,
-                                          filterValue.value || filterValue._id,
-                                          filterValue.label || filterValue.name
-                                        )
-                                      }
-                                    >
-                                      {filterValue.label || filterValue.name}
-                                    </p>
-                                  </td>
-                                ))}
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
+                      <table className="my-3 w-100">
+                        <tbody>
+                          {Array.from({ length: Math.ceil(filter.filterOptions.length / 4) }).map(
+                            (_, i) => (
+                              <tr key={i}>
+                                {isArray(filter.filterOptions)
+                                  .slice(i * 4, i * 4 + 4)
+                                  .map((filterValue) => (
+                                    <td key={filterValue.label} className="filterOption pointer">
+                                      <p
+                                        className="m-0 text-primary"
+                                        onClick={() =>
+                                          handleSelectFilter(
+                                            filter.name,
+                                            filterValue.value || filterValue._id,
+                                            filterValue.label || filterValue.name
+                                          )
+                                        }
+                                      >
+                                        {filterValue.label || filterValue.name}
+                                      </p>
+                                    </td>
+                                  ))}
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
 
-                    <div className="text-start my-2">
-                      <Button
-                        variant="outline-primary"
-                        onClick={() => handleSelectFilter(filter.name, "", "")}
-                      >
-                        Clear
-                      </Button>
+                      <div className="text-start my-2">
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => handleSelectFilter(filter.name, "", "")}
+                        >
+                          Clear
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Tooltip>
-              ) : (
-                <span>{"Any>"}</span>
+                  </Tooltip>
+                ) : (
+                  <span>{"Any>"}</span>
+                )}
+              </li>
+              {filter.filterType === "range" && (
+                <>
+                  {Object.keys(filter.filterOptions).map((filterKey) => (
+                    <li
+                      key={filterKey}
+                      className="d-flex justify-content-between align-items-center px-3 py-2 "
+                    >
+                      <Row className="w-100">
+                        <Col xs={4} className="">
+                          <span className="">{filterKey}</span>
+                        </Col>
+                        <Col xs={8} className="p-0">
+                          <SelectBox
+                            options={filter.filterOptions[filterKey].options}
+                            value={filter[filter.filterOptions[filterKey].key]}
+                            onChange={(value) => {
+                              dispatch(
+                                selectFilters({ [filter.filterOptions[filterKey].key]: value })
+                              );
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                    </li>
+                  ))}
+                </>
               )}
-            </li>
-            {filter.filterType === "range" && (
-              <>
-                {Object.keys(filter.filterOptions).map((filterKey) => (
-                  <li
-                    key={filterKey}
-                    className="d-flex justify-content-between align-items-center px-3 py-2 "
-                  >
-                    <Row className="w-100">
-                      <Col xs={4} className="">
-                        <span className="">{filterKey}</span>
-                      </Col>
-                      <Col xs={8} className="p-0">
-                        <SelectBox
-                          options={filter.filterOptions[filterKey].options}
-                          value={filter[filter.filterOptions[filterKey].key]}
-                          onChange={(value) => {
-                            dispatch(
-                              selectFilters({ [filter.filterOptions[filterKey].key]: value })
-                            );
-                          }}
-                        />
-                      </Col>
-                    </Row>
-                  </li>
-                ))}
-              </>
-            )}
-          </Fragment>
-        ))}
-      </ul>
-    </div>
+            </Fragment>
+          ))}
+        </ul>
+      </div>
+      <div className="fullSizeAddContainer d-none d-lg-flex" style={{ width: 200, height: 200 }}>
+        Add Container
+        <br />
+        (200 x 200)
+      </div>
+      <div className="fullSizeAddContainer d-none d-lg-flex" style={{ width: 200, height: 200 }}>
+        Add Container
+        <br />
+        (200 x 200)
+      </div>
+    </>
   );
 }

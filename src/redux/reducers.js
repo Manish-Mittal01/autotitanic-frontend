@@ -11,10 +11,10 @@ import filtersSlice from "./filters/slice";
 
 const appReducer = combineReducers({
   common: commonSlice,
-  auth: authSlice,
-  profile: profileSlice,
   contactus: contactSlice,
 
+  auth: authSlice,
+  profile: profileSlice,
   makeAndModel: makeSlice,
   countryAndCity: countryAndCitySlice,
   vehicles: vehiclesSlice,

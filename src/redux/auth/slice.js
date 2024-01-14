@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { googleLogin, loginOrRegisterUser, logout } from "./thunk";
+import { login } from "./thunk";
 
 const initialState = {
   loggedinUser: {},
@@ -16,27 +16,12 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginOrRegisterUser.pending, (state, action) => {})
-      .addCase(loginOrRegisterUser.fulfilled, (state, action) => {
+      .addCase(login.pending, (state, action) => {})
+      .addCase(login.fulfilled, (state, action) => {
         state.loggedinUser = action.payload;
-        state.rememberedUser = action.meta?.arg.remember
-          ? action.meta?.arg
-          : state.rememberedUser;
+        state.rememberedUser = action.meta?.arg.remember ? action.meta?.arg : state.rememberedUser;
       })
-      .addCase(loginOrRegisterUser.rejected, (state, action) => {});
-    builder
-      .addCase(googleLogin.pending, (state, action) => {})
-      .addCase(googleLogin.fulfilled, (state, action) => {
-        state.loggedinUser = action.payload;
-      })
-      .addCase(googleLogin.rejected, (state, action) => {});
-
-    builder
-      .addCase(logout.pending, (state, action) => {})
-      .addCase(logout.fulfilled, (state, action) => {
-        state.loggedinUser = action.payload;
-      })
-      .addCase(logout.rejected, (state, action) => {});
+      .addCase(login.rejected, (state, action) => {});
   },
 });
 

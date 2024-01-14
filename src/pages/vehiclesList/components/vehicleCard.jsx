@@ -8,13 +8,13 @@ export default function VehicleCard({ vehicle }) {
     <>
       <Row className="vehicleCardWrapper ">
         <Col lg={3} xs={9} className="" style={{ paddingInline: 1 }}>
-          <img src={vehicle.media[0]} className="mainImage w-100" />
+          <img src={vehicle.media[0].url} className="mainImage w-100" />
         </Col>
         <Col lg={1} xs={3} className="px-0 d-flex flex-column">
           {vehicle.media.slice(1, 4).map((image, i) => (
             <img
               key={image}
-              src={image}
+              src={image.url}
               className={`sideImage`}
               style={{ marginBlock: i === 1 ? 1 : 0 }}
             />

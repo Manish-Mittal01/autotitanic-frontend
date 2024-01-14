@@ -11,9 +11,11 @@ import { getVehicleList } from "../../redux/vehicles/thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
 import { sortingOptions } from "../../utils/filters";
-import { resetFilters } from "../../redux/filters/slice";
+import { resetFilters, selectFilters } from "../../redux/filters/slice";
+import { useParams } from "react-router-dom";
 
 export default function VehiclesList() {
+  const { categoryFilter } = useParams();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { vehiclesList } = useSelector((state) => state.vehicles);
@@ -56,7 +58,15 @@ export default function VehiclesList() {
     };
   }, []);
 
+  useEffect(() => {
+    if (categoryFilter === "used" || categoryFilter === "new") {
+      dispatch(selectFilters({ condition: { value: categoryFilter, label: categoryFilter } }));
+    }
+  }, [categoryFilter]);
+
   //   console.log("vehiclesList", vehiclesList);
+  // console.log("categoryFilter", categoryFilter);
+  // console.log("filters", filters);
 
   return (
     <>
@@ -80,7 +90,7 @@ export default function VehiclesList() {
             <CarFilters />
           </Col>
 
-          <Col lg={9}>
+          <Col lg={9} className="vehicleListContainer">
             <Row className="justify-content-between align-items-center w-100 mb-2">
               <Col
                 lg={3}
@@ -140,8 +150,20 @@ export default function VehiclesList() {
               </Col>
             </Row>
             {vehiclesList.data?.items.length > 0 ? (
-              isArray(vehiclesList.data?.items).map((vehicle) => (
-                <VehicleCard key={vehicle._id} vehicle={vehicle} />
+              isArray(vehiclesList.data?.items).map((vehicle, i) => (
+                <>
+                  <VehicleCard key={vehicle._id} vehicle={vehicle} />
+                  {i % 15 === 0 && (
+                    <div
+                      className="fullSizeAddContainer vehicleListAdd d-none d-lg-flex "
+                      style={{ width: 468, height: 60 }}
+                    >
+                      Add Container
+                      <br />
+                      (728 x 90)
+                    </div>
+                  )}
+                </>
               ))
             ) : (
               <h1 className="text-center my-5">0 Results Found</h1>

@@ -170,9 +170,6 @@ h6 {
   left: 7px;
 }
 
-.iconWithText input {
-  padding-left: 30px;
-}
 
 .form-control {
   height: 45px;
@@ -1741,6 +1738,7 @@ posts-card-wrp .card-cstm .content p {
 
 .filterBoxWrapper {
   max-width: 300px;
+  min-width: 225px;
 }
 
 .myTooltip {
@@ -1838,6 +1836,7 @@ posts-card-wrp .card-cstm .content p {
   margin: 4px;
   padding: 6px;
   cursor: pointer;
+  box-shadow: 0px 0px 0px 0.5px #fff;
 }
 
 .actionWrapper:hover {
@@ -1884,6 +1883,14 @@ posts-card-wrp .card-cstm .content p {
     height: 100px !important;
   }
 }
+
+@media (min-width:1450px) {
+  .vehicleListAdd {
+    width: 728px !important;
+    height: 90px !important;
+  }
+}
+
 
 .personalAdd {
   width: calc(100% - 740px);
@@ -2097,16 +2104,150 @@ a {
   font-weight: bold;
 }
 
-.navLink:hover span {
+.navLinkText:hover {
   color: red;
+}
+
+.navLinkText {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.navLinkText svg {
+  margin-left: 2px;
+}
+
+.navLinkText:hover svg g {
+  fill: red;
 }
 
 .dropOtions {
   background-color: #fff;
-  padding: 6px;
-  border-radius: 4px;
+  /* padding-top: 10px; */
+  border: 1px solid lightgrey;
+  border-top: 3px solid red;
+}
+
+.dropOtions li:hover {
+  color: red;
 }
 
 .dropOtions li {
-  padding: 6px;
+  padding: 6px 12px;
+  border-bottom: 1px solid grey;
+}
+
+.phoneInput input {
+  width: 100% !important;
+  height: 45px !important;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  height: 45px;
+}
+
+.postImageWrapper {
+  overflow: scroll;
+  text-wrap: nowrap;
+}
+
+.imageploadBtn {
+  width: 70px;
+  min-width: 70px;
+  height: 70px;
+  font-size: 20px;
+  color: red;
+  background-color: #fff3f3;
+  border: 1px solid red;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.postImagePreview {
+  width: 70px;
+  height: 70px;
+  margin-inline: 6px;
+}
+
+.imageRemoveIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  transform: rotate(45deg);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* z-index: 9; */
+}
+
+.sellVehicleFeatureContainer {
+  box-shadow: 0 5px 30px 0 rgba(82, 63, 105, 0.2);
+  padding: 1rem;
+}
+
+.postCardImage {
+  width: 235px;
+  height: 180px;
+}
+
+.userName {
+  margin: 0;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  max-width: 55px;
+}
+
+.vehicleListContainer {
+  max-width: calc(100% - 225px);
+}
+
+.galleryContainer {
+  position: absolute;
+  background-color: #000;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.gallerySlider {
+  width: 100%;
+}
+
+.gallerySlider .slick-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallerySlider .slick-slide>div {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallerySlider iframe body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+iframe>html>body>img {
+  height: 100%;
 }

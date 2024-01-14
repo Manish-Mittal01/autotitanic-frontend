@@ -11,6 +11,7 @@ import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
 import { getAllMake, getAllModel, getAllVariant } from "../../redux/makeAndModel/thunk";
 import { getVehicleCount } from "../../redux/vehicles/thunk";
 import { useNavigate } from "react-router-dom";
+import HeroAdd from "../../components/heroSection/heroAdd";
 
 export default function AllFilters() {
   const navigate = useNavigate();
@@ -96,15 +97,15 @@ export default function AllFilters() {
 
   return (
     <>
-      <HeroSection showFilterBox={false} />
+      <HeroAdd />
       <section>
         <Row className="allFiltersContainer border rounded mx-2 my-5">
           <div className="my-3 d-flex justify-content-between">
             <p>ADVANCED SEARCH</p>
             <h6 className="text-danger fw-bold ">{vehiclesCount.data?.totalCount} Result found</h6>
           </div>
-          <Col md={10}>
-            <Row className="mx-auto">
+          <Col md={9} className="">
+            <Row className="justify-content-center">
               {filtersList.map((filter) =>
                 Array.isArray(filter.filterOptions) ? (
                   <Col md={5} className="my-2">
@@ -143,7 +144,7 @@ export default function AllFilters() {
                 )
               )}
             </Row>
-            <Button className="my-3 w-100" onClick={() => navigate("/cars")}>
+            <Button variant="danger" className="my-3 w-100" onClick={() => navigate("/cars")}>
               Search
             </Button>
           </Col>

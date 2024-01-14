@@ -1,6 +1,7 @@
 import React, { memo, useEffect } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Slider from "react-slick";
+import OwlCarousel from "react-owl-carousel";
 import { useSelector } from "react-redux";
 import PostCard from "../../../components/postcard";
 import { getVehicleList } from "../../../redux/vehicles/thunk";
@@ -50,6 +51,34 @@ function CarsList() {
       },
     ],
   };
+
+  const setting2 = {
+    className: "owl-theme",
+    loop: true,
+    autoplay: true,
+    nav: true,
+    margin: 10,
+    items: 5,
+    dots: false,
+    lazyLoad: true,
+    autoplayTimeout: 4000,
+    slideBy: 5,
+    responsive: {
+      0: {
+        items: 1,
+      },
+      400: {
+        items: 2,
+      },
+      600: {
+        items: 3,
+      },
+      1400: {
+        items: 5,
+      },
+    },
+  };
+
   const vehiclesList = useSelector((state) => state.vehicles.vehiclesList);
 
   const handleCarsList = async () => {
@@ -71,6 +100,11 @@ function CarsList() {
               return (
                 <Row key={ind + "child"}>
                   <Col xs={12}>
+                    {/* <OwlCarousel {...setting2}>
+                      {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post) => (
+                        <PostCard key={1} post={post} />
+                      ))}
+                    </OwlCarousel> */}
                     <Slider {...settings}>
                       {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post) => (
                         <PostCard key={1} post={post} />
@@ -105,9 +139,14 @@ function CarsList() {
             {Array.from({ length: 2 }).map((_, ind) => (
               <Row key={ind + "child"}>
                 <Col>
+                  {/* <OwlCarousel {...setting2}>
+                    {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
+                      <PostCard key={i} post={post} />
+                    ))}
+                  </OwlCarousel> */}
                   <Slider {...settings}>
-                    {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post) => (
-                      <PostCard key={1} post={post} />
+                    {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
+                      <PostCard key={i} post={post} />
                     ))}
                   </Slider>
                 </Col>

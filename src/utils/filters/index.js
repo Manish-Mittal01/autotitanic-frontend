@@ -50,6 +50,7 @@ export const driverPositions = [
   { value: "Left hand drive", label: "Left hand drive" },
   { value: "Right hand drive", label: "Right hand drive" },
 ];
+
 export const seatOptions = [
   { value: 1, label: "1 Seat" },
   { value: 2, label: "2 Seat" },
@@ -59,6 +60,7 @@ export const seatOptions = [
   { value: 8, label: "8 Seat" },
   { value: 10, label: "10 Seat" },
 ];
+
 export const bootSpaceOptions = [
   { value: "No space", label: "No space" },
   { value: "1 - 3 suitcases (100 - 300 liters)", label: "1 - 3 suitcases (100 - 300 liters)" },
@@ -109,6 +111,40 @@ export const sortingOptions = [
   { value: "maxMileage", label: "Mileage: High to Low ", order: -1, key: "mileage" },
   { value: "minYear", label: "Age: Newest first", order: -1, key: "year" },
   { value: "maxYear", label: "Age: Oldest first", order: 1, key: "year" },
+];
+
+export const fuelTypeOptions = [
+  { value: "biFuel", label: "Bi Fuel" },
+  { value: "deselPlugInHybrid", label: "Desel Plug-in-Hybrid" },
+  { value: "diesel", label: "Diesel" },
+  { value: "dieselHybrid", label: "Diesel Hybrid" },
+  { value: "electric", label: "Electric" },
+  { value: "naturalGas", label: "Natural gas" },
+  { value: "petrol", label: "Petrol" },
+  { value: "petrolHybrid", label: "Petrol Hybrid" },
+  { value: "petrolPlugInHybrid", label: "Petrol Plug-in-Hybrid" },
+];
+
+export const bodyStyleOptions = [
+  { value: "SUV", label: "SUV" },
+  { value: "hatchback", label: "Hatchback" },
+  { value: "sedan", label: "Sedan" },
+  { value: "saloon", label: "Saloon" },
+];
+
+export const getEngineSizeOptions = () => {
+  const engineSizes = [];
+  for (let i = 1; i <= 8; i += 0.5) {
+    engineSizes.push({ value: `${i}L`, label: `${i}L` });
+  }
+  return engineSizes;
+};
+
+export const engineSizeOptions = [
+  { value: "SUV", label: "SUV" },
+  { value: "hatchback", label: "Hatchback" },
+  { value: "sedan", label: "Sedan" },
+  { value: "saloon", label: "Saloon" },
 ];
 
 export const filterOptions = [
@@ -196,16 +232,113 @@ export const filterOptions = [
     filterOptions: accelerationOptions,
     filterType: "normal",
   },
-  {
-    label: "Fuel Consumption",
-    name: "fuelConsumption",
-    filterOptions: fuelConsumtionOptions,
-    filterType: "normal",
-  },
+  // {
+  //   label: "Fuel Consumption",
+  //   name: "fuelConsumption",
+  //   filterOptions: fuelConsumtionOptions,
+  //   filterType: "normal",
+  // },
   {
     label: "CO2 Emission",
     name: "co2Emission",
     filterOptions: co2EmmisionOptions,
     filterType: "normal",
+  },
+];
+
+export const postFeatures = [
+  { label: "Country", value: "country", options: [], category: ["cars"] },
+  { label: "City", value: "city", options: [], category: ["cars"] },
+  { label: "Make", value: "make", options: [], category: ["cars"] },
+  { label: "Model", value: "model", options: [], category: ["cars"] },
+  { label: "Variant", value: "variant", options: [], category: ["cars"] },
+  {
+    label: "Year",
+    value: "year",
+    options: getYearList(),
+    category: ["cars"],
+  },
+  {
+    label: " body Style",
+    value: "bodyStyle",
+    options: bodyStyleOptions,
+    category: ["cars"],
+  },
+  {
+    label: "Fuel Type",
+    value: "fuelType",
+    options: fuelTypeOptions,
+    category: ["cars"],
+  },
+  {
+    label: "Engine Size",
+    value: "engineSize",
+    options: getEngineSizeOptions(),
+    category: ["cars"],
+  },
+  {
+    label: "Gearbox",
+    value: "gearBox",
+    options: [
+      { value: "automatic", label: "Automatic" },
+      { value: "manual", label: "Manual" },
+      { value: "unspecified", label: "Unspecified" },
+    ],
+    category: ["cars"],
+  },
+  {
+    label: "Condition",
+    value: "condition",
+    options: [
+      { value: "used", label: "Used" },
+      { value: "new", label: "New" },
+    ],
+    category: ["cars"],
+  },
+  {
+    label: "Door",
+    value: "door",
+    options: [
+      { value: 2, label: "2 Doors" },
+      { value: 4, label: "4 Doors" },
+    ],
+    category: ["cars"],
+  },
+  {
+    label: "Exterior Color",
+    value: "exteriorColor",
+    options: colorsList,
+    category: ["cars"],
+  },
+  {
+    label: "Interior Color",
+    value: "interiorColor",
+    options: colorsList,
+    category: ["cars"],
+  },
+  { label: "Seat", value: "seat", options: seatOptions, category: "normal" },
+  {
+    label: "Driver Position",
+    value: "driverPosition",
+    options: driverPositions,
+    category: ["cars"],
+  },
+  {
+    label: "Boot Space",
+    value: "bootSpace",
+    options: bootSpaceOptions,
+    category: ["cars"],
+  },
+  {
+    label: "Acceleration",
+    value: "accelration",
+    options: accelerationOptions,
+    category: ["cars"],
+  },
+  {
+    label: "CO2 Emission",
+    value: "co2Emission",
+    options: co2EmmisionOptions,
+    category: ["cars"],
   },
 ];
