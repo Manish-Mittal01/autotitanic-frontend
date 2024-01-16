@@ -5,7 +5,7 @@ import CKEditor from "react-ckeditor-component";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import SelectBox from "../../components/selectBox";
 import Asterik from "../../components/common/asterik";
-import { categories, preventMinusAndMinValue } from "../../utils";
+import { categories, preventMinus } from "../../utils";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
 import { postFeatures } from "../../utils/filters";
@@ -13,6 +13,7 @@ import { getAllMake, getAllModel, getAllVariant } from "../../redux/makeAndModel
 import { addVehicle } from "../../redux/vehicles/thunk";
 import { errorMsg, successMsg } from "../../utils/toastMsg";
 import { uploadFile } from "../../redux/common/thunk";
+import { useNavigate } from "react-router-dom";
 
 const files = [
   {
@@ -41,9 +42,10 @@ const files = [
 ];
 
 export default function SellVehicle() {
+  const navigate = useNavigate();
   const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
 
-  const [postUploadStep, setPostUploadStep] = useState(1);
+  const [postUploadStep, setPostUploadStep] = useState(2);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [featuresList, setFeaturesList] = useState(postFeatures);
 
@@ -83,6 +85,7 @@ export default function SellVehicle() {
     const response = await handleApiRequest(addVehicle, request);
     if (response.status) {
       successMsg("Post created!!");
+      navigate("/home");
     }
   };
 
@@ -114,7 +117,7 @@ export default function SellVehicle() {
     setFeaturesList(oldFilters);
   }, [allMakes, allModels, allVariants]);
 
-  console.log("postDetaiosl", postDetails);
+  // console.log("postDetaiosl", postDetails);
 
   return (
     <>
@@ -187,14 +190,13 @@ export default function SellVehicle() {
                     type="number"
                     className="form-control"
                     placeholder="Enter Mileage"
-                    min={1}
-                    max={100}
                     name="mileage"
                     value={postDetails.mileage?.value || ""}
-                    onKeyDown={(e) => preventMinusAndMinValue(e, 1)}
+                    min={0}
+                    onKeyDown={preventMinus}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value > 100) return;
+                      if (value.length > 6) return;
                       handleChange("mileage", { value: value, label: value });
                     }}
                   />
@@ -208,15 +210,15 @@ export default function SellVehicle() {
                 <div className="input-group has-validation">
                   <input
                     type="number"
-                    min={1}
-                    max={2147483647}
                     className="form-control"
                     placeholder="Enter Price"
                     name="price"
                     value={postDetails.price?.value || ""}
+                    min={0}
+                    onKeyDown={preventMinus}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value > 2147483647) return;
+                      if (value.length > 10) return;
                       handleChange("price", { value: value, label: value });
                     }}
                   />

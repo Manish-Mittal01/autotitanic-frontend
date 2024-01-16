@@ -35,10 +35,23 @@ export default function Gallery() {
 
   //   console.log("gallery", gallery);
 
+  const handleIframeLoad = () => {
+    // Access the content document when the iframe has loaded
+    const iframeDocument = iframeRef.current.contentDocument;
+
+    // You can now manipulate the content inside the iframe
+    // Apply CSS to the img element, for example:
+    const imgElement = iframeDocument.querySelector("img");
+    if (imgElement) {
+      imgElement.style.border = "2px solid red"; // Add your CSS styles here
+    }
+  };
+
   return (
     <div className="galleryContainer">
       {/* <iframe
         id="Iframe1"
+        onLoad={handleIframeLoad}
         ref={iframeRef}
         src={
           "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(48).png%2F1705216438454?alt=media&token=4c8a43fd-2a3f-4b83-abc4-f1f2e20d2ae8"

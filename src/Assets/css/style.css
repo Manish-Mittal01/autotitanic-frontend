@@ -2252,3 +2252,8 @@ iframe img {
   height: 100% !important;
   width: 100%;
 }
+
+.form-control::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
