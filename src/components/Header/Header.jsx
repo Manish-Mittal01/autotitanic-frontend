@@ -57,7 +57,9 @@ const Header = ({ sidebar, setSidebar }) => {
               (category, i) =>
                 category.label !== "Car Rentals" && (
                   // <NavLinks key={category.label} title={category.label} i={i} />
-                  <li onClick={() => navigate(`/${category.label}/rent`)}>Rent {category.label}</li>
+                  <li onClick={() => navigate(`/${category.label}/rent`)}>
+                    Rent a {category.label.slice(0, -1)}
+                  </li>
                 )
             )}
           </ul>

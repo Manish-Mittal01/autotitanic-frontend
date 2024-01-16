@@ -1,6 +1,7 @@
-import store from "../redux/store";
 import axios from "axios";
 import { REACT_APP_API_BASE_URL, REACT_APP_API_VERSION } from "../config";
+import { logoutUser } from "../redux/auth/slice";
+import { store } from "../redux/store";
 
 const baseURL = REACT_APP_API_BASE_URL + REACT_APP_API_VERSION;
 
@@ -40,11 +41,13 @@ export default function runAxiosSetup({ token, adminId, headers = {} }) {
     function (error) {
       console.log("my axios error", error.response, error.code);
       var errorObject = {};
-      if (error.response.data.message === "Token expired") {
+      if (error.response?.data.message === "Token expired") {
         errorObject.message = "Session expired";
         errorObject.code = error.response.data.code;
         errorObject.type = error.response.status;
         errorObject.data = error.response.data;
+
+        store.dispatch(logoutUser({}));
       } else if (error.response) {
         errorObject.message = error.response.data.message || "Server Error!!!";
         errorObject.code = error.response.data.code || "X_SERVER_ERROR";

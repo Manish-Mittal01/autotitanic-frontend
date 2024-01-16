@@ -2136,7 +2136,7 @@ a {
 
 .dropOtions li {
   padding: 6px 12px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #f3f3f3;
 }
 
 .phoneInput input {
@@ -2248,6 +2248,7 @@ input[type="file"]::-webkit-file-upload-button {
   justify-content: center;
 }
 
-iframe>html>body>img {
-  height: 100%;
+iframe img {
+  height: 100% !important;
+  width: 100%;
 }

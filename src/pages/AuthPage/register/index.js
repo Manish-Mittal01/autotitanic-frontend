@@ -12,6 +12,7 @@ import { handleApiRequest } from "../../../services/handleApiRequest";
 import { register } from "../../../redux/auth/thunk";
 import { getAllCountry } from "../../../redux/countryAndCity/thunk";
 import SelectBox from "../../../components/selectBox";
+import Asterik from "../../../components/common/asterik";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -52,6 +53,8 @@ const Register = () => {
     if (userCreds.email && !isEmail(userCreds.email)) return setErrors({ email: `Invalid email` });
     if (userCreds.mobile && !phone(userCreds.mobile).isValid)
       return setErrors({ mobile: `Invalid mobile` });
+    if (userCreds.password === userCreds.confirmPassword)
+      return setErrors({ password: "Password and confirm password should be same" });
 
     const request = {
       ...userCreds,
@@ -102,7 +105,8 @@ const Register = () => {
                     <form onSubmit={handleRegister} className="row g-3 needs-validation">
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Name*
+                          Name
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation">
                           <input
@@ -119,7 +123,8 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="email" className="form-label mb-0">
-                          Email Address*
+                          Email Address
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation">
                           <span className="input-group-text bg-dark" id="inputGroupPrepend">
@@ -139,7 +144,8 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Phone Number*
+                          Phone Number
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation">
                           <PhoneInput
@@ -156,7 +162,8 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Country*
+                          Country
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation">
                           <SelectBox
@@ -178,7 +185,8 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          User Type*
+                          User Type
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation">
                           <SelectBox
@@ -216,7 +224,8 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="password" className="form-label mb-0">
-                          Password*
+                          Password
+                          <Asterik />
                         </label>
                         <div className="input-group has-validation iconWithText">
                           <input
@@ -236,6 +245,33 @@ const Register = () => {
                           </span>
                         </div>
                         {errors.password && <p className="errorMsg">*{errors.password}</p>}
+                      </div>
+
+                      <div className="col-12">
+                        <label for="password" className="form-label mb-0">
+                          Confirm Password
+                          <Asterik />
+                        </label>
+                        <div className="input-group has-validation iconWithText">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            value={userCreds.confirmPassword || ""}
+                            onChange={handleChange}
+                            className="form-control"
+                            placeholder="ReEnter Password "
+                          />
+                          <span
+                            className="icn position-absolute pointer"
+                            style={{ left: "unset", right: "10px" }}
+                            onClick={() => setShowPassword((prev) => !prev)}
+                          >
+                            {showPassword ? <CloseEye /> : <OpenEye />}
+                          </span>
+                        </div>
+                        {errors.confirmPassword && (
+                          <p className="errorMsg">*{errors.confirmPassword}</p>
+                        )}
                       </div>
 
                       <div className="col-12">

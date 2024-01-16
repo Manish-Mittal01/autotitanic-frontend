@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 import CKEditor from "react-ckeditor-component";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import SelectBox from "../../components/selectBox";
-import { categories, numberRange, preventMinusAndMinValue } from "../../utils";
+import Asterik from "../../components/common/asterik";
+import { categories, preventMinusAndMinValue } from "../../utils";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
 import { postFeatures } from "../../utils/filters";
@@ -122,7 +123,7 @@ export default function SellVehicle() {
 
         <Row className="sellVehicleFeatureContainer mx-2 justify-content-center">
           <div className="my-3  d-flex justify-content-center align-items-center">
-            <h4 className="m-0 my-2">Post Add</h4>
+            <h4 className="m-0 my-2">Car details</h4>
           </div>
           {postUploadStep === 1 ? (
             <PostStepOne
@@ -155,7 +156,10 @@ export default function SellVehicle() {
                   Array.isArray(filter.options) && (
                     <Col key={filter.value} md={6} className="my-2">
                       <label className="">
-                        <span className="">{filter.label}</span>
+                        <span className="">
+                          {filter.label}
+                          <Asterik />
+                        </span>
                       </label>
                       <SelectBox
                         options={filter.options}
@@ -176,6 +180,7 @@ export default function SellVehicle() {
               <Col md={6}>
                 <label htmlFor="" className="form-label mb-0">
                   Mileage (per mile)
+                  <Asterik />
                 </label>
                 <div className="input-group has-validation">
                   <input
@@ -198,6 +203,7 @@ export default function SellVehicle() {
               <Col md={6}>
                 <label htmlFor="" className="form-label mb-0">
                   Price
+                  <Asterik />
                 </label>
                 <div className="input-group has-validation">
                   <input
@@ -239,10 +245,7 @@ export default function SellVehicle() {
                 </div>
               </Col>
               <Col className="my-2">
-                <Button
-                  variant="danger"
-                  //  onClick={handleCreatePost}
-                >
+                <Button variant="danger" onClick={handleCreatePost}>
                   Post Advert
                 </Button>
               </Col>
@@ -328,14 +331,14 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
         <div className="w-50 mx-auto">
           <SelectBox
             className="my-3"
-            placeholder="Category"
+            placeholder="Category*"
             options={categories}
             value={postDetails.type}
             onChange={(selected) => setPostDetails((prev) => ({ ...prev, type: selected }))}
           />
           <SelectBox
             className="my-3"
-            placeholder="Country"
+            placeholder="Country*"
             options={allCountries.data?.items}
             value={postDetails.country}
             getOptionLabel={(option) => option.name}
@@ -350,14 +353,14 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
           />
           <SelectBox
             className="my-3"
-            placeholder="City"
+            placeholder="City*"
             options={allCities.data?.items}
             value={postDetails.city}
             getOptionLabel={(option) => option.name}
             getOptionValue={(option) => option._id}
             onChange={(selected) => setPostDetails((prev) => ({ ...prev, city: selected }))}
           />
-          <label>Images</label>
+          <label>Images*</label>
           <p className="small text-muted">Add at least 5 and maximum 20 images ( Max 5MB )</p>
           <div className="postImageWrapper d-flex align-items-center">
             <label htmlFor="selectpostImage" className="imageploadBtn">
