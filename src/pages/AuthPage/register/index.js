@@ -111,6 +111,7 @@ const Register = () => {
                         <div className="input-group has-validation">
                           <input
                             type="text"
+                            maxLength={15}
                             className="form-control"
                             placeholder="Enter Name"
                             name="name"
@@ -131,7 +132,7 @@ const Register = () => {
                             <i className="bi bi-envelope text-white" />
                           </span>
                           <input
-                            type="text"
+                            type="email"
                             className="form-control"
                             placeholder="Email Address"
                             name="email"

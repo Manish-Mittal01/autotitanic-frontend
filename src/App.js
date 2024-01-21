@@ -7,7 +7,7 @@ import LoadIndicator from "./components/loader";
 import MyLayout from "./layout/myLayout";
 import { categories } from "./utils";
 import NavComponent from "./pages/navComponent";
-import { authRoutes, publicRoutes } from "./routes";
+import { authRoutes, privateRoutes, publicRoutes } from "./routes";
 
 function App() {
   const { pathname } = useLocation();
@@ -25,20 +25,19 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (loggedinUser.data?.token && pathname === "/login") navigate("/home");
+    if (loggedinUser?.data?.token && pathname === "/login") navigate("/home");
     if (pathname === "/") {
       navigate("/home");
     }
   }, [loggedinUser]);
 
-  console.log("loggedinUser", loggedinUser);
-
+  // console.log("loggedinUser", loggedinUser);
   return (
     <>
       <LoadIndicator />
       <Routes>
         <Route path="/" element={<MyLayout />}>
-          {!loggedinUser.data?.token &&
+          {!loggedinUser?.data?.token &&
             authRoutes.map((route) => (
               <Route key={route.path} path={route.path} element={route.element} />
             ))}
@@ -46,6 +45,14 @@ function App() {
           {publicRoutes.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
+
+          {privateRoutes.map((route) =>
+            loggedinUser?.data?.token ? (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ) : (
+              <Route key={route.path} path={route.path} element={<Navigate to="/login" />} />
+            )
+          )}
 
           {categories.map((category) => (
             <Route

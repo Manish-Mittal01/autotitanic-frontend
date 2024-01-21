@@ -1,17 +1,37 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
+import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
 import { Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { handleApiRequest } from "../../../services/handleApiRequest";
+import { getWishlist, removeWishlistItem } from "../../../redux/vehicles/thunk";
 
-export default function VehicleCard({ vehicle }) {
+export default function VehicleCard({ vehicle, wishlist }) {
+  const navigate = useNavigate();
+
+  const handleWishlist = async () => {
+    await handleApiRequest(getWishlist);
+  };
+
+  const handleRemoveWishlistItem = async () => {
+    const response = await handleApiRequest(removeWishlistItem, { id: wishlist });
+    if (response.status) {
+      handleWishlist();
+    }
+  };
+
   return (
-    <>
-      <Row className="vehicleCardWrapper ">
+    <div className="position-relative">
+      <Row
+        className="vehicleCardWrapper pointer"
+        onClick={() => navigate(`/details/${vehicle._id}`)}
+      >
         <Col lg={3} xs={9} className="" style={{ paddingInline: 1 }}>
-          <img src={vehicle.media[0].url} className="mainImage w-100" />
+          <img src={vehicle.media?.[0].url} className="mainImage w-100" />
         </Col>
         <Col lg={1} xs={3} className="px-0 d-flex flex-column">
-          {vehicle.media.slice(1, 4).map((image, i) => (
+          {vehicle.media?.slice(1, 4).map((image, i) => (
             <img
               key={image}
               src={image.url}
@@ -32,7 +52,7 @@ export default function VehicleCard({ vehicle }) {
               {vehicle.year} | {vehicle.bodyStyle} | {vehicle.mileage}M | {vehicle.engineSize} |{" "}
               {vehicle.gearBox} | {vehicle.fuelType} | {vehicle.condition}
             </p>
-            <p className="my-2">KarHouse</p>
+            <p className="my-2">{vehicle?.user?.name}</p>
             <p>
               <StarRegular />
               {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
@@ -44,6 +64,12 @@ export default function VehicleCard({ vehicle }) {
           </div>
         </Col>
       </Row>
-    </>
+      {wishlist && (
+        <button className="removeBtn border rounded-pill" onClick={handleRemoveWishlistItem}>
+          Remove
+          <HeartIcon style={{ width: 14, height: 14 }} className="removeWishlistIcon ms-1" />
+        </button>
+      )}
+    </div>
   );
 }

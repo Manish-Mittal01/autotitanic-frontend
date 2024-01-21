@@ -44,7 +44,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (rememberedUser.email) {
+    if (rememberedUser?.email) {
       setUserCreds({ ...rememberedUser, remember: false });
     }
   }, [rememberedUser]);

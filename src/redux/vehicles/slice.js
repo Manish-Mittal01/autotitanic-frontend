@@ -1,9 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getVehicleCount, getVehicleList } from "./thunk";
+import {
+  getCompareList,
+  getVehicleCount,
+  getVehicleDetails,
+  getVehicleList,
+  getWishlist,
+} from "./thunk";
 
 const initialState = {
   vehiclesList: {},
   vehiclesCount: {},
+  vehicleDetails: {},
+  compareList: {},
+  wishlist: {},
   gallery: {},
 };
 
@@ -28,6 +37,24 @@ const vehiclesSlice = createSlice({
         state.vehiclesCount = action.payload;
       })
       .addCase(getVehicleCount.rejected, (state, action) => {});
+    builder
+      .addCase(getVehicleDetails.pending, (state, action) => {})
+      .addCase(getVehicleDetails.fulfilled, (state, action) => {
+        state.vehicleDetails = action.payload;
+      })
+      .addCase(getVehicleDetails.rejected, (state, action) => {});
+    builder
+      .addCase(getCompareList.pending, (state, action) => {})
+      .addCase(getCompareList.fulfilled, (state, action) => {
+        state.compareList = action.payload;
+      })
+      .addCase(getCompareList.rejected, (state, action) => {});
+    builder
+      .addCase(getWishlist.pending, (state, action) => {})
+      .addCase(getWishlist.fulfilled, (state, action) => {
+        state.wishlist = action.payload;
+      })
+      .addCase(getWishlist.rejected, (state, action) => {});
   },
 });
 

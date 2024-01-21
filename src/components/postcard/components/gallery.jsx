@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { Fragment } from "react";
 import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
@@ -16,7 +16,6 @@ export default function Gallery() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  const iframeRef = useRef();
   const dispatch = useDispatch();
   const { gallery } = useSelector((state) => state.vehicles);
 
@@ -24,28 +23,7 @@ export default function Gallery() {
     dispatch(mediaGallery({}));
   };
 
-  // useEffect(() => {
-  //   console.log("content 1", $("#Iframe1").contents());
-  //   console.log("content 2", $("#Iframe1").contents().find("img"));
-  //   $("#Iframe1").contents().find("img").css({
-  //     width: "100%",
-  //     height: "90%",
-  //   });
-  // }, []);
-
   //   console.log("gallery", gallery);
-
-  const handleIframeLoad = () => {
-    // Access the content document when the iframe has loaded
-    const iframeDocument = iframeRef.current.contentDocument;
-
-    // You can now manipulate the content inside the iframe
-    // Apply CSS to the img element, for example:
-    const imgElement = iframeDocument.querySelector("img");
-    if (imgElement) {
-      imgElement.style.border = "2px solid red"; // Add your CSS styles here
-    }
-  };
 
   return (
     <div className="galleryContainer">
@@ -70,7 +48,7 @@ export default function Gallery() {
             ) : (
               <ReactPlayer url={"http://www.example.com/waterfall-video.mp4"} />
             )}
-            {/* <p className="postion-absolute">X</p> */}
+            {/* <p className="galleryCrossIcon">X</p> */}
           </>
         ))}
       </Slider>

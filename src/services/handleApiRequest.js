@@ -18,6 +18,6 @@ export async function handleApiRequest(
     }
   } catch (error) {
     console.log("api error", error);
-    errorMsg(error.message);
+    showErrorToast && errorMsg(error.message);
   }
 }

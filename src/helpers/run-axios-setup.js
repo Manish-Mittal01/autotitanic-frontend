@@ -41,7 +41,10 @@ export default function runAxiosSetup({ token, adminId, headers = {} }) {
     function (error) {
       console.log("my axios error", error.response, error.code);
       var errorObject = {};
-      if (error.response?.data.message === "Token expired") {
+      if (
+        error.response?.data.message === "Token expired" ||
+        error.response?.data.message === "Unauthorized"
+      ) {
         errorObject.message = "Session expired";
         errorObject.code = error.response.data.code;
         errorObject.type = error.response.status;

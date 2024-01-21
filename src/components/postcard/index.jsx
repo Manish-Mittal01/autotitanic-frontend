@@ -8,18 +8,36 @@ import MyTooltip from "../common/tooltip";
 import Gallery from "./components/gallery";
 import { useDispatch } from "react-redux";
 import { mediaGallery } from "../../redux/vehicles/slice";
+import { useNavigate } from "react-router-dom";
+import { handleApiRequest } from "../../services/handleApiRequest";
+import { addToCompare } from "../../redux/vehicles/thunk";
+import { successMsg } from "../../utils/toastMsg";
+import { getUserProfile } from "../../redux/profile/thunk";
 
 export default function PostCard({ post }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const showGallery = (media) => {
     dispatch(mediaGallery(media));
   };
 
+  const handleUserProfile = async () => {
+    await handleApiRequest(getUserProfile);
+  };
+
+  const handleAddToCompare = async () => {
+    const response = await handleApiRequest(addToCompare, { vehicle: post._id });
+    if (response.status) {
+      successMsg("Added to compare list");
+      handleUserProfile();
+    }
+  };
+
   const ActionContainer = () => {
     return (
       <div className="postActionContainer">
-        <p className="actionWrapper">
+        <p className="actionWrapper" onClick={() => navigate(`/details/${post._id}`)}>
           <OverlayTrigger overlay={MyTooltip("View")}>
             <LinkIcon fontWeight={500} style={{ width: 20, height: 20 }} />
           </OverlayTrigger>
@@ -34,7 +52,7 @@ export default function PostCard({ post }) {
             <ExpandIcon />
           </OverlayTrigger>
         </p>
-        <p className="actionWrapper">
+        <p className="actionWrapper" onClick={handleAddToCompare}>
           <OverlayTrigger overlay={MyTooltip("Compare")}>
             <CompareIcon fontSize={19} fontWeight={500} />
           </OverlayTrigger>
@@ -59,7 +77,7 @@ export default function PostCard({ post }) {
             <ActionContainer />
           </div>
           <div className="content">
-            <p className="head fw-bold pb-1 mt-2 mb-0 font-middle">
+            <p className="head postCardDetails fw-bold pb-1 mt-2 mb-0 font-middle">
               {post?.year} Reg | {post?.gearBox} | {post?.mileage} miles
             </p>
             <p className="m-0 text-danger fw-bold">
@@ -69,7 +87,7 @@ export default function PostCard({ post }) {
             <div className="lctn-wrp postcradBackground text-white d-flex align-items-center justify-content-between p-2">
               <div className="d-flex align-items-center">
                 <p className="m-0">{post?.currency}</p>
-                <p className="m-0">{post?.price}</p>
+                <p className="m-0"> {post?.price}</p>
               </div>
               <div className="d-flex align-items-center">
                 <p className="m-0 me-1">{post?.country?.name} </p>

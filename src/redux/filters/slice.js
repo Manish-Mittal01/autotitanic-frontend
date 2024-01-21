@@ -9,7 +9,6 @@ const filtersSlice = createSlice({
   initialState: initialState,
   reducers: {
     selectFilters: (state, action) => {
-      console.log("payload", action.payload);
       return { ...state, filters: { ...state.filters, ...action.payload } };
     },
     resetFilters: (state, action) => {

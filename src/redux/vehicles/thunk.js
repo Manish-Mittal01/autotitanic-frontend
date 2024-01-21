@@ -33,3 +33,78 @@ export const addVehicle = createAsyncThunk("vehicles/addVehicle", async (details
     return Thunk.rejectWithValue(error);
   }
 });
+
+export const getVehicleDetails = createAsyncThunk(
+  "vehicles/getVehicleDetails",
+  async (id, Thunk) => {
+    try {
+      const response = await axios.get(`vehicleDetails/${id}`);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
+export const addToCompare = createAsyncThunk("vehicles/addToCompare", async (vehicle, Thunk) => {
+  try {
+    const response = await axios.post(`addToCompare`, vehicle);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const getCompareList = createAsyncThunk(
+  "vehicles/getCompareList",
+  async (vehicle, Thunk) => {
+    try {
+      const response = await axios.get(`getCompareList`);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
+export const removeCompareListItem = createAsyncThunk(
+  "vehicles/removeCompareListItem",
+  async (id, Thunk) => {
+    try {
+      const response = await axios.post(`removeCompareListItem`, id);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
+export const addToWishlist = createAsyncThunk("vehicles/addToWishlist", async (id, Thunk) => {
+  try {
+    const response = await axios.post(`addToWishlist`, id);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const getWishlist = createAsyncThunk("vehicles/getWishlist", async (vehicle, Thunk) => {
+  try {
+    const response = await axios.get(`getWishlist`);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const removeWishlistItem = createAsyncThunk(
+  "vehicles/removeWishlistItem",
+  async (id, Thunk) => {
+    try {
+      const response = await axios.post(`removewishlistItem`, id);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);

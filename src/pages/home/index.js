@@ -40,7 +40,7 @@ export default function Home() {
             {allMakes.data?.items?.map(
               (make) =>
                 make.isMainLogo && (
-                  <Col lg={3} className="my-2">
+                  <Col sm={6} lg={3} className="my-2">
                     <div className="makeCard">
                       <div>
                         <p className="m-0">{make.label}</p>
@@ -60,7 +60,7 @@ export default function Home() {
           {showAllMakes && (
             <Row className="allMakeContainer">
               {allMakes.data?.items?.map((make) => (
-                <Col lg={3} className="my-2">
+                <Col sm={6} lg={3} className="my-2">
                   <div className="makeCard">
                     <div>
                       <p className="m-0">{make.label}</p>

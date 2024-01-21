@@ -7,15 +7,18 @@ import { ReactComponent as ProfileHolder } from "../../Assets/icons/Profile-hold
 import { ReactComponent as DownArrow } from "../../Assets/icons/down-arrow.svg";
 import mainLogo from "../../Assets/Images/mainLogo.png";
 import { categories } from "../../utils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getUserProfile } from "../../redux/profile/thunk";
+import { selectFilters } from "../../redux/filters/slice";
 
 const Header = ({ sidebar, setSidebar }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { loggedinUser } = useSelector((state) => state.auth);
   const token = loggedinUser?.data?.token;
   const { userProfile } = useSelector((state) => state.profile);
-  const navigate = useNavigate();
+
   const [showMenu, setShowMenu] = useState(false);
 
   const handleSidebar = () => {
@@ -23,11 +26,17 @@ const Header = ({ sidebar, setSidebar }) => {
   };
 
   const handleUserProfile = async () => {
-    await handleApiRequest(getUserProfile);
+    await handleApiRequest(getUserProfile, {}, false);
+  };
+
+  const handleFilters = async (category) => {
+    await dispatch(selectFilters({ type: category }));
   };
 
   useEffect(() => {
-    handleUserProfile();
+    if (token) {
+      handleUserProfile();
+    }
   }, [token]);
 
   // console.log("userProfile", userProfile);
@@ -46,9 +55,30 @@ const Header = ({ sidebar, setSidebar }) => {
         </p>
         {showMenu === i && title !== "Car Rentals" && (
           <ul className="dropOtions list-unstyled position-absolute">
-            <li onClick={() => navigate(`/${title}/used`)}>Used {title}</li>
-            <li onClick={() => navigate(`/${title}/new`)}>New {title}</li>
-            <li onClick={() => navigate(`/${title}/sell`)}>Sell your {title}</li>
+            <li
+              onClick={() => {
+                navigate(`/${title}/used`);
+                // handleFilters(title.toLowerCase());
+              }}
+            >
+              Used {title}
+            </li>
+            <li
+              onClick={() => {
+                navigate(`/${title}/new`);
+                // handleFilters(title.toLowerCase());
+              }}
+            >
+              New {title}
+            </li>
+            <li
+              onClick={() => {
+                navigate(`/${title}/sell`);
+                // handleFilters(title.toLowerCase());
+              }}
+            >
+              Sell your {title}
+            </li>
           </ul>
         )}
         {showMenu === i && title === "Car Rentals" && (
@@ -97,14 +127,25 @@ const Header = ({ sidebar, setSidebar }) => {
                 ))}
               </Nav>
               <ul className="list-unstyled ps-0 mb-0 d-flex align-items-center gap-10">
-                <li className="d-flex align-items-center gap-10">
-                  <Button variant="transparent" className="border-0 p-0">
+                <li className="d-flex align-items-center gap-10 position-relative">
+                  <Button
+                    variant="transparent"
+                    className="border-0 p-0"
+                    onClick={() => navigate("/CompareList")}
+                  >
                     <span className="icn">
                       <CompareIcon />
                     </span>
+                    {userProfile.data?.compareCount && (
+                      <p className="compareCount">{userProfile.data?.compareCount}</p>
+                    )}
                   </Button>
                 </li>
-                <li className="d-flex align-items-center gap-10">
+                <li
+                  className="d-flex align-items-center gap-10"
+                  style={{ minWidth: 45 }}
+                  onClick={() => navigate("/profile")}
+                >
                   <Button variant="transparent" className="font-small border-0 p-0">
                     <p className="m-0 icn">
                       {userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (

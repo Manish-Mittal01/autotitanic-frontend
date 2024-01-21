@@ -45,7 +45,7 @@ export default function SellVehicle() {
   const navigate = useNavigate();
   const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
 
-  const [postUploadStep, setPostUploadStep] = useState(2);
+  const [postUploadStep, setPostUploadStep] = useState(1);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [featuresList, setFeaturesList] = useState(postFeatures);
 
@@ -143,13 +143,14 @@ export default function SellVehicle() {
                 <div className="input-group has-validation">
                   <input
                     type="text"
+                    className="form-control"
+                    placeholder="Enter title"
                     name="title"
+                    maxLength={100}
                     value={postDetails.title?.value || ""}
                     onChange={(e) =>
                       handleChange("title", { value: e.target.value, label: e.target.value })
                     }
-                    className="form-control"
-                    placeholder="Enter title"
                   />
                 </div>
               </Col>
@@ -235,6 +236,17 @@ export default function SellVehicle() {
                     content={postDetails.description}
                     events={{
                       change: (e) => {
+                        console.log("first", e.editor.getData());
+                        const textCount = e.editor
+                          .getData()
+                          .replace(/<[^>]*>/g, "")
+                          .replace(/\n/g, "").length;
+                        console.log(
+                          "length",
+                          e.editor.getData().replace(/<[^>]*>/g, ""),
+                          textCount
+                        );
+
                         setPostDetails((prev) => {
                           return {
                             ...prev,

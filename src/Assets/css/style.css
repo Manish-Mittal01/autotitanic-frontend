@@ -2204,13 +2204,21 @@ input[type="file"]::-webkit-file-upload-button {
 .userName {
   margin: 0;
   overflow: hidden;
-  text-wrap: nowrap;
   text-overflow: ellipsis;
   max-width: 55px;
+  /* text-wrap: nowrap; */
+  line-height: 16px;
 }
 
 .vehicleListContainer {
   max-width: calc(100% - 225px);
+}
+
+@media (max-width:1024px) {
+
+  .vehicleListContainer {
+    max-width: 100%;
+  }
 }
 
 .galleryContainer {
@@ -2256,4 +2264,170 @@ iframe img {
 .form-control::-webkit-inner-spin-button,
 ::-webkit-outer-spin-button {
   -webkit-appearance: none;
+}
+
+.galleryCrossIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.alice-carousel_stage-item {
+  margin-inline: 12px;
+}
+
+.btn-next,
+.alice-carousel__next-btn-item {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.btn-prev,
+.alice-carousel__prev-btn-item {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.thumbs {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.thumbs .alice-carousel__stage {
+  display: table-row;
+}
+
+.thumbs .alice-carousel__stage-item {
+  width: 20% !important;
+  padding-inline: 6px;
+  display: table-cell;
+  height: 60px
+}
+
+.thumbs .alice-carousel__stage-item:first-child {
+  margin-left: 0;
+}
+
+.thumbs .alice-carousel__stage-item div,
+.thumbs .alice-carousel__stage-item img {
+  height: 100%;
+}
+
+.parentCrousel>.alice-carousel {
+  text-align: center;
+}
+
+.alice-carousel .alice-carouselprev-btn-item {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0px, -50%);
+}
+
+.alice-carousel .alice-carousel_next-btn-item {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(0px, -50%);
+}
+
+.detailsWrapper {
+  background-color: #f2f5fa;
+}
+
+.detailsHeading {
+  border-bottom: 1px solid red;
+  width: fit-content;
+}
+
+.emailIcon g {
+  fill: #000
+}
+
+.redIcon g {
+  fill: #ff0000;
+}
+
+.redIcon {
+  width: 13px;
+  height: 13px;
+  margin-inline: 4px;
+}
+
+.vehicleActionBtn:hover {
+  background-color: red;
+  color: #fff;
+}
+
+.compareListItem p {
+  text-wrap: nowrap;
+  margin: 0;
+}
+
+.compareListItem {
+  /* width: 100%; */
+  vertical-align: middle;
+}
+
+.comparePropertyContainer {
+  position: sticky;
+  left: -2px;
+  top: 0;
+  background-color: #fff !important;
+  z-index: 9;
+}
+
+.compareListItemRemoveIcon {
+  left: 110px;
+}
+
+.compareCount {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 10px;
+}
+
+.postCardDetails {
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userProfileImage {
+  width: 100px;
+  height: 100px;
+  border: 1px solid red;
+  border-radius: 50%;
+  background-color: #fff;
+  padding: 4px;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  width: fit-content;
+  background-color: transparent;
+  right: 10px;
+}
+
+.removeWishlistIcon g {
+  fill: red
 }

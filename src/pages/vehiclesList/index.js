@@ -90,7 +90,7 @@ export default function VehiclesList() {
             <CarFilters />
           </Col>
 
-          <Col lg={9} className="vehicleListContainer">
+          <Col xs={12} lg={9} className="vehicleListContainer">
             <Row className="justify-content-between align-items-center w-100 mb-2">
               <Col
                 lg={3}
@@ -153,7 +153,7 @@ export default function VehiclesList() {
               isArray(vehiclesList.data?.items).map((vehicle, i) => (
                 <>
                   <VehicleCard key={vehicle._id} vehicle={vehicle} />
-                  {i % 15 === 0 && (
+                  {i % 10 === 0 && (
                     <div
                       className="fullSizeAddContainer vehicleListAdd d-none d-lg-flex "
                       style={{ width: 468, height: 60 }}

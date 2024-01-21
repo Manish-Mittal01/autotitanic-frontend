@@ -10,7 +10,7 @@ export default function NavComponent() {
 
   return categoryFilter === "new" || categoryFilter === "used" ? (
     <VehiclesList />
-  ) : loggedinUser.data?.token ? (
+  ) : loggedinUser?.data?.token ? (
     <SellVehicle />
   ) : (
     <Navigate to="/login" />
