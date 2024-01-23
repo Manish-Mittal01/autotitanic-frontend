@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
@@ -9,6 +9,8 @@ import { getWishlist, removeWishlistItem } from "../../../redux/vehicles/thunk";
 
 export default function VehicleCard({ vehicle, wishlist }) {
   const navigate = useNavigate();
+  const imageRef = useRef();
+  const [mainImageWidth, setMainImageWidth] = useState();
 
   const handleWishlist = async () => {
     await handleApiRequest(getWishlist);
@@ -21,6 +23,12 @@ export default function VehicleCard({ vehicle, wishlist }) {
     }
   };
 
+  useEffect(() => {
+    if (imageRef.current) {
+      setMainImageWidth(imageRef.current.offsetWidth);
+    }
+  }, [imageRef.current]);
+
   return (
     <div className="position-relative">
       <Row
@@ -28,7 +36,12 @@ export default function VehicleCard({ vehicle, wishlist }) {
         onClick={() => navigate(`/details/${vehicle._id}`)}
       >
         <Col lg={3} xs={9} className="" style={{ paddingInline: 1 }}>
-          <img src={vehicle.media?.[0].url} className="mainImage w-100" />
+          <img
+            ref={imageRef}
+            src={vehicle.media?.[0].url}
+            className="mainImage w-100"
+            style={{ height: mainImageWidth }}
+          />
         </Col>
         <Col lg={1} xs={3} className="px-0 d-flex flex-column">
           {vehicle.media?.slice(1, 4).map((image, i) => (
@@ -65,9 +78,12 @@ export default function VehicleCard({ vehicle, wishlist }) {
         </Col>
       </Row>
       {wishlist && (
-        <button className="removeBtn border rounded-pill" onClick={handleRemoveWishlistItem}>
+        <button
+          className="removeBtn border rounded-pill bg-white"
+          onClick={handleRemoveWishlistItem}
+        >
           Remove
-          <HeartIcon style={{ width: 14, height: 14 }} className="removeWishlistIcon ms-1" />
+          {/* <HeartIcon style={{ width: 14, height: 14 }} className="removeWishlistIcon ms-1" /> */}
         </button>
       )}
     </div>

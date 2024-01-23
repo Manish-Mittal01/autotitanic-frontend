@@ -13,11 +13,27 @@ function CarsList() {
     infinite: true,
     speed: 1000,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 40000,
     cssEase: "linear",
     slidesToShow: 6,
     slidesToScroll: 6,
     responsive: [
+      {
+        breakpoint: 2000,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 5,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 1700,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4,
+          infinite: true,
+        },
+      },
       {
         breakpoint: 1400,
         settings: {

@@ -11,11 +11,6 @@ export default function Sidebar({ user }) {
 
   const sidetabList = [
     {
-      label: "Dashboard",
-      path: "/dashboard",
-      onClick: () => {},
-    },
-    {
       label: "My Items",
       path: "/my-items",
       onClick: () => {
@@ -49,14 +44,14 @@ export default function Sidebar({ user }) {
   ];
 
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState("Dashboard");
+  const [activeTab, setActiveTab] = useState("my-items");
 
   const handleLogout = () => {
     dispatch(logoutUser());
   };
 
   useEffect(() => {
-    if (pathname === "/profile") setActiveTab("/dashboard");
+    if (pathname === "/profile") setActiveTab("/my-items");
     else setActiveTab(pathname);
   }, [pathname]);
 

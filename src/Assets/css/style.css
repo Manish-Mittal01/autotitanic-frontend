@@ -2431,3 +2431,11 @@ iframe img {
 .removeWishlistIcon g {
   fill: red
 }
+
+.whatsappMsgBtn {
+  background-color: #e0ede0;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -7,9 +7,17 @@ import {
   LinkedinShareButton,
   PinterestShareButton,
   WhatsappShareButton,
+  EmailShareButton,
 } from "react-share";
 
-import { FacebookIcon, TwitterIcon, LinkedinIcon, PinterestIcon, WhatsappIcon } from "react-share";
+import {
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  WhatsappIcon,
+  EmailIcon,
+} from "react-share";
 
 export default function SharePop({ action, setAction }) {
   const postUrl = window.location.href;
@@ -68,6 +76,12 @@ export default function SharePop({ action, setAction }) {
             >
               <WhatsappIcon size={32} round />
             </WhatsappShareButton>
+            <EmailShareButton
+              url={postUrl}
+              //  quote={"Dummy text!"} hashtag="#muo"
+            >
+              <EmailIcon size={32} round />
+            </EmailShareButton>
           </div>
         </Modal.Body>
       </Modal>

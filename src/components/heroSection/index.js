@@ -139,7 +139,7 @@ export default function HeroSection({ showFilterBox = true }) {
           </div>
           <div className="text-center my-3">
             <Button variant="danger" onClick={() => navigate("/cars")}>
-              Search ({vehiclesCount.data?.totalCount}) Results
+              Search {vehiclesCount.data?.totalCount?.toLocaleString()} Cars
             </Button>
           </div>
           <div className="d-flex justify-content-between">

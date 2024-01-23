@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer, MdEmail } from "react-icons/md";
-import { FaScrewdriverWrench } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
@@ -14,9 +14,12 @@ import MediaCarousel from "./components/mediaCrousel";
 import SharePop from "./components/sharePop";
 import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
+import MakeOfferPop from "./components/makeOfferPop";
+import isUserLoggedin from "../../utils/isUserLoggedin";
 
 export default function VehicleDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { vehicleDetails } = useSelector((state) => state.vehicles);
   const detail = vehicleDetails.data;
   const [action, setAction] = useState(null);
@@ -30,17 +33,25 @@ export default function VehicleDetails() {
   };
 
   const handleAddToCompare = async () => {
-    const response = await handleApiRequest(addToCompare, { vehicle: id });
-    if (response.status) {
-      successMsg("Added to compare list");
-      handleUserProfile();
+    if (isUserLoggedin()) {
+      const response = await handleApiRequest(addToCompare, { vehicle: id });
+      if (response.status) {
+        successMsg("Added to compare list");
+        handleUserProfile();
+      }
+    } else {
+      navigate("/login");
     }
   };
 
   const handleAddToWishlist = async () => {
-    const response = await handleApiRequest(addToWishlist, { id });
-    if (response.status) {
-      successMsg("Added to wishlist");
+    if (isUserLoggedin()) {
+      const response = await handleApiRequest(addToWishlist, { id });
+      if (response.status) {
+        successMsg("Added to wishlist");
+      }
+    } else {
+      navigate("/login");
     }
   };
 
@@ -58,19 +69,27 @@ export default function VehicleDetails() {
             <div className="parentCrousel">
               <MediaCarousel media={detail?.media} />
             </div>
-            <div className="d-flex justify-content-start my-2">
-              <button className="vehicleActionBtn small border p-2">
-                <MdLocalOffer className="mx-1" />
+            <div className="d-flex align-items-center my-2 border-bottom my-4">
+              <p
+                className="small pointer text-center m-0 p-2"
+                onClick={() => {
+                  if (isUserLoggedin()) {
+                    setAction({ type: "makeOffer", currency: detail?.currency });
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+              >
+                <MdLocalOffer className="text-danger mx-1" />
                 Make an Offer
-              </button>
-              <button className="vehicleActionBtn small border p-2 mx-2">
-                <FaScrewdriverWrench className="mx-1" />
-                Schedule test Drive
-              </button>
-              <button className="vehicleActionBtn small border p-2">
-                <MdEmail className="mx-1" />
-                Email to a friend
-              </button>
+              </p>
+              <p
+                className="whatsappMsgBtn small pointer rounded-pill text-center m-0 p-1 mx-2"
+                onClick={() => {}}
+              >
+                <FaWhatsapp className="text-success mx-1" />
+                Message on Whatsapp
+              </p>
             </div>
             <div className="d-flex justify-content-between my-2 border-bottom my-4">
               <div className="d-flex">
@@ -95,7 +114,10 @@ export default function VehicleDetails() {
             </div>
             <div>
               <h5>Description</h5>
-              <div dangerouslySetInnerHTML={{ __html: detail?.description }}></div>
+              <div
+                dangerouslySetInnerHTML={{ __html: detail?.description }}
+                className="border-bottom"
+              ></div>
             </div>
           </Col>
           <Col lg={4}>
@@ -103,16 +125,13 @@ export default function VehicleDetails() {
             <p>{[detail?.year, detail?.make.label, detail?.model.label].join("  ")}</p>
             <p className="d-flex align-items-center justify-content-between">
               <div>
-                {detail?.country.name}
+                {detail?.city.name + ", " + detail?.country.name}
                 <img src={detail?.country.flag} className="ms-1" style={{ width: 22 }} />
               </div>
               <div className="d-flex align-items-center text-danger">
                 <p className="m-0">{detail?.currency}</p>
                 <p className="m-0">{detail?.price}</p>
               </div>
-            </p>
-            <p>
-              <button className="w-100 p-1 border">Request More Info</button>
             </p>
             <div className="detailsWrapper p-3">
               <h6 className="detailsHeading">Details</h6>
@@ -122,6 +141,8 @@ export default function VehicleDetails() {
                   key !== "createdAt" &&
                   key !== "media" &&
                   key !== "reviews" &&
+                  key !== "country" &&
+                  key !== "city" &&
                   key !== "description" &&
                   key !== "price" &&
                   key !== "currency" &&
@@ -144,6 +165,7 @@ export default function VehicleDetails() {
       </section>
 
       {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
+      {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}
     </>
   );
 }

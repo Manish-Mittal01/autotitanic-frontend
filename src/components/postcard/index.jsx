@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactComponent as HeartIcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as ExpandIcon } from "../../Assets/icons/expand.svg";
 import { ReactComponent as LinkIcon } from "../../Assets/icons/link.svg";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
-import { Modal, OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
 import MyTooltip from "../common/tooltip";
 import Gallery from "./components/gallery";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,8 @@ import { getUserProfile } from "../../redux/profile/thunk";
 export default function PostCard({ post }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const postImageRef = useRef();
+  const [postImageHeight, setPostImageHeight] = useState(0);
 
   const showGallery = (media) => {
     dispatch(mediaGallery(media));
@@ -61,6 +63,12 @@ export default function PostCard({ post }) {
     );
   };
 
+  useEffect(() => {
+    if (postImageRef.current) {
+      setPostImageHeight(postImageRef.current.offsetWidth);
+    }
+  }, [postImageRef.current]);
+
   // console.log("showImageModel", showImageModel);
 
   return (
@@ -69,10 +77,12 @@ export default function PostCard({ post }) {
         <div className="card-cstm bg-white h-10 top">
           <div className="img-wrp position-relative postImage">
             <img
+              ref={postImageRef}
               src={post?.media[0].url}
               loading="lazy"
               alt=""
               className="postCardImage img-fluid w-100 "
+              style={{ height: postImageHeight, minHeight: 200 }}
             />
             <ActionContainer />
           </div>
