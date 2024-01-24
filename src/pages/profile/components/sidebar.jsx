@@ -8,6 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function Sidebar({ user }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = useState("/profile");
 
   const sidetabList = [
     {
@@ -27,12 +29,16 @@ export default function Sidebar({ user }) {
     {
       label: "Profile",
       path: "/profile",
-      onClick: () => {},
+      onClick: () => {
+        navigate("/profile");
+      },
     },
     {
-      label: "Settings",
-      path: "/settings",
-      onClick: () => {},
+      label: "Change Password",
+      path: "/change-password",
+      onClick: () => {
+        navigate("/change-password");
+      },
     },
     {
       label: "Logout",
@@ -43,16 +49,12 @@ export default function Sidebar({ user }) {
     },
   ];
 
-  const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState("my-items");
-
   const handleLogout = () => {
     dispatch(logoutUser());
   };
 
   useEffect(() => {
-    if (pathname === "/profile") setActiveTab("/my-items");
-    else setActiveTab(pathname);
+    setActiveTab(pathname);
   }, [pathname]);
 
   return (

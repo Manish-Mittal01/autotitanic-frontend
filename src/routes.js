@@ -7,7 +7,9 @@ import ContentPage from "./pages/contentPages";
 import ContactUs from "./pages/contentPages/contact";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
+import ChangePassword from "./pages/profile/components/changePassword";
 import MyItems from "./pages/profile/components/myItems";
+import MyProfile from "./pages/profile/components/profile";
 import Wishlist from "./pages/profile/components/wishlist";
 import VehicleDetails from "./pages/vehicleDetails";
 import VehiclesList from "./pages/vehiclesList";
@@ -46,7 +48,7 @@ export const privateRoutes = [
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <Profile Component={MyProfile} />,
   },
   {
     path: "/my-wishlist",
@@ -55,6 +57,10 @@ export const privateRoutes = [
   {
     path: "/my-items",
     element: <Profile Component={MyItems} />,
+  },
+  {
+    path: "/change-password",
+    element: <Profile Component={ChangePassword} />,
   },
 ];
 

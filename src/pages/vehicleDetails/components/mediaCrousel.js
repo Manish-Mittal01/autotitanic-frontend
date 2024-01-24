@@ -1,110 +1,72 @@
-import React, { useEffect, useState } from "react";
-import AliceCarousel from "react-alice-carousel";
+import React, { useRef, useState, useEffect } from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { isArray } from "../../../utils/dataTypes";
 import ReactPlayer from "react-player";
-
-const thumbItems = (items, [setThumbIndex, setThumbAnimation]) => {
-  return items.map((item, i) => (
-    <div className="thumb" onClick={() => (setThumbIndex(i), setThumbAnimation(true))}>
-      {item}
-    </div>
-  ));
-};
+import Slider from "react-slick";
 
 const OverlayCarousal = ({ media }) => {
-  const [mainIndex, setMainIndex] = useState(0);
-  const [mainAnimation, setMainAnimation] = useState(false);
-  const [thumbIndex, setThumbIndex] = useState(0);
-  const [thumbAnimation, setThumbAnimation] = useState(false);
-  const [thumbs, setThumbs] = useState();
-  const [items, setItems] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const sliderRef = useRef(null);
 
-  const slideNext = () => {
-    if (!thumbAnimation && thumbIndex < thumbs.length - 1) {
-      setThumbAnimation(true);
-      setThumbIndex(thumbIndex + 1);
-    }
+  const settingsMain = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    afterChange: (slideIndex) => setCurrentSlide(slideIndex),
   };
 
-  const slidePrev = () => {
-    if (!thumbAnimation && thumbIndex > 0) {
-      setThumbAnimation(true);
-      setThumbIndex(thumbIndex - 1);
-    }
+  const settingsThumbnails = {
+    dots: false,
+    arrows: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    focusOnSelect: true,
+    responsive: [
+      {
+        breakpoint: 1400,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+    ],
   };
 
-  const syncMainBeforeChange = (e) => {
-    setMainAnimation(true);
+  const handleSlideChange = (index) => {
+    sliderRef.current.slickGoTo(index);
   };
 
-  const syncMainAfterChange = (e) => {
-    setMainAnimation(false);
+  return (
+    <div>
+      <Slider ref={sliderRef} {...settingsMain}>
+        {media?.map((item, index) => (
+          <div key={index} className="position-relative">
+            {item.type?.includes("image") ? (
+              <img src={item.url} alt={`Slide ${index}`} className="detailCrouselImage" />
+            ) : (
+              <ReactPlayer url={item.url} className="detailCrouselImage" />
+            )}
+            <p className="watermark">Autotitanic</p>
+          </div>
+        ))}
+      </Slider>
 
-    if (e.type === "action") {
-      setThumbIndex(e.item);
-      setThumbAnimation(false);
-    } else {
-      setMainIndex(thumbIndex);
-    }
-  };
-
-  const syncThumbs = (e) => {
-    setThumbIndex(e.item);
-    setThumbAnimation(false);
-
-    if (!mainAnimation) {
-      setMainIndex(e.item);
-    }
-  };
-
-  useEffect(() => {
-    const myItems = isArray(media).map((item) => (
-      <div className="item" data-value="1">
-        {/* {console.log(item, "itemitem")} */}
-        {item?.type?.includes("image") ? (
-          <img src={item?.url} style={{ width: "100%" }} />
-        ) : (
-          <ReactPlayer url={"http://www.example.com/waterfall-video.mp4"} />
-        )}
-      </div>
-    ));
-    setItems(myItems);
-    setThumbs(thumbItems(myItems, [setThumbIndex, setThumbAnimation]));
-  }, [media]);
-
-  return [
-    <AliceCarousel
-      className="parentCrousel"
-      activeIndex={mainIndex}
-      animationType="fadeout"
-      animationDuration={800}
-      disableDotsControls
-      items={items}
-      mouseTracking={!thumbAnimation}
-      onSlideChange={syncMainBeforeChange}
-      onSlideChanged={syncMainAfterChange}
-      touchTracking={!thumbAnimation}
-    />,
-    <div className="thumbs">
-      <AliceCarousel
-        activeIndex={thumbIndex}
-        autoWidth
-        disableDotsControls
-        disableButtonsControls
-        items={thumbs}
-        mouseTracking={false}
-        onSlideChanged={syncThumbs}
-        touchTracking={!mainAnimation}
-      />
-      {/* <div className="btn-prev" onClick={slidePrev}>
-        &lang;
-      </div>
-      <div className="btn-next" onClick={slideNext}>
-        &rang;
-      </div> */}
-    </div>,
-  ];
+      <Slider {...settingsThumbnails}>
+        {media?.map((item, index) => (
+          <div key={index} onClick={() => handleSlideChange(index)}>
+            <img
+              src={item.url}
+              alt={`Thumbnail ${index}`}
+              className="detailsCrouselThumbnailImage"
+            />
+          </div>
+        ))}
+      </Slider>
+    </div>
+  );
 };
 
 export default OverlayCarousal;
