@@ -144,7 +144,7 @@ const Header = ({ sidebar, setSidebar }) => {
                     <span className="icn">
                       <CompareIcon />
                     </span>
-                    {userProfile.data?.compareCount && (
+                    {userProfile.data?.compareCount > 0 && (
                       <p className="compareCount">{userProfile.data?.compareCount}</p>
                     )}
                   </Button>

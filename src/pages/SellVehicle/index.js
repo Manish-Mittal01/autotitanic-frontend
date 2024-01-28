@@ -194,6 +194,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
 
   //   console.log("postDetails.media", postDetails.media);
   //   console.log("proceedToNextStep", proceedToNextStep);
+  console.log("postDetails", postDetails);
 
   return (
     <>
@@ -218,7 +219,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
                 ...prev,
                 country: selected,
                 currency: { value: selected.currency, label: selected.currency },
-                city: {},
+                city: "",
               }))
             }
           />
@@ -226,7 +227,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
             className="my-3"
             placeholder="City*"
             options={allCities.data?.items}
-            value={postDetails.city}
+            value={postDetails.city || ""}
             getOptionLabel={(option) => option.name}
             getOptionValue={(option) => option._id}
             onChange={(selected) => handleChange("city", selected)}

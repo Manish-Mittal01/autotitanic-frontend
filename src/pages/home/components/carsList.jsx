@@ -102,6 +102,7 @@ function CarsList() {
     const request = {
       filters: {
         isFeatured: true,
+        status: "approved",
       },
       paginationDetails: { page: 1, limit: 240 },
     };
@@ -110,6 +111,9 @@ function CarsList() {
 
   const handleFeaturedList = async () => {
     const request = {
+      filters: {
+        status: "approved",
+      },
       paginationDetails: { page: 1, limit: 180, sortBy: "createdAt", order: -1 },
     };
     await handleApiRequest(getRecentList, request);
@@ -137,8 +141,8 @@ function CarsList() {
     handleFeaturedList();
   }, []);
 
-  console.log("recentList", recentList);
-  console.log("splitList", splitList(recentList.data?.items, 4, 5));
+  // console.log("recentList", recentList);
+  // console.log("splitList", splitList(recentList.data?.items, 4, 5));
 
   // console.log("featuredList", featuredList);
 
@@ -185,10 +189,10 @@ function CarsList() {
       </div>
 
       <h3 className="my-2 text-center">Recently Posted Cars</h3>
-      {splitList(recentList.data?.items, 6, 40).map((_, i) => (
+      {splitList(recentList.data?.items, 6, 40).map((rows, i) => (
         <Row key={i + "parent"} className="align-items-center justify-content-between">
           <Col xs={12} xl={10} className="homePostRow">
-            {Array.from({ length: 2 }).map((_, ind) => (
+            {splitList(rows, 2, 20).map((row, ind) => (
               <Row key={ind + "child"}>
                 <Col>
                   {/* <OwlCarousel {...setting2}>
@@ -197,7 +201,7 @@ function CarsList() {
                     ))}
                   </OwlCarousel> */}
                   <Slider {...settings}>
-                    {recentList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
+                    {row.map((post, i) => (
                       <PostCard key={i} post={post} />
                     ))}
                   </Slider>

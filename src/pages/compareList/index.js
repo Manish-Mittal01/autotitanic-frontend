@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getCompareList, removeCompareListItem } from "../../redux/vehicles/thunk";
 import HeroAdd from "../../components/heroSection/heroAdd";
+import { getUserProfile } from "../../redux/profile/thunk";
 
 export default function CompareList() {
   const { compareList } = useSelector((state) => state.vehicles);
@@ -11,10 +12,15 @@ export default function CompareList() {
     await handleApiRequest(getCompareList);
   };
 
+  const handleUserProfile = async () => {
+    await handleApiRequest(getUserProfile);
+  };
+
   const handleRemoveItem = async (id) => {
     const response = await handleApiRequest(removeCompareListItem, { id });
     if (response.status) {
       handleCompareList();
+      handleUserProfile();
     }
   };
 

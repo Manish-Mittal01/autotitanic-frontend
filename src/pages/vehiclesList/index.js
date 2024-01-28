@@ -43,7 +43,10 @@ export default function VehiclesList() {
     Object.entries(filters).forEach((filter) => {
       newFilters[filter[0]] = filter[1].value || filter[1]._id;
     });
-    const request = { filters: newFilters, paginationDetails: paginationDetails };
+    const request = {
+      filters: { ...newFilters, status: "approved" },
+      paginationDetails: paginationDetails,
+    };
     console.log("request", request);
     await handleApiRequest(getVehicleList, request);
   };

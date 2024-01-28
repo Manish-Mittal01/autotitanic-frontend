@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
-import { MdLocalOffer, MdEmail } from "react-icons/md";
+import { MdLocalOffer } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
