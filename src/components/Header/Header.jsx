@@ -29,8 +29,13 @@ const Header = ({ sidebar, setSidebar }) => {
     await handleApiRequest(getUserProfile, {}, false);
   };
 
-  const handleFilters = async (category) => {
-    await dispatch(selectFilters({ type: category }));
+  const handleFilters = async (type, condition) => {
+    dispatch(
+      selectFilters({
+        type: { value: type, label: type },
+        condition: { value: condition, label: condition },
+      })
+    );
   };
 
   useEffect(() => {
@@ -51,42 +56,45 @@ const Header = ({ sidebar, setSidebar }) => {
         onMouseLeave={() => setShowMenu(false)}
       >
         <p className="navLinkText">
-          {title} <DownArrow width={8} height={8} />
+          {title.label} <DownArrow width={8} height={8} />
         </p>
-        {showMenu === i && title !== "Car Rentals" && (
+        {showMenu === i && title.label !== "Car Rentals" && (
           <ul className="dropOtions list-unstyled position-absolute">
             <li
               onClick={() => {
-                navigate(`/${title}/used`);
-                // handleFilters(title.toLowerCase());
+                navigate(`/${title.value}/all`);
               }}
             >
-              Used {title}
+              All {title.label}
             </li>
             <li
               onClick={() => {
-                navigate(`/${title}/new`);
-                // handleFilters(title.toLowerCase());
+                navigate(`/${title.value}/used`);
               }}
             >
-              New {title}
+              Used {title.label}
             </li>
             <li
               onClick={() => {
-                navigate(`/${title}/sell`);
-                // handleFilters(title.toLowerCase());
+                navigate(`/${title.value}/new`);
               }}
             >
-              Sell your {title}
+              New {title.label}
+            </li>
+            <li
+              onClick={() => {
+                navigate(`/${title.value}/sell`);
+              }}
+            >
+              Sell your {title.label}
             </li>
           </ul>
         )}
-        {showMenu === i && title === "Car Rentals" && (
+        {showMenu === i && title.label === "Car Rentals" && (
           <ul className="dropOtions list-unstyled position-absolute">
             {categories.map(
               (category, i) =>
                 category.label !== "Car Rentals" && (
-                  // <NavLinks key={category.label} title={category.label} i={i} />
                   <li onClick={() => navigate(`/${category.label}/rent`)}>
                     Rent a {category.label.slice(0, -1)}
                   </li>
@@ -123,7 +131,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <div className="d-flex align-items-center">
               <Nav className="d-none d-lg-flex me-2">
                 {categories.map((category, i) => (
-                  <NavLinks key={category.label} title={category.label} i={i} />
+                  <NavLinks key={category.label} title={category} i={i} />
                 ))}
               </Nav>
               <ul className="list-unstyled ps-0 mb-0 d-flex align-items-center gap-10">

@@ -18,7 +18,8 @@ export default function AllFilters() {
   const dispatch = useDispatch();
   const { vehiclesCount } = useSelector((state) => state.vehicles);
   const { filters } = useSelector((state) => state.filters);
-  const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
+  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
+  // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
   const [filtersList, setFiltersList] = useState(filterOptions);
 
@@ -64,7 +65,7 @@ export default function AllFilters() {
     handleResultCount();
 
     if (filters.make?.value) handleModelList();
-    if (filters.model?.value) handleVariantList();
+    // if (filters.model?.value) handleVariantList();
     if (filters.country?.value) handleAllCities();
   }, [filters]);
 
@@ -72,7 +73,7 @@ export default function AllFilters() {
     const oldFilters = [...filtersList];
     const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
     const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
-    const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
+    // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
     const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
     const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
 
@@ -82,9 +83,9 @@ export default function AllFilters() {
     if (filters.make && allModels.data) {
       oldFilters[modelIndex].filterOptions = allModels.data.items;
     }
-    if (filters.model && allVariants.data) {
-      oldFilters[variantIndex].filterOptions = allVariants.data.items;
-    }
+    // if (filters.model && allVariants.data) {
+    //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
+    // }
     if (allCountries.data) {
       oldFilters[countryIndex].filterOptions = allCountries.data.items;
     }
@@ -93,7 +94,8 @@ export default function AllFilters() {
     }
 
     setFiltersList(oldFilters);
-  }, [allMakes, allModels, allVariants, allCountries, allCities]);
+  }, [allMakes, allModels, allCountries, allCities]);
+  // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
   return (
     <>

@@ -25,6 +25,27 @@ export const getVehicleList = createAsyncThunk(
   }
 );
 
+export const getFeaturedList = createAsyncThunk(
+  "vehicles/getFeaturedList",
+  async (filters, Thunk) => {
+    try {
+      const response = await axios.post(`AllVehicles`, filters);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
+export const getRecentList = createAsyncThunk("vehicles/getRecentList", async (filters, Thunk) => {
+  try {
+    const response = await axios.post(`AllVehicles`, filters);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
 export const addVehicle = createAsyncThunk("vehicles/addVehicle", async (details, Thunk) => {
   try {
     const response = await axios.post(`addVehicle`, details);

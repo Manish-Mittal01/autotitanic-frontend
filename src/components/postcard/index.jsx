@@ -72,7 +72,11 @@ export default function PostCard({ post }) {
   // console.log("showImageModel", showImageModel);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      className="pointer"
+      style={{ position: "relative" }}
+      onClick={() => navigate(`/details/${post._id}`)}
+    >
       <div className="h-100 text-dark m-0 p-2">
         <div className="card-cstm bg-white h-10 top">
           <div className="img-wrp position-relative postImage">

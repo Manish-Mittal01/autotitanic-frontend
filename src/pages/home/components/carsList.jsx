@@ -1,10 +1,10 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Slider from "react-slick";
 import OwlCarousel from "react-owl-carousel";
 import { useSelector } from "react-redux";
 import PostCard from "../../../components/postcard";
-import { getVehicleList } from "../../../redux/vehicles/thunk";
+import { getFeaturedList, getRecentList, getVehicleList } from "../../../redux/vehicles/thunk";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 
 function CarsList() {
@@ -95,34 +95,70 @@ function CarsList() {
     },
   };
 
-  const vehiclesList = useSelector((state) => state.vehicles.vehiclesList);
+  const featuredList = useSelector((state) => state.vehicles.featuredList);
+  const recentList = useSelector((state) => state.vehicles.recentList);
 
-  const handleCarsList = async () => {
-    await handleApiRequest(getVehicleList, { paginationDetails: { page: 1, limit: 200 } });
+  const handleRecentList = async () => {
+    const request = {
+      filters: {
+        isFeatured: true,
+      },
+      paginationDetails: { page: 1, limit: 240 },
+    };
+    await handleApiRequest(getFeaturedList, request);
   };
 
+  const handleFeaturedList = async () => {
+    const request = {
+      paginationDetails: { page: 1, limit: 180, sortBy: "createdAt", order: -1 },
+    };
+    await handleApiRequest(getRecentList, request);
+  };
+
+  const splitList = useCallback(
+    (list = [], rows, rowSize) => {
+      const myList = [...list];
+      const newList = [];
+
+      for (let size = 0; size <= rows; size++) {
+        if (myList?.length >= rowSize) {
+          newList.push(myList.splice(0, rowSize));
+        } else if (myList?.length > 0) {
+          newList.push(myList.splice(0));
+        }
+      }
+      return newList;
+    },
+    [featuredList, recentList]
+  );
+
   useEffect(() => {
-    handleCarsList();
+    handleRecentList();
+    handleFeaturedList();
   }, []);
+
+  console.log("recentList", recentList);
+  console.log("splitList", splitList(recentList.data?.items, 4, 5));
+
+  // console.log("featuredList", featuredList);
 
   return (
     <>
       <h3 className="my-2 text-center text-danger">Featured Cars</h3>
-
-      {Array.from({ length: 3 }).map((_, i) => (
+      {splitList(featuredList.data?.items, 3, 60).map((rows, i) => (
         <Row key={i + "parent"} className="align-items-center justify-content-between">
           <div className="homePostRow">
-            {Array.from({ length: 2 }).map((_, ind) => {
+            {splitList(rows, 2, 30).map((row, ind) => {
               return (
                 <Row key={ind + "child"}>
                   <Col xs={12}>
                     {/* <OwlCarousel {...setting2}>
-                      {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post) => (
+                      {rows.slice(0 * 20, 0 * 20 + 20).map((post) => (
                         <PostCard key={1} post={post} />
                       ))}
                     </OwlCarousel> */}
                     <Slider {...settings}>
-                      {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post) => (
+                      {row.map((post) => (
                         <PostCard key={1} post={post} />
                       ))}
                     </Slider>
@@ -149,19 +185,19 @@ function CarsList() {
       </div>
 
       <h3 className="my-2 text-center">Recently Posted Cars</h3>
-      {Array.from({ length: 6 }).map((_, i) => (
+      {splitList(recentList.data?.items, 6, 40).map((_, i) => (
         <Row key={i + "parent"} className="align-items-center justify-content-between">
           <Col xs={12} xl={10} className="homePostRow">
             {Array.from({ length: 2 }).map((_, ind) => (
               <Row key={ind + "child"}>
                 <Col>
                   {/* <OwlCarousel {...setting2}>
-                    {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
+                    {recentList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
                       <PostCard key={i} post={post} />
                     ))}
                   </OwlCarousel> */}
                   <Slider {...settings}>
-                    {vehiclesList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
+                    {recentList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
                       <PostCard key={i} post={post} />
                     ))}
                   </Slider>

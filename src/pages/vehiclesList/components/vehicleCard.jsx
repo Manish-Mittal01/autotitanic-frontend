@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { getWishlist, removeWishlistItem } from "../../../redux/vehicles/thunk";
+import { parseCamelKey } from "../../../utils/parseKey";
 
-export default function VehicleCard({ vehicle, wishlist }) {
+export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   const navigate = useNavigate();
   const imageRef = useRef();
   const [mainImageWidth, setMainImageWidth] = useState();
@@ -46,7 +47,7 @@ export default function VehicleCard({ vehicle, wishlist }) {
         <Col lg={1} xs={3} className="px-0 d-flex flex-column">
           {vehicle.media?.slice(1, 4).map((image, i) => (
             <img
-              key={image}
+              key={image.url}
               src={image.url}
               className={`sideImage`}
               style={{ marginBlock: i === 1 ? 1 : 0 }}
@@ -60,7 +61,7 @@ export default function VehicleCard({ vehicle, wishlist }) {
           </h6>
           <div className="vehicledetails">
             <p>{vehicle.make.label + " " + vehicle.model.label}</p>
-            <p>{vehicle.variant?.label}</p>
+            {/* <p>{vehicle.variant?.label}</p> */}
             <p className="my-2 fw-bold">
               {vehicle.year} | {vehicle.bodyStyle} | {vehicle.mileage}M | {vehicle.engineSize} |{" "}
               {vehicle.gearBox} | {vehicle.fuelType} | {vehicle.condition}
@@ -77,6 +78,10 @@ export default function VehicleCard({ vehicle, wishlist }) {
           </div>
         </Col>
       </Row>
+      <Row>
+        <p className="">Delete</p>
+        {vehicle.status === "draft" && <p className="">Upload</p>}
+      </Row>
       {wishlist && (
         <button
           className="removeBtn border rounded-pill bg-white"
@@ -84,6 +89,22 @@ export default function VehicleCard({ vehicle, wishlist }) {
         >
           Remove
           {/* <HeartIcon style={{ width: 14, height: 14 }} className="removeWishlistIcon ms-1" /> */}
+        </button>
+      )}
+      {myVehicle && (
+        <button
+          className={`removeBtn border rounded-pill bg-white ${
+            vehicle.status === "approved"
+              ? "successMsg"
+              : vehicle.status === "rejected" || vehicle.status === "deleted"
+              ? "rejectMsg"
+              : vehicle.status === "pending" || vehicle.status === "draft"
+              ? "warningMsg"
+              : ""
+          }`}
+          onClick={handleRemoveWishlistItem}
+        >
+          {parseCamelKey(vehicle.status)}
         </button>
       )}
     </div>

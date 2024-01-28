@@ -8,7 +8,7 @@ export default function NavComponent() {
   const { categoryFilter } = useParams();
   const { loggedinUser } = useSelector((state) => state.auth);
 
-  return categoryFilter === "new" || categoryFilter === "used" ? (
+  return categoryFilter === "new" || categoryFilter === "used" || categoryFilter === "all" ? (
     <VehiclesList />
   ) : loggedinUser?.data?.token ? (
     <SellVehicle />

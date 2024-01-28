@@ -102,17 +102,6 @@ export const co2EmmisionOptions = [
   { value: "upto 250+ g / km CO2", label: "upto 250+ g / km CO2" },
 ];
 
-export const sortingOptions = [
-  { value: "relevance", label: "Relevance", order: 1, key: "_id" },
-  { value: "createdAt", label: "Most recent first", order: 1, key: "createdAt" },
-  { value: "minPrice", label: "Price: Low to High", order: 1, key: "price" },
-  { value: "maxPrice", label: "Price: High to Low", order: -1, key: "price" },
-  { value: "minMileage", label: "Mileage: Low to High", order: 1, key: "mileage" },
-  { value: "maxMileage", label: "Mileage: High to Low ", order: -1, key: "mileage" },
-  { value: "minYear", label: "Age: Newest first", order: -1, key: "year" },
-  { value: "maxYear", label: "Age: Oldest first", order: 1, key: "year" },
-];
-
 export const fuelTypeOptions = [
   { value: "biFuel", label: "Bi Fuel" },
   { value: "deselPlugInHybrid", label: "Desel Plug-in-Hybrid" },
@@ -152,7 +141,7 @@ export const filterOptions = [
   { label: "City", name: "city", filterOptions: [], filterType: "normal" },
   { label: "Make", name: "make", filterOptions: [], filterType: "normal" },
   { label: "Model", name: "model", filterOptions: [], filterType: "normal" },
-  { label: "Variant", name: "variant", filterOptions: [], filterType: "normal" },
+  // { label: "Variant", name: "variant", filterOptions: [], filterType: "normal" },
   {
     label: "Price",
     name: "price",
@@ -251,7 +240,7 @@ export const postFeatures = [
   { label: "City", value: "city", options: [], category: ["cars"] },
   { label: "Make", value: "make", options: [], category: ["cars"] },
   { label: "Model", value: "model", options: [], category: ["cars"] },
-  { label: "Variant", value: "variant", options: [], category: ["cars"] },
+  // { label: "Variant", value: "variant", options: [], category: ["cars"] },
   {
     label: "Year",
     value: "year",
@@ -341,4 +330,15 @@ export const postFeatures = [
     options: co2EmmisionOptions,
     category: ["cars"],
   },
+];
+
+export const sortingOptions = [
+  { value: "relevance", label: "Relevance", order: 1, key: "_id" },
+  { value: "createdAt", label: "Most recent first", order: -1, key: "createdAt" },
+  { value: "minPrice", label: "Price: Low to High", order: 1, key: "price" },
+  { value: "maxPrice", label: "Price: High to Low", order: -1, key: "price" },
+  { value: "minMileage", label: "Mileage: Low to High", order: 1, key: "mileage" },
+  { value: "maxMileage", label: "Mileage: High to Low ", order: -1, key: "mileage" },
+  { value: "minYear", label: "Age: Newest first", order: -1, key: "year" },
+  { value: "maxYear", label: "Age: Oldest first", order: 1, key: "year" },
 ];

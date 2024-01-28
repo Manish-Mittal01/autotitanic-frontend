@@ -42,19 +42,12 @@ const files = [
 ];
 
 export default function SellVehicle() {
-  const navigate = useNavigate();
-  const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
+  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
+  // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
 
   const [postUploadStep, setPostUploadStep] = useState(1);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [featuresList, setFeaturesList] = useState(postFeatures);
-
-  const handleChange = (name, value) => {
-    if (name === "make")
-      setPostDetails((prev) => ({ ...prev, [name]: value, model: "", variant: "" }));
-    else if (name === "model") setPostDetails((prev) => ({ ...prev, [name]: value, variant: "" }));
-    else setPostDetails((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleMakeList = async () => {
     handleApiRequest(getAllMake);
@@ -68,41 +61,20 @@ export default function SellVehicle() {
     handleApiRequest(getAllVariant, postDetails.model?.value);
   };
 
-  const handleCreatePost = async () => {
-    console.log("postDetails", postDetails);
-    const request = { ...postDetails };
-
-    const allKeys = featuresList.map((elem) => elem.value);
-    allKeys.push("price", "mileage", "description", "currency", "title", "type");
-
-    for (let key of allKeys) {
-      if (!postDetails[key]) return errorMsg(`${key} is required`);
-      if (key !== "media" && key !== "description") {
-        request[key] = postDetails[key]?.value || postDetails[key]?._id;
-      }
-    }
-
-    const response = await handleApiRequest(addVehicle, request);
-    if (response.status) {
-      successMsg("Post created!!");
-      navigate("/home");
-    }
-  };
-
   useEffect(() => {
     handleMakeList();
   }, []);
 
   useEffect(() => {
     if (allMakes.data && postDetails.make) handleModelList();
-    if (allModels.data && postDetails.model) handleVariantList();
+    // if (allModels.data && postDetails.model) handleVariantList();
   }, [postDetails.make, postDetails.model]);
 
   useEffect(() => {
     const oldFilters = [...featuresList];
     const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
     const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
-    const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
+    // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
 
     if (allMakes.data) {
       oldFilters[makeIndex].options = allMakes.data?.items;
@@ -110,14 +82,15 @@ export default function SellVehicle() {
     if (postDetails.make && allModels.data) {
       oldFilters[modelIndex].options = allModels.data.items;
     }
-    if (postDetails.model && allVariants.data) {
-      oldFilters[variantIndex].options = allVariants.data.items;
-    }
+    // if (postDetails.model && allVariants.data) {
+    //   oldFilters[variantIndex].options = allVariants.data.items;
+    // }
 
     setFeaturesList(oldFilters);
-  }, [allMakes, allModels, allVariants]);
+  }, [allMakes, allModels]);
+  // }, [allMakes, allModels, allVariants]);
 
-  // console.log("postDetaiosl", postDetails);
+  // console.log("postDetails", postDetails);
 
   return (
     <>
@@ -135,135 +108,11 @@ export default function SellVehicle() {
               setPostUploadStep={setPostUploadStep}
             />
           ) : (
-            <>
-              <Col xs={12}>
-                <label htmlFor="" className="form-label mb-0">
-                  Title
-                </label>
-                <div className="input-group has-validation">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter title"
-                    name="title"
-                    maxLength={100}
-                    value={postDetails.title?.value || ""}
-                    onChange={(e) =>
-                      handleChange("title", { value: e.target.value, label: e.target.value })
-                    }
-                  />
-                </div>
-              </Col>
-              {featuresList.map(
-                (filter, i) =>
-                  i > 1 &&
-                  Array.isArray(filter.options) && (
-                    <Col key={filter.value} md={6} className="my-2">
-                      <label className="">
-                        <span className="">
-                          {filter.label}
-                          <Asterik />
-                        </span>
-                      </label>
-                      <SelectBox
-                        options={filter.options}
-                        value={postDetails[filter.value]}
-                        getOptionLabel={(option) => option.label || option.name}
-                        getOptionValue={(option) => option.value || option._id}
-                        onChange={(selected) => {
-                          const value = {
-                            value: selected.value || selected._id,
-                            label: selected.label || selected.name,
-                          };
-                          handleChange(filter.value, value);
-                        }}
-                      />
-                    </Col>
-                  )
-              )}
-              <Col md={6}>
-                <label htmlFor="" className="form-label mb-0">
-                  Mileage (per mile)
-                  <Asterik />
-                </label>
-                <div className="input-group has-validation">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Enter Mileage"
-                    name="mileage"
-                    value={postDetails.mileage?.value || ""}
-                    min={0}
-                    onKeyDown={preventMinus}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value.length > 6) return;
-                      handleChange("mileage", { value: value, label: value });
-                    }}
-                  />
-                </div>
-              </Col>
-              <Col md={6}>
-                <label htmlFor="" className="form-label mb-0">
-                  Price
-                  <Asterik />
-                </label>
-                <div className="input-group has-validation">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Enter Price"
-                    name="price"
-                    value={postDetails.price?.value || ""}
-                    min={0}
-                    onKeyDown={preventMinus}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value.length > 10) return;
-                      handleChange("price", { value: value, label: value });
-                    }}
-                  />
-                </div>
-              </Col>
-
-              <Col xs={12}>
-                <label htmlFor="" className="form-label mb-0">
-                  Description
-                </label>
-                <div className="input-group has-validation">
-                  <CKEditor
-                    activeClass="p10 w-100"
-                    content={postDetails.description}
-                    events={{
-                      change: (e) => {
-                        console.log("first", e.editor.getData());
-                        const textCount = e.editor
-                          .getData()
-                          .replace(/<[^>]*>/g, "")
-                          .replace(/\n/g, "").length;
-                        console.log(
-                          "length",
-                          e.editor.getData().replace(/<[^>]*>/g, ""),
-                          textCount
-                        );
-
-                        setPostDetails((prev) => {
-                          return {
-                            ...prev,
-                            description: e.editor.getData(),
-                          };
-                        });
-                      },
-                    }}
-                  />
-                </div>
-              </Col>
-              <Col className="my-2">
-                <Button variant="danger" onClick={handleCreatePost}>
-                  Post Advert
-                </Button>
-              </Col>
-            </>
+            <PostStepTwo
+              postDetails={postDetails}
+              setPostDetails={setPostDetails}
+              featuresList={featuresList}
+            />
           )}
         </Row>
       </section>
@@ -274,6 +123,13 @@ export default function SellVehicle() {
 export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) => {
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
   const [localImages, setLocalImages] = useState([]);
+
+  const handleChange = (name, value) => {
+    setPostDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const getMediaLocalUrl = (files) => {
     const imageUrls = [];
@@ -348,7 +204,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
             placeholder="Category*"
             options={categories}
             value={postDetails.type}
-            onChange={(selected) => setPostDetails((prev) => ({ ...prev, type: selected }))}
+            onChange={(selected) => handleChange("type", selected)}
           />
           <SelectBox
             className="my-3"
@@ -362,6 +218,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
                 ...prev,
                 country: selected,
                 currency: { value: selected.currency, label: selected.currency },
+                city: {},
               }))
             }
           />
@@ -372,7 +229,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
             value={postDetails.city}
             getOptionLabel={(option) => option.name}
             getOptionValue={(option) => option._id}
-            onChange={(selected) => setPostDetails((prev) => ({ ...prev, city: selected }))}
+            onChange={(selected) => handleChange("city", selected)}
           />
           <label>Images*</label>
           <p className="small text-muted">Add at least 5 and maximum 20 images ( Max 5MB )</p>
@@ -401,10 +258,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
 
                     const oldMedia = [...postDetails.media];
                     oldMedia.splice(i, 1);
-                    setPostDetails((prev) => ({
-                      ...prev,
-                      media: oldMedia,
-                    }));
+                    handleChange("media", oldMedia);
                   }}
                 >
                   +
@@ -418,7 +272,7 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
             className="form-control my-3"
             placeholder="Link for video"
             value={postDetails.video}
-            onChange={(e) => setPostDetails((prev) => ({ ...prev, video: e.target.value }))}
+            onChange={(e) => handleChange("video", e.target.value)}
           />
         </div>
         <Button
@@ -428,6 +282,166 @@ export const PostStepOne = ({ postDetails, setPostDetails, setPostUploadStep }) 
           onClick={() => handleProccedToNextStep()}
         >
           Next
+        </Button>
+      </Col>
+    </>
+  );
+};
+
+export const PostStepTwo = ({ postDetails, setPostDetails, featuresList }) => {
+  const navigate = useNavigate();
+
+  const handleChange = (name, value) => {
+    if (name === "make")
+      setPostDetails((prev) => ({ ...prev, [name]: value, model: "", variant: "" }));
+    else if (name === "model") setPostDetails((prev) => ({ ...prev, [name]: value, variant: "" }));
+    else setPostDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreatePost = async () => {
+    const request = { ...postDetails };
+
+    const allKeys = featuresList.map((elem) => elem.value);
+    allKeys.push("price", "mileage", "description", "currency", "title", "type");
+
+    for (let key of allKeys) {
+      if (!postDetails[key]) return errorMsg(`${key} is required`);
+      if (key !== "media" && key !== "description") {
+        request[key] = postDetails[key]?.value || postDetails[key]?._id;
+      }
+    }
+
+    const response = await handleApiRequest(addVehicle, request);
+    if (response.status) {
+      successMsg("Post created!!");
+      navigate("/home");
+    }
+  };
+
+  // console.log("postDetails", postDetails);
+
+  return (
+    <>
+      <Col xs={12}>
+        <label htmlFor="" className="form-label mb-0">
+          Title
+        </label>
+        <div className="input-group has-validation">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter title"
+            name="title"
+            maxLength={100}
+            value={postDetails.title?.value || ""}
+            onChange={(e) =>
+              handleChange("title", { value: e.target.value, label: e.target.value })
+            }
+          />
+        </div>
+      </Col>
+      {featuresList.map(
+        (filter, i) =>
+          i > 1 &&
+          Array.isArray(filter.options) && (
+            <Col key={filter.value} md={6} className="my-2">
+              <label className="">
+                <span className="">
+                  {filter.label}
+                  <Asterik />
+                </span>
+              </label>
+              <SelectBox
+                options={filter.options}
+                value={postDetails[filter.value]}
+                getOptionLabel={(option) => option.label || option.name}
+                getOptionValue={(option) => option.value || option._id}
+                onChange={(selected) => {
+                  const value = {
+                    value: selected.value || selected._id,
+                    label: selected.label || selected.name,
+                  };
+                  handleChange(filter.value, value);
+                }}
+              />
+            </Col>
+          )
+      )}
+      <Col md={6}>
+        <label htmlFor="" className="form-label mb-0">
+          Mileage (per mile)
+          <Asterik />
+        </label>
+        <div className="input-group has-validation">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Enter Mileage"
+            name="mileage"
+            value={postDetails.mileage?.value || ""}
+            min={0}
+            onKeyDown={preventMinus}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length > 6) return;
+              handleChange("mileage", { value: value, label: value });
+            }}
+          />
+        </div>
+      </Col>
+      <Col md={6}>
+        <label htmlFor="" className="form-label mb-0">
+          Price
+          <Asterik />
+        </label>
+        <div className="input-group has-validation">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Enter Price"
+            name="price"
+            value={postDetails.price?.value || ""}
+            min={0}
+            onKeyDown={preventMinus}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length > 10) return;
+              handleChange("price", { value: value, label: value });
+            }}
+          />
+        </div>
+      </Col>
+
+      <Col xs={12}>
+        <label htmlFor="" className="form-label mb-0">
+          Description
+        </label>
+        <div className="input-group has-validation">
+          <CKEditor
+            activeClass="p10 w-100"
+            content={postDetails.description}
+            events={{
+              change: (e) => {
+                // const textCount = e.editor
+                //   .getData()
+                //   .replace(/<[^>]*>/g, "")
+                //   .replace(/\n/g, "").length;
+                // console.log("length", e.editor.getData().replace(/<[^>]*>/g, ""), textCount);
+
+                setPostDetails((prev) => {
+                  return {
+                    ...prev,
+                    description: e.editor.getData(),
+                  };
+                });
+              },
+            }}
+          />
+        </div>
+      </Col>
+      <Col className="my-2">
+        <Button variant="danger" onClick={handleCreatePost}>
+          Post Advert
         </Button>
       </Col>
     </>

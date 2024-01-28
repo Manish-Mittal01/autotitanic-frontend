@@ -6,15 +6,15 @@ export const currencySymbols = {
 };
 
 export const categories = [
-  { value: "Cars", label: "Cars" },
-  { value: "Vans", label: "Vans" },
-  { value: "Bikes", label: "Bikes" },
-  { value: "Motorhomes & Caravans", label: "Motorhomes & Caravans" },
-  { value: "Trucks", label: "Trucks" },
-  { value: "Farms", label: "Farms" },
-  { value: "Plants", label: "Plants" },
-  { value: "Car Rentals", label: "Car Rentals" },
-  { value: "Part & Accessories", label: "Part & Accessories" },
+  { value: "cars", label: "Cars" },
+  { value: "vans", label: "Vans" },
+  { value: "bikes", label: "Bikes" },
+  { value: "motorhomesAndCCaravans", label: "Motorhomes & Caravans" },
+  { value: "trucks", label: "Trucks" },
+  { value: "farms", label: "Farms" },
+  { value: "plants", label: "Plants" },
+  { value: "carRentals", label: "Car Rentals" },
+  { value: "partAndAccessories", label: "Part & Accessories" },
 ];
 
 export const preventMinus = (e) => {

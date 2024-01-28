@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getCompareList,
+  getFeaturedList,
+  getRecentList,
   getVehicleCount,
   getVehicleDetails,
   getVehicleList,
@@ -9,6 +11,8 @@ import {
 
 const initialState = {
   vehiclesList: {},
+  featuredList: {},
+  recentList: {},
   vehiclesCount: {},
   vehicleDetails: {},
   compareList: {},
@@ -31,6 +35,18 @@ const vehiclesSlice = createSlice({
         state.vehiclesList = action.payload;
       })
       .addCase(getVehicleList.rejected, (state, action) => {});
+    builder
+      .addCase(getFeaturedList.pending, (state, action) => {})
+      .addCase(getFeaturedList.fulfilled, (state, action) => {
+        state.featuredList = action.payload;
+      })
+      .addCase(getFeaturedList.rejected, (state, action) => {});
+    builder
+      .addCase(getRecentList.pending, (state, action) => {})
+      .addCase(getRecentList.fulfilled, (state, action) => {
+        state.recentList = action.payload;
+      })
+      .addCase(getRecentList.rejected, (state, action) => {});
     builder
       .addCase(getVehicleCount.pending, (state, action) => {})
       .addCase(getVehicleCount.fulfilled, (state, action) => {

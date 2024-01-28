@@ -14,7 +14,8 @@ export default function CarFilters() {
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { vehiclesList } = useSelector((state) => state.vehicles);
-  const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
+  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
+  // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
   const [showFilterOptions, setShowFilterOptions] = useState(null);
@@ -63,7 +64,7 @@ export default function CarFilters() {
     const oldFilters = [...filtersList];
     const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
     const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
-    const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
+    // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
     const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
     const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
 
@@ -73,9 +74,9 @@ export default function CarFilters() {
     if (filters.make && allModels.data) {
       oldFilters[modelIndex].filterOptions = allModels.data.items;
     }
-    if (filters.model && allVariants.data) {
-      oldFilters[variantIndex].filterOptions = allVariants.data.items;
-    }
+    // if (filters.model && allVariants.data) {
+    //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
+    // }
     if (allCountries.data) {
       oldFilters[countryIndex].filterOptions = allCountries.data.items;
     }
@@ -84,7 +85,8 @@ export default function CarFilters() {
     }
 
     setFiltersList(oldFilters);
-  }, [allMakes, allModels, allVariants, allCountries, allCities]);
+  }, [allMakes, allModels, allCountries, allCities]);
+  // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
   //   console.log("allMakes", allMakes);
   //   console.log("allModels", allModels);
@@ -106,9 +108,9 @@ export default function CarFilters() {
               <li
                 key={filter.label}
                 className={`d-flex justify-content-between px-3 py-2 border-top ${
-                  (!filters.make && filter.label === "Model") ||
-                  (!filters.model && filter.label === "Variant")
-                    ? "disabled"
+                  !filters.make && filter.label === "Model"
+                    ? // || (!filters.model && filter.label === "Variant")
+                      "disabled"
                     : ""
                 }`}
               >
@@ -140,8 +142,8 @@ export default function CarFilters() {
                               <tr key={i}>
                                 {isArray(filter.filterOptions)
                                   .slice(i * 4, i * 4 + 4)
-                                  .map((filterValue) => (
-                                    <td key={filterValue.label} className="filterOption pointer">
+                                  .map((filterValue, ind) => (
+                                    <td key={ind} className="filterOption pointer">
                                       <p
                                         className="m-0 text-primary"
                                         onClick={() =>

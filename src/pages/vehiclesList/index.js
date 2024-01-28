@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ReactComponent as FilterIcon } from "../../Assets/icons/filter.svg";
 import HeroSection from "../../components/heroSection";
@@ -61,6 +61,8 @@ export default function VehiclesList() {
   useEffect(() => {
     if (categoryFilter === "used" || categoryFilter === "new") {
       dispatch(selectFilters({ condition: { value: categoryFilter, label: categoryFilter } }));
+    } else {
+      dispatch(selectFilters({ condition: "" }));
     }
   }, [categoryFilter]);
 
@@ -80,9 +82,7 @@ export default function VehiclesList() {
             <br />
             (728 x 90)
           </div>
-          <div className="personalAdd" s>
-            Personal Add
-          </div>
+          <div className="personalAdd">Personal Add</div>
         </div>
 
         <Row className="my-2">
@@ -151,8 +151,8 @@ export default function VehiclesList() {
             </Row>
             {vehiclesList.data?.items.length > 0 ? (
               isArray(vehiclesList.data?.items).map((vehicle, i) => (
-                <>
-                  <VehicleCard key={vehicle._id} vehicle={vehicle} />
+                <Fragment key={vehicle._id}>
+                  <VehicleCard vehicle={vehicle} />
                   {i % 10 === 0 && (
                     <div
                       className="fullSizeAddContainer vehicleListAdd d-none d-lg-flex "
@@ -163,7 +163,7 @@ export default function VehiclesList() {
                       (728 x 90)
                     </div>
                   )}
-                </>
+                </Fragment>
               ))
             ) : (
               <h1 className="text-center my-5">0 Results Found</h1>

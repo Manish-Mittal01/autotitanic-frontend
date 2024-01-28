@@ -56,8 +56,8 @@ function App() {
 
           {categories.map((category) => (
             <Route
-              key={category.label}
-              path={`${category.label}/:categoryFilter`}
+              key={category.value}
+              path={`${category.value}/:categoryFilter`}
               element={<NavComponent />}
             />
           ))}

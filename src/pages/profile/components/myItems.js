@@ -4,6 +4,7 @@ import { handleApiRequest } from "../../../services/handleApiRequest";
 import { isArray } from "../../../utils/dataTypes";
 import VehicleCard from "../../vehiclesList/components/vehicleCard";
 import { getVehicleList } from "../../../redux/vehicles/thunk";
+import { Form, Row } from "react-bootstrap";
 
 export default function MyItems() {
   const { vehiclesList } = useSelector((state) => state.vehicles);
@@ -14,6 +15,7 @@ export default function MyItems() {
     sortBy: "createdAt",
     order: 1,
   });
+  const [filters, setFilters] = useState({});
 
   const totalPage = Math.ceil(vehiclesList.data?.totalCount / paginationDetails.limit) || 0;
 
@@ -25,10 +27,13 @@ export default function MyItems() {
     }
   };
 
+  const handleChange = (e) => {
+    setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleVehicleList = async () => {
-    const newFilters = { user: userProfile.data?._id || "" };
+    const newFilters = { ...filters, user: userProfile.data?._id || "" };
     const request = { filters: newFilters, paginationDetails: paginationDetails };
-    console.log("request", request);
     await handleApiRequest(getVehicleList, request);
   };
 
@@ -36,18 +41,28 @@ export default function MyItems() {
     if (userProfile.data?._id) {
       handleVehicleList();
     }
-  }, [paginationDetails, userProfile]);
+  }, [paginationDetails, userProfile, filters]);
 
-  console.log("vehiclesList", vehiclesList);
+  // console.log("vehiclesList", vehiclesList);
   // console.log("userProfile", userProfile);
 
   return (
     <>
-      <h4>My Items</h4>
+      <div className="d-flex justify-content-between align-items-center">
+        <h5>My Items</h5>
+        <Form.Select className="myVehiclesFilter" name="status" onChange={handleChange}>
+          <option value="">All</option>
+          <option value="pending">Pending</option>
+          <option value="draft">Draft</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="deleted">Deleted</option>
+        </Form.Select>
+      </div>
       {vehiclesList.data?.items?.length > 0 ? (
         isArray(vehiclesList.data?.items).map((vehicle, i) => (
           <>
-            <VehicleCard key={vehicle._id} vehicle={vehicle || {}} />
+            <VehicleCard key={vehicle._id} vehicle={vehicle || {}} myVehicle={true} />
             {i % 10 === 0 && (
               <div
                 className="fullSizeAddContainer vehicleListAdd d-none d-lg-flex "

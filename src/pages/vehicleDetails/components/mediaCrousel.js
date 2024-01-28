@@ -54,7 +54,7 @@ const OverlayCarousal = ({ media }) => {
         ))}
       </Slider>
 
-      <Slider {...settingsThumbnails}>
+      <Slider {...settingsThumbnails} className="thumbs">
         {media?.map((item, index) => (
           <div key={index} onClick={() => handleSlideChange(index)}>
             <img
