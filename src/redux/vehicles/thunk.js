@@ -46,6 +46,18 @@ export const getRecentList = createAsyncThunk("vehicles/getRecentList", async (f
   }
 });
 
+export const getRelatedVehicles = createAsyncThunk(
+  "vehicles/getRelatedVehicles",
+  async (filters, Thunk) => {
+    try {
+      const response = await axios.post(`AllVehicles`, filters);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
 export const addVehicle = createAsyncThunk("vehicles/addVehicle", async (details, Thunk) => {
   try {
     const response = await axios.post(`addVehicle`, details);
@@ -66,6 +78,15 @@ export const getVehicleDetails = createAsyncThunk(
     }
   }
 );
+
+export const updateVehicle = createAsyncThunk("vehicles/updateVehicle", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`updateVehicle/${details._id}`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
 
 export const addToCompare = createAsyncThunk("vehicles/addToCompare", async (vehicle, Thunk) => {
   try {
@@ -129,3 +150,12 @@ export const removeWishlistItem = createAsyncThunk(
     }
   }
 );
+
+export const makeOffer = createAsyncThunk("vehicles/makeOffer", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`makeOffer`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});

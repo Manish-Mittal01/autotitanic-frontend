@@ -86,7 +86,7 @@ const Header = ({ sidebar, setSidebar }) => {
                 navigate(`/${title.value}/sell`);
               }}
             >
-              Sell your {title.label}
+              Sell your {title.label?.slice(0, -1)}
             </li>
           </ul>
         )}
@@ -157,7 +157,10 @@ const Header = ({ sidebar, setSidebar }) => {
                   <Button variant="transparent" className="font-small border-0 p-0">
                     <p className="m-0 icn">
                       {userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (
-                        <img src={userProfile.data.userAvatar || userProfile.data.dealerLogo} />
+                        <img
+                          src={userProfile.data.userAvatar || userProfile.data.dealerLogo}
+                          className="headerAvatar"
+                        />
                       ) : (
                         <ProfileHolder />
                       )}

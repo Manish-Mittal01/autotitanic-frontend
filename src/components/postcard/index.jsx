@@ -63,11 +63,11 @@ export default function PostCard({ post }) {
     );
   };
 
-  useEffect(() => {
-    if (postImageRef.current) {
-      setPostImageHeight(postImageRef.current.offsetWidth);
-    }
-  }, [postImageRef.current]);
+  // useEffect(() => {
+  //   if (postImageRef.current) {
+  //     setPostImageHeight(postImageRef.current.offsetWidth);
+  //   }
+  // }, [postImageRef.current?.offsetWidth]);
 
   // console.log("showImageModel", showImageModel);
 
@@ -86,7 +86,10 @@ export default function PostCard({ post }) {
               loading="lazy"
               alt=""
               className="postCardImage img-fluid w-100 "
-              style={{ height: postImageHeight, minHeight: 200 }}
+              style={{
+                // height: postImageHeight,
+                minHeight: 200,
+              }}
             />
             <ActionContainer />
           </div>

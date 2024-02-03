@@ -47,7 +47,6 @@ export default function VehiclesList() {
       filters: { ...newFilters, status: "approved" },
       paginationDetails: paginationDetails,
     };
-    console.log("request", request);
     await handleApiRequest(getVehicleList, request);
   };
 

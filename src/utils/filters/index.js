@@ -201,12 +201,12 @@ export const filterOptions = [
     filterOptions: colorsList,
     filterType: "normal",
   },
-  {
-    label: "Interior Color",
-    name: "interiorColor",
-    filterOptions: colorsList,
-    filterType: "normal",
-  },
+  // {
+  //   label: "Interior Color",
+  //   name: "interiorColor",
+  //   filterOptions: colorsList,
+  //   filterType: "normal",
+  // },
   { label: "Seat", name: "seat", filterOptions: seatOptions, filterType: "normal" },
   {
     label: "Driver Position",
@@ -299,12 +299,12 @@ export const postFeatures = [
     options: colorsList,
     category: ["cars"],
   },
-  {
-    label: "Interior Color",
-    value: "interiorColor",
-    options: colorsList,
-    category: ["cars"],
-  },
+  // {
+  //   label: "Interior Color",
+  //   value: "interiorColor",
+  //   options: colorsList,
+  //   category: ["cars"],
+  // },
   { label: "Seat", value: "seat", options: seatOptions, category: "normal" },
   {
     label: "Driver Position",

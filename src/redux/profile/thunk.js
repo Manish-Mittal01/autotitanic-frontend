@@ -29,10 +29,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (profileDetails, Thunk) => {
     try {
-      const response = await axios.put(
-        `users/update/profile/${profileDetails.userId}`,
-        profileDetails
-      );
+      const response = await axios.post(`updateUserProfile`, profileDetails);
       return response?.data;
     } catch (error) {
       return Thunk.rejectWithValue(error);

@@ -3,6 +3,7 @@ import {
   getCompareList,
   getFeaturedList,
   getRecentList,
+  getRelatedVehicles,
   getVehicleCount,
   getVehicleDetails,
   getVehicleList,
@@ -12,6 +13,7 @@ import {
 const initialState = {
   vehiclesList: {},
   featuredList: {},
+  relatedVehicles: {},
   recentList: {},
   vehiclesCount: {},
   vehicleDetails: {},
@@ -41,6 +43,12 @@ const vehiclesSlice = createSlice({
         state.featuredList = action.payload;
       })
       .addCase(getFeaturedList.rejected, (state, action) => {});
+    builder
+      .addCase(getRelatedVehicles.pending, (state, action) => {})
+      .addCase(getRelatedVehicles.fulfilled, (state, action) => {
+        state.featuredList = action.payload;
+      })
+      .addCase(getRelatedVehicles.rejected, (state, action) => {});
     builder
       .addCase(getRecentList.pending, (state, action) => {})
       .addCase(getRecentList.fulfilled, (state, action) => {

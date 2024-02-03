@@ -3,10 +3,13 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import { isArray } from "../../../utils/dataTypes";
 import ReactPlayer from "react-player";
 import Slider from "react-slick";
+import { IoMdShare } from "react-icons/io";
+import SharePop from "./sharePop";
 
 const OverlayCarousal = ({ media }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [action, setAction] = useState(null);
 
   const settingsMain = {
     dots: false,
@@ -50,6 +53,12 @@ const OverlayCarousal = ({ media }) => {
               <ReactPlayer url={item.url} className="detailCrouselImage" />
             )}
             <p className="watermark">Autotitanic</p>
+            <IoMdShare
+              className="shareIcon pointer"
+              onClick={() => {
+                setAction({ type: "sharePost" });
+              }}
+            />
           </div>
         ))}
       </Slider>
@@ -65,6 +74,8 @@ const OverlayCarousal = ({ media }) => {
           </div>
         ))}
       </Slider>
+
+      {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
     </div>
   );
 };

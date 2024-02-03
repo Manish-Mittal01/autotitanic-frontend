@@ -13,6 +13,7 @@ import { register } from "../../../redux/auth/thunk";
 import { getAllCountry } from "../../../redux/countryAndCity/thunk";
 import SelectBox from "../../../components/selectBox";
 import Asterik from "../../../components/common/asterik";
+import { uploadFile } from "../../../redux/common/thunk";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -29,7 +30,12 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const value =
+      e.target.type === "checkbox"
+        ? e.target.checked
+        : e.target.type === "file"
+        ? e.target.files[0]
+        : e.target.value;
     setUserCreds((prev) => {
       return {
         ...prev,
@@ -53,20 +59,29 @@ const Register = () => {
     if (userCreds.email && !isEmail(userCreds.email)) return setErrors({ email: `Invalid email` });
     if (userCreds.mobile && !phone(userCreds.mobile).isValid)
       return setErrors({ mobile: `Invalid mobile` });
-    if (userCreds.password === userCreds.confirmPassword)
+    if (userCreds.password !== userCreds.confirmPassword)
       return setErrors({ password: "Password and confirm password should be same" });
 
+    let image = "";
+    if (userCreds.image) {
+      const formData = new FormData();
+      formData.append("images", userCreds.image);
+      const response = await handleApiRequest(uploadFile, formData);
+      if (response.status) {
+        image = response.data[0]?.url;
+      }
+    }
     const request = {
       ...userCreds,
-      country: userCreds.country?.name,
+      country: userCreds.country?._id,
       userType: userCreds.userType?.value,
+      image: image,
     };
 
     const response = await handleApiRequest(register, request);
     if (response.status) {
       navigate("/login");
     }
-    console.log("login response", response);
   };
 
   useEffect(() => {
@@ -155,6 +170,23 @@ const Register = () => {
                             value={userCreds.mobile}
                             onChange={(value, country, e, formattedValue) =>
                               setUserCreds((prev) => ({ ...prev, mobile: formattedValue }))
+                            }
+                          />
+                        </div>
+                        {errors.mobile && <p className="errorMsg">*{errors.mobile}</p>}
+                      </div>
+
+                      <div className="col-12">
+                        <label for="name" className="form-label mb-0">
+                          Whatsapp Number
+                        </label>
+                        <div className="input-group has-validation">
+                          <PhoneInput
+                            className="phoneInput"
+                            country={"gh"}
+                            value={userCreds.whatsapp}
+                            onChange={(value, country, e, formattedValue) =>
+                              setUserCreds((prev) => ({ ...prev, whatsapp: formattedValue }))
                             }
                           />
                         </div>

@@ -78,7 +78,7 @@ export default function HeroSection({ showFilterBox = true }) {
     ) : null;
   };
 
-  console.log("filters", filters);
+  // console.log("filters", filters);
   //   console.log("allCountries", allCountries);
   //   console.log("allMakes", allMakes);
   //   console.log("allModels", allModels);

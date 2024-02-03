@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import myImage from "../../../Assets/Images/user.jpg";
-import { parseCamelKey } from "../../../utils/parseKey";
-import { useDispatch } from "react-redux";
-import { logoutUser } from "../../../redux/auth/slice";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { LuPencil } from "react-icons/lu";
+import myImage from "../../../Assets/Images/user.jpg";
+import { ReactComponent as EditIcon } from "../../../Assets/icons/edit.svg";
+import { parseCamelKey } from "../../../utils/parseKey";
+import { logoutUser } from "../../../redux/auth/slice";
+import { handleApiRequest } from "../../../services/handleApiRequest";
+import { getUserProfile, updateProfile } from "../../../redux/profile/thunk";
+import { errorMsg } from "../../../utils/toastMsg";
+import { uploadFile } from "../../../redux/common/thunk";
 
-export default function Sidebar({ user }) {
+export default function Sidebar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
+  const { userProfile: user } = useSelector((state) => state.profile);
+
   const [activeTab, setActiveTab] = useState("/profile");
 
   const sidetabList = [
@@ -53,6 +61,36 @@ export default function Sidebar({ user }) {
     dispatch(logoutUser());
   };
 
+  const handleUserProfile = async () => {
+    await handleApiRequest(getUserProfile);
+  };
+
+  const handleUpdateProfileImage = async (e) => {
+    const image = e.target.files[0];
+    if (!image) return;
+    const fileType = image.type.split("/").pop();
+    const acceptedFileType = ["png", "jpg", "jpeg", "webm"];
+    if (!acceptedFileType.includes(fileType)) {
+      return errorMsg("Use jpg, png, webm file only");
+    }
+
+    const formData = new FormData();
+    formData.append("images", image);
+    const response = await handleApiRequest(uploadFile, formData);
+    if (response.status) {
+      let userImage = response.data[0]?.url;
+
+      const profileUpdateresponse = await handleApiRequest(updateProfile, {
+        image: userImage,
+        _id: user.data._id,
+      });
+
+      if (profileUpdateresponse.status) {
+        handleUserProfile();
+      }
+    }
+  };
+
   useEffect(() => {
     setActiveTab(pathname);
   }, [pathname]);
@@ -63,10 +101,24 @@ export default function Sidebar({ user }) {
         <ul className="list-unstyled">
           <li className={`d-flex justify-content-between px-3 py-2 border-top `}>
             <div className="text-center">
-              <img
-                src={user?.data?.userAvatar || user?.data?.dealerLogo || myImage}
-                className="userProfileImage"
-              />
+              <div className="position-relative mx-auto" style={{ width: "fit-content" }}>
+                <img
+                  src={user?.data?.userAvatar || user?.data?.dealerLogo || myImage}
+                  className="userProfileImage"
+                />
+                <label htmlFor="selectpostImage" className="editProfileImageIcon">
+                  <LuPencil />
+                </label>
+                <input
+                  id="selectpostImage"
+                  type="file"
+                  accept=".png, .jpg, .jpeg, .webm"
+                  className="d-none"
+                  onChange={(e) => {
+                    handleUpdateProfileImage(e);
+                  }}
+                />
+              </div>
               <b className="m-0 d-block">{user?.data?.name}</b>
               <p className="m-0 text-danger">{parseCamelKey(user?.data?.userType)}</p>
               <p className="text-break">{user?.data?.email}</p>

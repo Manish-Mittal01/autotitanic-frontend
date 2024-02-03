@@ -8,10 +8,6 @@ import Sidebar from "./components/sidebar";
 import Wishlist from "./components/wishlist";
 
 export default function Profile({ Component }) {
-  const { userProfile } = useSelector((state) => state.profile);
-
-  // console.log("userProfile", userProfile);
-
   return (
     <>
       <section>
@@ -29,7 +25,7 @@ export default function Profile({ Component }) {
 
         <Row className="my-2">
           <Col lg={3} className="filterBoxWrapper d-none d-lg-block">
-            <Sidebar user={userProfile} />
+            <Sidebar />
           </Col>
 
           <Col xs={12} lg={9} className="vehicleListContainer">

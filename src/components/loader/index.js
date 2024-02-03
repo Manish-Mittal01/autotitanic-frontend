@@ -50,7 +50,7 @@ export default function LoadIndicator({ isOpaque }) {
             width: 100%;
             height: 100%;
             background-color: #000;
-            opacity: ${isOpaque ? 1 : 0.25};
+            opacity: ${isOpaque ? 1 : 0.4};
           }
 
           .x-load-indicator-component .x-load-indicator-image {
