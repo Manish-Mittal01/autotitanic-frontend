@@ -1,20 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ReactComponent as CloseEye } from "../../../Assets/icons/closedEye.svg";
 import { ReactComponent as OpenEye } from "../../../Assets/icons/openEye.svg";
 import { Button, Row } from "react-bootstrap";
 import Asterik from "../../../components/common/asterik";
+import { handleApiRequest } from "../../../services/handleApiRequest";
+import { changePassword } from "../../../redux/profile/thunk";
+import { errorMsg, successMsg } from "../../../utils/toastMsg";
 
 export default function ChangePassword() {
   const [errors, setErrors] = useState({});
   const [userCreds, setUserCreds] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setUserCreds((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  const handleChangePassword = async () => {
+    if (userCreds.password !== userCreds.confirmPassword)
+      return errorMsg("Password and confirm password should match");
+    const response = await handleApiRequest(changePassword, userCreds);
+    if (response.status) {
+      successMsg("Password updated");
+      userCreds({});
+    }
+  };
+
+  // console.log("userCreds", userCreds);
 
   return (
     <>
@@ -96,7 +117,12 @@ export default function ChangePassword() {
             </Row>
 
             <div className="col-12">
-              <Button variant="danger" type="submit" className="btn w-100 ">
+              <Button
+                variant="danger"
+                type="submit"
+                className="btn w-100"
+                onClick={handleChangePassword}
+              >
                 Change Password
               </Button>
             </div>

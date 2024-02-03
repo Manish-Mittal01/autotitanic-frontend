@@ -14,10 +14,7 @@ export const changePassword = createAsyncThunk(
   "profile/changePassword",
   async (passworddetails, Thunk) => {
     try {
-      const response = await axios.put(
-        `users/update/password/${passworddetails.userId}`,
-        passworddetails
-      );
+      const response = await axios.post(`changePassword`, passworddetails);
       return response?.data;
     } catch (error) {
       return Thunk.rejectWithValue(error);

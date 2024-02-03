@@ -1,3 +1,4 @@
+import SuccessScreen from "./components/successScreen";
 import Login from "./pages/AuthPage/Login/Index";
 import Register from "./pages/AuthPage/register";
 import ResetPassword from "./pages/AuthPage/resetPassword";
@@ -49,6 +50,10 @@ export const privateRoutes = [
   {
     path: "/profile",
     element: <Profile Component={MyProfile} />,
+  },
+  {
+    path: "/successMsg",
+    element: <SuccessScreen />,
   },
   {
     path: "/my-wishlist",

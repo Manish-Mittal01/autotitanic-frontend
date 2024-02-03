@@ -362,8 +362,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     }
 
     if (response.status) {
-      successMsg("Post created!!");
-      navigate("/home");
+      navigate("/successMsg");
     }
   };
 
