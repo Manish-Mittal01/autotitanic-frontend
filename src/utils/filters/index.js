@@ -1,3 +1,22 @@
+export function getYearList() {
+  const yearList = [];
+  for (let i = new Date().getFullYear(); i >= 2000; i--) {
+    yearList.push({ value: i, label: i });
+  }
+  for (let i = 1990; i >= 1930; i -= 10) {
+    yearList.push({ value: i, label: `${i}s` });
+  }
+  return yearList;
+}
+
+export const getEngineSizeOptions = () => {
+  const engineSizes = [];
+  for (let i = 1; i <= 8; i += 0.5) {
+    engineSizes.push({ value: `${i}L`, label: `${i}L` });
+  }
+  return engineSizes;
+};
+
 export const priceList = [
   { value: 0, label: 0 },
   { value: 1000, label: 1000 },
@@ -24,24 +43,27 @@ export const mileageList = [
   { value: 100, label: 100 },
 ];
 
-export function getYearList() {
-  const yearList = [];
-  for (let i = 2000; i <= new Date().getFullYear(); i++) {
-    yearList.push({ value: i, label: i });
-  }
-  return yearList;
-}
-
 export const colorsList = [
-  { value: "Red", label: "Red" },
+  { value: "Beige", label: "Beige" },
   { value: "Black", label: "Black" },
-  { value: "White", label: "White" },
-  { value: "Brown", label: "Brown" },
   { value: "Blue", label: "Blue" },
+  { value: "Bronze", label: "Bronze" },
+  { value: "Brown", label: "Brown" },
+  { value: "Burgundy", label: "Burgundy" },
+  { value: "Gold", label: "Gold" },
   { value: "Green", label: "Green" },
   { value: "Grey", label: "Grey" },
-  { value: "Biege", label: "Biege" },
+  { value: "Indigo", label: "Indigo" },
+  { value: "Magenta", label: "Magenta" },
+  { value: "Maroon", label: "Maroon" },
+  { value: "Navy", label: "Navy" },
+  { value: "Orange", label: "Orange" },
+  { value: "Pink", label: "Pink" },
+  { value: "Purple", label: "Purple" },
+  { value: "Red", label: "Red" },
   { value: "Silver", label: "Silver" },
+  { value: "White", label: "White" },
+  { value: "Turquoise", label: "Turquoise" },
   { value: "Yellow", label: "Yellow" },
   { value: "Multicolour", label: "Multicolour" },
 ];
@@ -54,15 +76,16 @@ export const driverPositions = [
 export const seatOptions = [
   { value: 1, label: "1 Seat" },
   { value: 2, label: "2 Seat" },
+  { value: 3, label: "3 Seat" },
   { value: 4, label: "4 Seat" },
   { value: 5, label: "5 Seat" },
   { value: 7, label: "7 Seat" },
   { value: 8, label: "8 Seat" },
-  { value: 10, label: "10 Seat" },
+  { value: 9, label: "9 Seat" },
 ];
 
 export const bootSpaceOptions = [
-  { value: "No space", label: "No space" },
+  // { value: "No space", label: "No space" },
   { value: "1 - 3 suitcases (100 - 300 liters)", label: "1 - 3 suitcases (100 - 300 liters)" },
   { value: "3 - 5 suitcases (300 - 500 liters)", label: "3 - 5 suitcases (300 - 500 liters)" },
   {
@@ -72,16 +95,13 @@ export const bootSpaceOptions = [
 ];
 
 export const accelerationOptions = [
-  { value: "4-6s (0-60mph)", label: "4-6s (0-60mph)" },
-  { value: "6-8s (0-60mph)", label: "6-8s (0-60mph)" },
-  { value: "8-10s (0-60mph)", label: "8-10s (0-60mph)" },
-  { value: "10-12s (0-60mph)", label: "10-12s (0-60mph)" },
+  { value: "0-5s (0-60mph)", label: "0-5s (0-60mph)" },
+  { value: "5-8s (0-60mph)", label: "5-8s (0-60mph)" },
+  { value: "8-12s (0-60mph)", label: "8-12s (0-60mph)" },
   { value: "12+s (0-60mph)", label: "12+s (0-60mph)" },
 ];
 
 export const fuelConsumtionOptions = [
-  { value: "10+ mpg", label: "10+ mpg" },
-  { value: "20+ mpg", label: "20+ mpg" },
   { value: "30+ mpg", label: "30+ mpg" },
   { value: "40+ mpg", label: "40+ mpg" },
   { value: "50+ mpg", label: "50+ mpg" },
@@ -89,51 +109,78 @@ export const fuelConsumtionOptions = [
 ];
 
 export const co2EmmisionOptions = [
+  { value: "upto 0 g / km CO2", label: "upto 0 g / km CO2" },
+  { value: "upto 75 g / km CO2", label: "upto 75 g / km CO2" },
   { value: "upto 100 g / km CO2", label: "upto 100 g / km CO2" },
   { value: "upto 110 g / km CO2", label: "upto 110 g / km CO2" },
   { value: "upto 120 g / km CO2", label: "upto 120 g / km CO2" },
   { value: "upto 130 g / km CO2", label: "upto 130 g / km CO2" },
   { value: "upto 150 g / km CO2", label: "upto 150 g / km CO2" },
-  { value: "upto 170 g / km CO2", label: "upto 170 g / km CO2" },
-  { value: "upto 180 g / km CO2", label: "upto 180 g / km CO2" },
+  { value: "upto 165 g / km CO2", label: "upto 165 g / km CO2" },
+  { value: "upto 175 g / km CO2", label: "upto 175 g / km CO2" },
+  { value: "upto 185 g / km CO2", label: "upto 185 g / km CO2" },
   { value: "upto 200 g / km CO2", label: "upto 200 g / km CO2" },
-  { value: "upto 220 g / km CO2", label: "upto 220 g / km CO2" },
-  { value: "upto 250 g / km CO2", label: "upto 250 g / km CO2" },
-  { value: "upto 250+ g / km CO2", label: "upto 250+ g / km CO2" },
+  { value: "upto 225 g / km CO2", label: "upto 225 g / km CO2" },
+  { value: "upto 255 g / km CO2", label: "upto 255 g / km CO2" },
+  { value: "upto 255+ g / km CO2", label: "upto 255+ g / km CO2" },
 ];
 
 export const fuelTypeOptions = [
   { value: "biFuel", label: "Bi Fuel" },
-  { value: "deselPlugInHybrid", label: "Desel Plug-in-Hybrid" },
   { value: "diesel", label: "Diesel" },
   { value: "dieselHybrid", label: "Diesel Hybrid" },
+  { value: "deselPlugInHybrid", label: "Desel Plug-in-Hybrid" },
   { value: "electric", label: "Electric" },
   { value: "naturalGas", label: "Natural gas" },
   { value: "petrol", label: "Petrol" },
   { value: "petrolHybrid", label: "Petrol Hybrid" },
   { value: "petrolPlugInHybrid", label: "Petrol Plug-in-Hybrid" },
+  { value: "unspecified", label: "Unspecified" },
 ];
 
 export const bodyStyleOptions = [
-  { value: "SUV", label: "SUV" },
+  { value: "carDerivedVan", label: "Car Derived Van" },
+  { value: "convertible", label: "Convertible" },
+  { value: "coupe", label: "Coupe" },
+  { value: "estate", label: "Estate" },
   { value: "hatchback", label: "Hatchback" },
-  { value: "sedan", label: "Sedan" },
+  { value: "MPV", label: "MPV" },
+  { value: "SUV/Pick-up", label: "SUV/Pick-up" },
   { value: "saloon", label: "Saloon" },
+  { value: "unspecified", label: "Unspecified" },
 ];
 
-export const getEngineSizeOptions = () => {
-  const engineSizes = [];
-  for (let i = 1; i <= 8; i += 0.5) {
-    engineSizes.push({ value: `${i}L`, label: `${i}L` });
-  }
-  return engineSizes;
-};
-
 export const engineSizeOptions = [
-  { value: "SUV", label: "SUV" },
-  { value: "hatchback", label: "Hatchback" },
-  { value: "sedan", label: "Sedan" },
-  { value: "saloon", label: "Saloon" },
+  { value: "0L", label: "0L" },
+  { value: "1.0L", label: "1.0L" },
+  { value: "1.2L", label: "1.2L" },
+  { value: "1.4L", label: "1.4L" },
+  { value: "1.6L", label: "1.6L" },
+  { value: "1.8L", label: "1.8L" },
+  { value: "1.9L", label: "1.9L" },
+  { value: "2.0L", label: "2.0L" },
+  { value: "2.2L", label: "2.2L" },
+  { value: "2.4L", label: "2.4L" },
+  { value: "2.6L", label: "2.6L" },
+  { value: "2.8L", label: "2.8L" },
+  { value: "3.0L", label: "3.0L" },
+  { value: "3.5L", label: "3.5L" },
+  { value: "4.0L", label: "4.0L" },
+  { value: "4.5L", label: "4.5L" },
+  { value: "5.0L", label: "5.0L" },
+  { value: "5.5L", label: "5.5L" },
+  { value: "6.0L", label: "6.0L" },
+  { value: "6.5L", label: "6.5L" },
+  { value: "7.0L", label: "7.0L" },
+];
+
+export const doorOptions = [
+  { value: 2, label: "2 Doors" },
+  { value: 3, label: "3 Doors" },
+  { value: 4, label: "4 Doors" },
+  { value: 5, label: "5 Doors" },
+  { value: 6, label: "6 Doors" },
+  { value: 7, label: "7 Doors" },
 ];
 
 export const filterOptions = [
@@ -155,8 +202,10 @@ export const filterOptions = [
     label: "Year",
     name: "year",
     filterOptions: {
-      From: { options: getYearList().slice(0, -2), key: "minYear" },
-      To: { options: getYearList().slice(2), key: "maxYear" },
+      From: { options: getYearList() },
+      // .slice(0, -2), key: "minYear" },
+      To: { options: getYearList() },
+      // .slice(2), key: "maxYear" },
     },
     filterType: "range",
   },
@@ -189,10 +238,7 @@ export const filterOptions = [
   {
     label: "Door",
     name: "door",
-    filterOptions: [
-      { value: 2, label: "2 Doors" },
-      { value: 4, label: "4 Doors" },
-    ],
+    filterOptions: doorOptions,
     filterType: "normal",
   },
   {
@@ -262,7 +308,7 @@ export const postFeatures = [
   {
     label: "Engine Size",
     value: "engineSize",
-    options: getEngineSizeOptions(),
+    options: engineSizeOptions,
     category: ["cars"],
   },
   {
@@ -287,10 +333,7 @@ export const postFeatures = [
   {
     label: "Door",
     value: "door",
-    options: [
-      { value: 2, label: "2 Doors" },
-      { value: 4, label: "4 Doors" },
-    ],
+    options: doorOptions,
     category: ["cars"],
   },
   {
@@ -330,6 +373,33 @@ export const postFeatures = [
     options: co2EmmisionOptions,
     category: ["cars"],
   },
+];
+
+export const detailsList = {
+  cars: [
+    { value: "condition", label: "Condition" },
+    { value: "year", label: "Year" },
+    { value: "bodyStyle", label: "Body" },
+    { value: "driverPosition", label: "Driver Position" },
+    { value: "gearBox", label: "Gear Box" },
+    { value: "engineSize", label: "Engine Size" },
+    { value: "mileage", label: "Mileage" },
+    { value: "fuelType", label: "Fuel Type" },
+    { value: "seat", label: "Seats" },
+    { value: "door", label: "Doors" },
+    { value: "exteriorColor", label: "Colour" },
+    { value: "bootSpace", label: "Boot Space" },
+    { value: "accelration", label: "Acceleration" },
+    { value: "co2Emission", label: "CO2 Emission" },
+  ],
+};
+
+export const sellerDetails = [
+  { value: "userType", label: "seller Type" },
+  { value: "name", label: "Seller Name" },
+  { value: "mobile", label: "Contact Number" },
+  { value: "whatsapp", label: "Whatspp Seller" },
+  { value: "email", label: "Email Seller" },
 ];
 
 export const sortingOptions = [

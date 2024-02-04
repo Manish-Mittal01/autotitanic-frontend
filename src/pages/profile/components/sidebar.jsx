@@ -100,7 +100,7 @@ export default function Sidebar() {
       <div className="border rounded pb-3">
         <ul className="list-unstyled">
           <li className={`d-flex justify-content-between px-3 py-2 border-top `}>
-            <div className="text-center">
+            <div className="text-center" style={{ width: "100%" }}>
               <div className="position-relative mx-auto" style={{ width: "fit-content" }}>
                 <img
                   src={user?.data?.userAvatar || user?.data?.dealerLogo || myImage}

@@ -19,7 +19,7 @@ function CarsList() {
     slidesToScroll: 6,
     responsive: [
       {
-        breakpoint: 2000,
+        breakpoint: 3000,
         settings: {
           slidesToShow: 5,
           slidesToScroll: 5,
@@ -27,7 +27,7 @@ function CarsList() {
         },
       },
       {
-        breakpoint: 1700,
+        breakpoint: 2400,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
@@ -136,51 +136,65 @@ function CarsList() {
     [featuredList, recentList]
   );
 
+  const sliderItemsCountFix = (settings, itemsCount) => {
+    if (!settings.responsive) return settings;
+    const responsiveArray = settings.responsive.map((responsiveItem) => {
+      const responsive = responsiveItem.settings !== "unslick" && responsiveItem.settings;
+      if (!responsive) return;
+      const slidesToShow = responsive.slidesToShow || 1;
+      const isItemsMoreThanSlidesToShow = itemsCount > slidesToShow;
+
+      return isItemsMoreThanSlidesToShow
+        ? responsiveItem
+        : {
+            ...responsiveItem,
+            settings: { ...responsiveItem.settings, slidesToShow: itemsCount },
+          };
+    });
+
+    return { ...settings, responsive: responsiveArray };
+  };
+
   useEffect(() => {
     handleRecentList();
     handleFeaturedList();
   }, []);
 
-  // console.log("recentList", recentList);
   // console.log("splitList", splitList(recentList.data?.items, 4, 5));
-
+  // console.log("recentList", recentList);
   // console.log("featuredList", featuredList);
 
   return (
     <>
       <h3 className="my-2 text-center text-danger">Featured Cars</h3>
-      {splitList(featuredList.data?.items, 3, 60).map((rows, i) => (
-        <Row key={i + "parent"} className="align-items-center justify-content-between">
-          <div className="homePostRow">
-            {splitList(rows, 2, 30).map((row, ind) => {
-              return (
+      {splitList(featuredList.data?.items, 3, 60).map((rows, i) => {
+        return (
+          <Row key={i + "parent"} className="align-items-center justify-content-between">
+            <Col xs={12} xl={10} className="homePostRow">
+              {splitList(rows, 2, 30).map((row, ind) => (
                 <Row key={ind + "child"}>
                   <Col xs={12}>
-                    {/* <OwlCarousel {...setting2}>
-                      {rows.slice(0 * 20, 0 * 20 + 20).map((post) => (
-                        <PostCard key={1} post={post} />
-                      ))}
-                    </OwlCarousel> */}
-                    <Slider {...settings}>
-                      {row.map((post) => (
-                        <PostCard key={1} post={post} />
+                    <Slider {...sliderItemsCountFix(settings, row.length)}>
+                      {row.map((post, i) => (
+                        <PostCard key={i} post={post} />
                       ))}
                     </Slider>
                   </Col>
                 </Row>
-              );
-            })}
-          </div>
-          <div
-            className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
-            style={{ width: 160, height: 600 }}
-          >
-            Add Container
-            <br />
-            (160 x 600)
-          </div>
-        </Row>
-      ))}
+              ))}
+            </Col>
+            <Col
+              xl={2}
+              className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
+              style={{ width: 160, height: 600 }}
+            >
+              Add Container
+              <br />
+              (160 x 600)
+            </Col>
+          </Row>
+        );
+      })}
 
       <div className="fullSizeAddContainer" style={{ width: 980, height: 120 }}>
         Add Container
@@ -194,13 +208,8 @@ function CarsList() {
           <Col xs={12} xl={10} className="homePostRow">
             {splitList(rows, 2, 20).map((row, ind) => (
               <Row key={ind + "child"}>
-                <Col>
-                  {/* <OwlCarousel {...setting2}>
-                    {recentList.data?.items.slice(0 * 20, 0 * 20 + 20).map((post, i) => (
-                      <PostCard key={i} post={post} />
-                    ))}
-                  </OwlCarousel> */}
-                  <Slider {...settings}>
+                <Col xs={12}>
+                  <Slider {...sliderItemsCountFix(settings, row.length)} className="mySlider">
                     {row.map((post, i) => (
                       <PostCard key={i} post={post} />
                     ))}

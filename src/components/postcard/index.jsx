@@ -3,6 +3,7 @@ import { ReactComponent as HeartIcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as ExpandIcon } from "../../Assets/icons/expand.svg";
 import { ReactComponent as LinkIcon } from "../../Assets/icons/link.svg";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
+import { FaStar } from "react-icons/fa";
 import { OverlayTrigger } from "react-bootstrap";
 import MyTooltip from "../common/tooltip";
 import Gallery from "./components/gallery";
@@ -70,11 +71,11 @@ export default function PostCard({ post }) {
   // }, [postImageRef.current?.offsetWidth]);
 
   // console.log("showImageModel", showImageModel);
+  console.log("post", post);
 
   return (
     <div
-      className="pointer"
-      style={{ position: "relative" }}
+      className="postcardWrapper pointer position-relative mx-auto"
       onClick={() => navigate(`/details/${post._id}`)}
     >
       <div className="h-100 text-dark m-0 p-2">
@@ -101,8 +102,8 @@ export default function PostCard({ post }) {
               {post?.make?.label + " " + post?.model?.label}
             </p>
             <button className="border rounded-pill my-1">Private</button>
-            <div className="lctn-wrp postcradBackground text-white d-flex align-items-center justify-content-between p-2">
-              <div className="d-flex align-items-center">
+            <div className=" postcardFooter text-white d-flex align-items-center justify-content-between p-2">
+              <div className="d-flex align-items-center me-3">
                 <p className="m-0">{post?.currency}</p>
                 <p className="m-0"> {post?.price}</p>
               </div>
@@ -114,6 +115,7 @@ export default function PostCard({ post }) {
           </div>
         </div>
       </div>
+      {post.isFeatured && <FaStar className="starIcon" />}
     </div>
   );
 }

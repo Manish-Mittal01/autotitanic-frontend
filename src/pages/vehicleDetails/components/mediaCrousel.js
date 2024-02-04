@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
-import { isArray } from "../../../utils/dataTypes";
 import ReactPlayer from "react-player";
 import Slider from "react-slick";
 import { IoMdShare } from "react-icons/io";
+import { FaWhatsapp, FaStar } from "react-icons/fa";
+import { isArray } from "../../../utils/dataTypes";
 import SharePop from "./sharePop";
 
-const OverlayCarousal = ({ media }) => {
+const OverlayCarousal = ({ media, isFeatured }) => {
   const sliderRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [action, setAction] = useState(null);
@@ -52,13 +53,14 @@ const OverlayCarousal = ({ media }) => {
             ) : (
               <ReactPlayer url={item.url} className="detailCrouselImage" />
             )}
-            <p className="watermark">Autotitanic</p>
-            <IoMdShare
+            <p className="watermark">AutoTitanic</p>
+            {/* <IoMdShare
               className="shareIcon pointer"
               onClick={() => {
                 setAction({ type: "sharePost" });
               }}
-            />
+            /> */}
+            {/* {isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />} */}
           </div>
         ))}
       </Slider>

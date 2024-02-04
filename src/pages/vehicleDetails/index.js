@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaStar } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
@@ -21,6 +21,7 @@ import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
 import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
+import { detailsList, sellerDetails } from "../../utils/filters";
 
 export default function VehicleDetails() {
   const { id } = useParams();
@@ -88,39 +89,32 @@ export default function VehicleDetails() {
         <Row>
           <Col lg={8}>
             <div className="parentCrousel">
-              <MediaCarousel media={detail?.media} />
+              <MediaCarousel media={detail?.media} isFeatured={detail?.isFeatured} />
             </div>
-            <div className="d-flex align-items-center my-2 border-bottom my-4">
-              <p
-                className="small pointer text-center m-0 p-2"
-                onClick={() => {
-                  if (isUserLoggedin()) {
-                    setAction({ type: "makeOffer", currency: detail?.currency });
-                  } else {
-                    navigate("/login");
-                  }
-                }}
-              >
-                <MdLocalOffer className="text-danger mx-1" />
-                Make an Offer
-              </p>
-              <p className="small pointer text-center m-0 p-2" onClick={handleAddToCompare}>
-                <CompareIcon className="redIcon" />
-                Add to Compare
-              </p>
-              <p className="small pointer text-center m-0 p-2 mx-2" onClick={handleAddToWishlist}>
-                <Heartcon className="redIcon" />
-                Add to Wishlist
-              </p>
-              <p
-                className="whatsappMsgBtn small pointer rounded-pill text-center m-0 p-1 mx-2"
-                onClick={() => {}}
-              >
-                <FaWhatsapp className="text-success mx-1" />
-                Whatsapp Seller
-              </p>
-            </div>
-            {/* <div className="d-flex justify-content-between my-2 border-bottom my-4">
+            <div className="inlineActionWrapper d-flex align-items-center justify-content-between my-2 border-bottom my-4">
+              <div className="d-flex align-items-center">
+                <p
+                  className="small pointer text-center m-0 p-2"
+                  onClick={() => {
+                    if (isUserLoggedin()) {
+                      setAction({ type: "makeOffer", currency: detail?.currency });
+                    } else {
+                      navigate("/login");
+                    }
+                  }}
+                >
+                  <MdLocalOffer className="text-danger mx-1" />
+                  Make an Offer
+                </p>
+                <p className="small pointer text-center m-0 p-2" onClick={handleAddToCompare}>
+                  <CompareIcon className="redIcon" />
+                  Add to Compare
+                </p>
+                <p className="small pointer text-center m-0 p-2 mx-2" onClick={handleAddToWishlist}>
+                  <Heartcon className="redIcon" />
+                  Add to Wishlist
+                </p>
+              </div>
               <p
                 className="small pointer text-center m-0 p-2"
                 onClick={() => {
@@ -135,8 +129,8 @@ export default function VehicleDetails() {
                   }}
                 />
               </p>
-            </div> */}
-            <div>
+            </div>
+            <div className="my-4">
               <h5>Vehicle Description</h5>
               <div
                 dangerouslySetInnerHTML={{ __html: detail?.description }}
@@ -145,70 +139,101 @@ export default function VehicleDetails() {
             </div>
           </Col>
           <Col lg={4}>
-            {/* <h4>{[detail?.make.label, detail?.model.label].join(" ")}</h4> */}
             <h5 className="my-2">{detail?.title}</h5>
             <p>{[detail?.year, detail?.make.label, detail?.model.label].join("  ")}</p>
             <p className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center text-danger gap-1">
+                <h6 className="m-0 fw-bold">{detail?.currency} </h6>
+                <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString()}</h6>
+              </div>
               <div>
                 {detail?.city?.name + ", " + detail?.country?.name}
-                <img src={detail?.country.flag} className="ms-1" style={{ width: 22 }} />
-              </div>
-              <div className="d-flex align-items-center text-danger">
-                <p className="m-0">{detail?.currency}</p>
-                <p className="m-0">{detail?.price}</p>
+                <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
               </div>
             </p>
             <div className="detailsWrapper p-3">
-              <h6 className="detailsHeading">Key Features</h6>
-              {Object.keys(detail || {}).map(
+              <h6 className="detailsHeading"> Key Vehicle Details</h6>
+              {detailsList.cars?.map((key) => (
+                <Row className="my-2">
+                  <Col xs={5} className="small">
+                    {key.label}
+                  </Col>
+                  <Col xs={7} className="small">
+                    {typeof detail?.[key.value] !== "object"
+                      ? parseCamelKey(detail?.[key.value]?.toString())
+                      : parseCamelKey(detail?.[key.value]?.name || detail?.[key.value]?.label)}
+                  </Col>
+                </Row>
+              ))}
+            </div>
+            <div className="detailsWrapper sellerDetailsWrapper p-3 mt-3">
+              <h6 className="detailsHeading">Seller's Details</h6>
+              {sellerDetails.map(
                 (key) =>
-                  key !== "_id" &&
-                  key !== "createdAt" &&
-                  key !== "media" &&
-                  key !== "reviews" &&
-                  key !== "country" &&
-                  key !== "city" &&
-                  key !== "description" &&
-                  key !== "price" &&
-                  key !== "currency" &&
-                  key !== "isFeatured" &&
-                  key !== "status" &&
-                  key !== "sellOrRent" &&
-                  key !== "type" &&
-                  key !== "user" &&
-                  key !== "title" &&
-                  key !== "updatedAt" && (
+                  detail?.user?.[key.value] && (
                     <Row className="my-2">
                       <Col xs={5} className="small">
-                        {parseCamelKey(key)}
+                        {key.label}
                       </Col>
-                      <Col xs={7} className="small">
-                        {typeof detail[key] !== "object"
-                          ? parseCamelKey(detail[key]?.toString())
-                          : parseCamelKey(detail[key]?.name || detail[key]?.label)}
+                      <Col xs={7} className="small" style={{ wordWrap: "break-word" }}>
+                        {key.value === "whatsapp" || key.value === "email" ? (
+                          <a
+                            href={
+                              key.value === "whatsapp"
+                                ? `https://wa.me/${detail?.user?.[key.value]}`
+                                : `mailto:${detail?.user?.[key.value]}`
+                            }
+                            target="_blank"
+                          >
+                            {parseKey(detail?.user?.[key.value])}
+                          </a>
+                        ) : (
+                          parseKey(detail?.user?.[key.value])
+                        )}
                       </Col>
                     </Row>
                   )
               )}
             </div>
-            <div className="detailsWrapper p-3 mt-3">
-              <h6 className="detailsHeading">Seller Details</h6>
-              {["name", "mobile", "email"].map((key) => (
-                <Row className="my-2">
-                  <Col xs={5} className="small">
-                    {parseCamelKey(key)}
-                  </Col>
-                  <Col xs={7} className="small" style={{ wordWrap: "break-word" }}>
-                    {detail?.user?.[key]}
-                  </Col>
-                </Row>
-              ))}
+            <div className="detailsWrapper ActionWrapper p-3 mt-3">
+              <h6 className="detailsHeading">Interactive Options</h6>
               <Row className="my-2">
-                <Col xs={5} className="small">
-                  Seller
-                </Col>
-                <Col xs={7} className="small">
-                  {parseKey(detail?.user?.userType)}
+                <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
+                  <p
+                    className="small pointer m-0 p-2"
+                    onClick={() => {
+                      if (isUserLoggedin()) {
+                        setAction({ type: "makeOffer", currency: detail?.currency });
+                      } else {
+                        navigate("/login");
+                      }
+                    }}
+                  >
+                    <MdLocalOffer className="text-danger mx-1" />
+                    Make an Offer
+                  </p>
+                  <p className="small pointer m-0 p-2" onClick={handleAddToCompare}>
+                    <CompareIcon className="redIcon" />
+                    Add to Compare
+                  </p>
+                  <p className="small pointer m-0 p-2 " onClick={handleAddToWishlist}>
+                    <Heartcon className="redIcon" />
+                    Add to Wishlist
+                  </p>
+                  <p
+                    className="small pointer m-0 p-2"
+                    onClick={() => {
+                      setAction({ type: "sharePost" });
+                    }}
+                  >
+                    <IoMdShare
+                      className="mx-1 text-danger"
+                      onClick={() => {
+                        setAction({ type: "sharePost" });
+                      }}
+                    />
+                    Share
+                  </p>
                 </Col>
               </Row>
             </div>
@@ -217,6 +242,7 @@ export default function VehicleDetails() {
       </section>
 
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}
+      {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
     </>
   );
 }

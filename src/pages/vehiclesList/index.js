@@ -12,9 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
 import { sortingOptions } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { myArr } from "../../utils/constants";
 
 export default function VehiclesList() {
+  const { state } = useLocation();
   const { categoryFilter } = useParams();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
@@ -67,6 +69,12 @@ export default function VehiclesList() {
       dispatch(selectFilters({ condition: "" }));
     }
   }, [categoryFilter]);
+
+  useEffect(() => {
+    if (state?.filters) {
+      dispatch(selectFilters(state.filters));
+    }
+  }, [state]);
 
   //   console.log("vehiclesList", vehiclesList);
   // console.log("categoryFilter", categoryFilter);

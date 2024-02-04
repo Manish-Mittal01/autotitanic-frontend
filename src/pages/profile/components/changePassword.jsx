@@ -29,9 +29,10 @@ export default function ChangePassword() {
     if (userCreds.password !== userCreds.confirmPassword)
       return errorMsg("Password and confirm password should match");
     const response = await handleApiRequest(changePassword, userCreds);
+    console.log("response", response);
     if (response.status) {
       successMsg("Password updated");
-      userCreds({});
+      setUserCreds({});
     }
   };
 

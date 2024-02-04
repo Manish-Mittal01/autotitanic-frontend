@@ -91,7 +91,7 @@ export default function HeroSection({ showFilterBox = true }) {
           className="searchBoxWrapper bg-white p-4 rounded ms-4"
           style={{ display: showFilterBox ? "" : "none" }}
         >
-          <h5 className="text-center">Find your dream Cars</h5>
+          <h5 className="text-center">Find your dream Car</h5>
           <SelectBox
             placeholder="Select Country"
             components={{ Option: CountryFilterOptions, IndicatorSeparator: null }}
@@ -147,7 +147,7 @@ export default function HeroSection({ showFilterBox = true }) {
               Reset Filters
             </u>
             <u className="text-primary pointer" onClick={() => navigate("/allFilters")}>
-              More Filters
+              More Options
             </u>
           </div>
         </div>

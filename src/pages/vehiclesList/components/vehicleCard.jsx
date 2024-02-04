@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
@@ -42,11 +43,11 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (imageRef.current) {
-  //     setMainImageWidth(imageRef.current.offsetWidth);
-  //   }
-  // }, [imageRef.current]);
+  useEffect(() => {
+    if (imageRef.current) {
+      setMainImageWidth(imageRef.current.offsetWidth * (3 / 4));
+    }
+  }, [imageRef.current]);
 
   // console.log("vehicle.media", vehicle.media);
 
@@ -57,7 +58,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
           <Col
             lg={3}
             xs={9}
-            className=""
+            className="position-relative"
             style={{ paddingInline: 1 }}
             onClick={() => navigate(`/details/${vehicle._id}`)}
           >
@@ -67,6 +68,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
               className="mainImage w-100"
               // style={{ height: mainImageWidth }}
             />
+            {vehicle?.isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />}
           </Col>
           <Col
             lg={1}
@@ -99,7 +101,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
             </h6>
             {/* <div className="vehicledetails"> */}
             <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
-              {vehicle.make.label + " " + vehicle.model.label}
+              {vehicle.make?.label + " " + vehicle.model?.label}
             </p>
             {/* <p>{vehicle.variant?.label}</p> */}
             <p className="my-2 fw-bold" onClick={() => navigate(`/details/${vehicle._id}`)}>
@@ -175,6 +177,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
           </>
         )}
       </div>
+
       {
         <DeletePopup
           userAction={userAction}

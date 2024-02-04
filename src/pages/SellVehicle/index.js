@@ -66,7 +66,7 @@ export default function SellVehicle() {
   }, [id]);
 
   useEffect(() => {
-    if (vehicleDetails.data) {
+    if (id && vehicleDetails.data) {
       const myPostDetails = {};
       const myFeatureList = [
         ...featuresList,
@@ -226,6 +226,14 @@ export const PostStepOne = ({
     setPostUploadStep(2);
   };
 
+  const handleSelectMainImage = (i) => {
+    const oldImages = [...localImages];
+    const oldImage = oldImages[i];
+    oldImages.splice(i, 1);
+    oldImages.unshift(oldImage);
+    setLocalImages([...oldImages]);
+  };
+
   useEffect(() => {
     handleCountryList();
   }, []);
@@ -263,10 +271,12 @@ export const PostStepOne = ({
             setPostDetails((prev) => ({
               ...prev,
               country: selected,
-              currency: postDetails.currency || {
-                value: selected.currency,
-                label: selected.currency,
-              },
+              currency: postDetails.currency?.value
+                ? postDetails.currency
+                : {
+                    value: selected.currency,
+                    label: selected.currency,
+                  },
               city: "",
             }))
           }
@@ -297,7 +307,11 @@ export const PostStepOne = ({
           />
           {localImages.map((image, i) => (
             <div key={image.url} className="position-relative">
-              <img src={image.url} className="postImagePreview" />
+              <img
+                src={image.url}
+                className="postImagePreview pointer"
+                onClick={() => handleSelectMainImage(i)}
+              />
               <p
                 className="imageRemoveIcon"
                 onClick={() => {
@@ -306,9 +320,11 @@ export const PostStepOne = ({
               >
                 +
               </p>
+              {i === 0 && <p className="mainImageLabel">Main Image</p>}
             </div>
           ))}
         </div>
+        {localImages.length > 0 && <p className="small">Click on the image to select main image</p>}
 
         <input
           type="text"
@@ -362,7 +378,12 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     }
 
     if (response.status) {
-      navigate("/successMsg");
+      setPostDetails({ media: [] });
+      if (status === "draft") {
+        navigate("/my-items");
+      } else {
+        navigate("/successMsg");
+      }
     }
   };
 
