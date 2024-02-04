@@ -18,8 +18,8 @@ export default function AllFilters() {
   const dispatch = useDispatch();
   const { vehiclesCount } = useSelector((state) => state.vehicles);
   const { filters } = useSelector((state) => state.filters);
-  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
+  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
   const [filtersList, setFiltersList] = useState(filterOptions);
 

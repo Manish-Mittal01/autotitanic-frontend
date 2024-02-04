@@ -3,6 +3,7 @@ import { uploadFile } from "./thunk";
 
 const initialState = {
   uploadedFile: {},
+  showFilterBar: false,
 };
 
 const commonSlice = createSlice({
@@ -11,6 +12,9 @@ const commonSlice = createSlice({
   reducers: {
     emptyFile: (state, action) => {
       state.uploadedFile = {};
+    },
+    handleFilterBar: (state, action) => {
+      state.showFilterBar = !state.showFilterBar;
     },
   },
   extraReducers: (builder) => {
@@ -23,5 +27,5 @@ const commonSlice = createSlice({
   },
 });
 
-export const { emptyFile } = commonSlice.actions;
+export const { emptyFile, handleFilterBar } = commonSlice.actions;
 export default commonSlice.reducer;

@@ -91,7 +91,7 @@ export default function VehicleDetails() {
             <div className="parentCrousel">
               <MediaCarousel media={detail?.media} isFeatured={detail?.isFeatured} />
             </div>
-            <div className="inlineActionWrapper d-flex align-items-center justify-content-between my-2 border-bottom my-4">
+            <div className="inlineActionWrapper border-bottom my-4">
               <div className="d-flex align-items-center">
                 <p
                   className="small pointer text-center m-0 p-2"

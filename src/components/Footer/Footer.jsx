@@ -62,9 +62,9 @@ const Footer = () => {
           </Col>
           <hr />
           <Col lg="12" className="my-2">
-            <Row className="d-flex align-items-start gap-10 flex-wrap">
+            <Row className="d-flex align-items-start flex-wrap">
               {Array.from({ length: 2 }).map((page, i) => (
-                <Col key={i} lg={3} className="p-0">
+                <Col key={i} lg={3} sm={6} className="p-0 ps-2">
                   <ul className="list-unstyled ps-0 mb-0">
                     {i === 0 && (
                       <li className="py-1">

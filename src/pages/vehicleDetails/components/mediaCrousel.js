@@ -26,14 +26,14 @@ const OverlayCarousal = ({ media, isFeatured }) => {
     arrows: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 4,
     slidesToScroll: 1,
     focusOnSelect: true,
     responsive: [
       {
         breakpoint: 1400,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
         },
       },
     ],

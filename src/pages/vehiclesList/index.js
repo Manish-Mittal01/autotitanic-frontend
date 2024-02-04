@@ -14,12 +14,15 @@ import { sortingOptions } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { useLocation, useParams } from "react-router-dom";
 import { myArr } from "../../utils/constants";
+import FilterBar from "../../components/sidebar/Filterbar";
+import { handleFilterBar } from "../../redux/common/slice";
 
 export default function VehiclesList() {
   const { state } = useLocation();
   const { categoryFilter } = useParams();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
+  const { showFilterBar } = useSelector((state) => state.common);
   const { vehiclesList } = useSelector((state) => state.vehicles);
   const [paginationDetails, setPaginationDetails] = useState({
     page: 1,
@@ -30,7 +33,9 @@ export default function VehiclesList() {
 
   const totalPage = Math.ceil(vehiclesList.data?.totalCount / paginationDetails.limit) || 0;
 
-  const handleSidebar = () => {};
+  const handleShowFilterBar = () => {
+    dispatch(handleFilterBar());
+  };
 
   const handlePage = (btn) => {
     if (btn === "back" && paginationDetails.page > 1) {
@@ -82,6 +87,8 @@ export default function VehiclesList() {
 
   return (
     <>
+      {showFilterBar && <FilterBar />}
+
       <section>
         <div className="d-flex justify-content-between">
           <div
@@ -108,7 +115,7 @@ export default function VehiclesList() {
                 className="my-2 m-lg-0 d-lg-block d-flex justify-content-between align-items-center"
               >
                 <div className="filterIcon border p-2 mx-2 d-lg-none">
-                  <FilterIcon onClick={handleSidebar} />
+                  <FilterIcon onClick={handleShowFilterBar} />
                 </div>
                 <div>
                   {" "}
@@ -124,7 +131,7 @@ export default function VehiclesList() {
                 </div>
               </Col>
 
-              <Col lg={9} className="px-0">
+              <Col lg={9} className="pe-0">
                 <div className="w-100 d-flex justify-content-between justify-content-lg-end">
                   <div className="">
                     <SelectBox

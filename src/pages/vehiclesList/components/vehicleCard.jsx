@@ -94,7 +94,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                 <p className="m-0">{vehicle?.currency} </p>
                 <p className="m-0"> {vehicle?.price}</p>
               </div>
-              <p>
+              <p className="m-0">
                 <LocationIcon />
                 {vehicle.city?.name}, {vehicle.country?.name}
               </p>

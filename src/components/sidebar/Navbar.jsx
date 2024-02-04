@@ -2,12 +2,15 @@ import React from "react";
 import mainLogo from "../../Assets/Images/mainLogo.png";
 import { categories } from "../../utils";
 import { Accordion } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = ({ sidebar, setSidebar }) => {
+  const navigate = useNavigate();
+
   const handleSidebar = () => {
     setSidebar(!sidebar);
   };
+
   return (
     <>
       <div className="sidebar active">
@@ -38,52 +41,74 @@ const Navbar = ({ sidebar, setSidebar }) => {
             </svg>
           </button>
           <ul className="list-unstyled mb-0 w-100 sidebar-links pt-3">
-            {categories.map((category, i) => (
-              <li>
-                <Accordion>
-                  <Accordion.Item>
+            <li>
+              <Accordion defaultActiveKey={1}>
+                {categories.map((category, i) => (
+                  <Accordion.Item eventKey={i + 1}>
                     <Accordion.Header>{category.label}</Accordion.Header>
                     <Accordion.Body>
                       <ul className="list-unstyled  mb-0">
-                        <li className="py-1">
-                          <Link
-                            className="d-flex align-items-center active p-0"
-                            //    to="/caregivers"
-                          >
-                            Used {category.label}
-                          </Link>
-                        </li>
-                        <li className="py-1">
-                          <Link
-                            className="d-flex align-items-center"
-                            //    to="/caregiver/jobs"
-                          >
-                            New {category.label}
-                          </Link>
-                        </li>
-                        <li className="py-1">
-                          <Link
-                            className="d-flex align-items-center"
-                            //    to="/caregiver/jobs"
-                          >
-                            Sell {category.label}
-                          </Link>
-                        </li>
+                        {category.label !== "Car Rentals" ? (
+                          <>
+                            <li className="py-1">
+                              <Link
+                                to={`${category.value}/all`}
+                                className="d-flex align-items-center active p-0"
+                                onClick={handleSidebar}
+                              >
+                                All {category.label}
+                              </Link>
+                            </li>
+                            <li className="py-1">
+                              <Link
+                                to={`${category.value}/used`}
+                                className="d-flex align-items-center active p-0"
+                                onClick={handleSidebar}
+                              >
+                                Used {category.label}
+                              </Link>
+                            </li>
+                            <li className="py-1">
+                              <Link
+                                tto={`${category.value}/new`}
+                                className="d-flex align-items-center"
+                                onClick={handleSidebar}
+                              >
+                                New {category.label}
+                              </Link>
+                            </li>
+                            <li className="py-1">
+                              <Link
+                                to={`${category.value}/sell`}
+                                className="d-flex align-items-center"
+                                onClick={handleSidebar}
+                              >
+                                Sell {category.label}
+                              </Link>
+                            </li>
+                          </>
+                        ) : (
+                          category.label === "Car Rentals" &&
+                          categories.map(
+                            (category, i) =>
+                              category.label !== "Car Rentals" && (
+                                <li
+                                  onClick={() => {
+                                    navigate(`/${category.label}/rent`);
+                                    handleSidebar();
+                                  }}
+                                >
+                                  Rent a {category.label.slice(0, -1)}
+                                </li>
+                              )
+                          )
+                        )}
                       </ul>
                     </Accordion.Body>
                   </Accordion.Item>
-                </Accordion>
-              </li>
-              //   <li className="">
-              //     <a
-              //       className="link d-flex align-items-center justify-content-between"
-              //       href="/patient"
-              //     >
-              //       <div className="d-flex align-items-center">{category.label}</div>
-              //     </a>
-              //     {/* <NavLinks title={category.label} /> */}
-              //   </li>
-            ))}
+                ))}
+              </Accordion>
+            </li>
           </ul>
         </div>
       </div>

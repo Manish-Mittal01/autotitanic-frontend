@@ -1,13 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Accordion, Button, Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ReactComponent as CrossIcon } from "../../Assets/icons/cross.svg";
 import mainLogo from "../../Assets/Images/mainLogo.png";
 import { categories } from "../../utils";
-import { Accordion } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { handleFilterBar } from "../../redux/common/slice";
+import { filterOptions } from "../../utils/filters";
+import SelectBox from "../selectBox";
+import { resetFilters, selectFilters } from "../../redux/filters/slice";
+import parseKey from "../../utils/parseKey";
 
-const FilterBar = ({ sidebar, setSidebar }) => {
+const FilterBar = () => {
+  const dispatch = useDispatch();
+  const { filters } = useSelector((state) => state.filters);
+  const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
+  const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
+  const [filtersList, setFiltersList] = useState(filterOptions);
+
   const handleSidebar = () => {
-    setSidebar(!sidebar);
+    dispatch(handleFilterBar());
   };
+
+  const handleUpdateFilter = (name, value) => {
+    dispatch(selectFilters({ [name]: value }));
+  };
+
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+  };
+
+  useEffect(() => {
+    const oldFilters = [...filtersList];
+    const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
+    const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
+    // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
+    const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
+    const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
+
+    if (allMakes.data) {
+      oldFilters[makeIndex].filterOptions = allMakes.data?.items;
+    }
+    if (filters.make && allModels.data) {
+      oldFilters[modelIndex].filterOptions = allModels.data.items;
+    }
+    // if (filters.model && allVariants.data) {
+    //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
+    // }
+    if (allCountries.data) {
+      oldFilters[countryIndex].filterOptions = allCountries.data.items;
+    }
+    if (filters.country && allCities.data) {
+      oldFilters[cityIndex].filterOptions = allCities.data.items;
+    }
+
+    setFiltersList(oldFilters);
+  }, [allMakes, allModels, allCountries, allCities]);
+
   return (
     <>
       <div className="sidebar active">
@@ -15,29 +64,57 @@ const FilterBar = ({ sidebar, setSidebar }) => {
           <img src={mainLogo} className="w-100" />
           {/* <h2 className="m-0 py-2">Main Menu</h2> */}
         </div>
-        <div className="w-100 bg-transparent nav">
+        <div className="w-100 bg-transparent nav" style={{ overflowX: "hidden" }}>
           <button
             type="button"
             className="border-0 p-0 closebtn d-lg-none btn close-btn position-absolute btn btn-transparent"
             onClick={handleSidebar}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              stroke="#000"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M11.7819 4.03141C11.8353 3.97803 11.8778 3.91464 11.9067 3.84487C11.9357 3.7751 11.9506 3.70031 11.9506 3.62477C11.9507 3.54923 11.9358 3.47442 11.907 3.40461C11.8781 3.3348 11.8358 3.27136 11.7824 3.21791C11.729 3.16446 11.6656 3.12205 11.5959 3.0931C11.5261 3.06415 11.4513 3.04923 11.3758 3.04918C11.3002 3.04914 11.2254 3.06397 11.1556 3.09283C11.0858 3.1217 11.0223 3.16403 10.9689 3.21741L7.4999 6.68641L4.0319 3.21741C3.92396 3.10947 3.77756 3.04883 3.6249 3.04883C3.47225 3.04883 3.32584 3.10947 3.2179 3.21741C3.10996 3.32536 3.04932 3.47176 3.04932 3.62441C3.04932 3.77707 3.10996 3.92347 3.2179 4.03141L6.6869 7.49941L3.2179 10.9674C3.16445 11.0209 3.12206 11.0843 3.09313 11.1541C3.0642 11.224 3.04932 11.2988 3.04932 11.3744C3.04932 11.45 3.0642 11.5248 3.09313 11.5947C3.12206 11.6645 3.16445 11.728 3.2179 11.7814C3.32584 11.8894 3.47225 11.95 3.6249 11.95C3.70049 11.95 3.77533 11.9351 3.84517 11.9062C3.915 11.8773 3.97845 11.8349 4.0319 11.7814L7.4999 8.31241L10.9689 11.7814C11.0768 11.8892 11.2232 11.9497 11.3758 11.9496C11.5283 11.9496 11.6746 11.8889 11.7824 11.7809C11.8902 11.673 11.9507 11.5266 11.9506 11.3741C11.9505 11.2215 11.8898 11.0752 11.7819 10.9674L8.3129 7.49941L11.7819 4.03141Z"
-                fill="white"
-              ></path>
-            </svg>
+            <CrossIcon />
           </button>
-          <ul className="list-unstyled mb-0 w-100 sidebar-links pt-3">
+          <Row className="justify-content-center">
+            {filtersList.map((filter) =>
+              Array.isArray(filter.filterOptions) ? (
+                <Col xs={12} className="my-2">
+                  <label className="">
+                    <span className="">{filter.label}</span>
+                  </label>
+                  <SelectBox
+                    options={filter.filterOptions}
+                    value={filters.name}
+                    getOptionLabel={(option) => option.label || option.name}
+                    getOptionValue={(option) => option.value || option._id}
+                    onChange={(selected) => {
+                      const value = {
+                        value: selected.value || selected._id,
+                        label: selected.label || selected.name,
+                      };
+                      handleUpdateFilter(filter.name, value);
+                    }}
+                  />
+                </Col>
+              ) : (
+                Object.keys(filter.filterOptions).map((filterKey) => (
+                  <Col xs={12} className="my-2">
+                    <label className="">
+                      <span className="">{filterKey + " " + parseKey(filter.name)}</span>
+                    </label>
+                    <SelectBox
+                      options={filter.filterOptions[filterKey].options}
+                      value={filter[filter.filterOptions[filterKey].key]}
+                      onChange={(value) => {
+                        handleUpdateFilter([filter.filterOptions[filterKey].key], value);
+                      }}
+                    />
+                  </Col>
+                ))
+              )
+            )}
+          </Row>
+          <Button variant="" className="text-danger" onClick={handleResetFilters}>
+            Reset Filters
+          </Button>
+          {/* <ul className="list-unstyled mb-0 w-100 sidebar-links pt-3">
             {categories.map((category, i) => (
               <li>
                 <Accordion>
@@ -74,17 +151,8 @@ const FilterBar = ({ sidebar, setSidebar }) => {
                   </Accordion.Item>
                 </Accordion>
               </li>
-              //   <li className="">
-              //     <a
-              //       className="link d-flex align-items-center justify-content-between"
-              //       href="/patient"
-              //     >
-              //       <div className="d-flex align-items-center">{category.label}</div>
-              //     </a>
-              //     {/* <NavLinks title={category.label} /> */}
-              //   </li>
             ))}
-          </ul>
+          </ul> */}
         </div>
       </div>
     </>

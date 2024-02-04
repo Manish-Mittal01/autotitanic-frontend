@@ -103,12 +103,12 @@ export default function PostCard({ post }) {
             </p>
             <button className="border rounded-pill my-1">Private</button>
             <div className=" postcardFooter text-white d-flex align-items-center justify-content-between p-2">
-              <div className="d-flex align-items-center me-3">
+              <div className="d-flex align-items-center me-3 gap-1">
                 <p className="m-0">{post?.currency}</p>
-                <p className="m-0"> {post?.price}</p>
+                <p className="m-0"> {post?.price?.toLocaleString()}</p>
               </div>
               <div className="d-flex align-items-center">
-                <p className="m-0 me-1">{post?.country?.name} </p>
+                <p className="postcardCountryName m-0 me-1">{post?.country?.name} </p>
                 <img src={post?.country?.flag} style={{ width: 20 }} />
               </div>
             </div>

@@ -110,14 +110,21 @@ export default function SellVehicle() {
         <HeroAdd />
 
         <Row className="sellVehicleFeatureContainer mx-2 justify-content-center">
-          {postUploadStep === 2 && (
-            <p className="pointer" onClick={() => setPostUploadStep(1)}>
-              <FaArrowLeftLong className="me-1" />
-              Back
-            </p>
-          )}
-          <div className="my-3  d-flex justify-content-center align-items-center">
-            <h4 className="m-0 my-2">Car details</h4>
+          <div
+            className="my-3  d-flex justify-content-center align-items-center"
+            style={{ maxWidth: 800 }}
+          >
+            {postUploadStep === 2 && (
+              <h6
+                className="pointer text-nowrap m-0"
+                style={{ width: "fit-content" }}
+                onClick={() => setPostUploadStep(1)}
+              >
+                <FaArrowLeftLong className="me-1" />
+                Back
+              </h6>
+            )}
+            <h4 className="m-0 my-2 w-100 text-center">Car details</h4>
           </div>
           {postUploadStep === 1 ? (
             <PostStepOne
