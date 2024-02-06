@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
-import { FaWhatsapp, FaStar } from "react-icons/fa";
+import { FaWhatsappSquare } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
@@ -22,6 +22,7 @@ import { getUserProfile } from "../../redux/profile/thunk";
 import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { detailsList, sellerDetails } from "../../utils/filters";
+import { WhatsappIcon } from "react-share";
 
 export default function VehicleDetails() {
   const { id } = useParams();
@@ -139,103 +140,124 @@ export default function VehicleDetails() {
             </div>
           </Col>
           <Col lg={4}>
-            <h5 className="my-2">{detail?.title}</h5>
-            <p>{[detail?.year, detail?.make.label, detail?.model.label].join("  ")}</p>
-            <p className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center text-danger gap-1">
-                <h6 className="m-0 fw-bold">{detail?.currency} </h6>
-                <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString()}</h6>
-              </div>
-              <div>
-                {detail?.city?.name + ", " + detail?.country?.name}
-                <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
-              </div>
-            </p>
-            <div className="detailsWrapper p-3">
-              <h6 className="detailsHeading"> Key Vehicle Details</h6>
-              {detailsList.cars?.map((key) => (
-                <Row className="my-2">
-                  <Col xs={5} className="small">
-                    {key.label}
-                  </Col>
-                  <Col xs={7} className="small">
-                    {typeof detail?.[key.value] !== "object"
-                      ? parseCamelKey(detail?.[key.value]?.toString())
-                      : parseCamelKey(detail?.[key.value]?.name || detail?.[key.value]?.label)}
-                  </Col>
-                </Row>
-              ))}
+            <h6 className="my-2">{detail?.title}</h6>
+            <p>{[detail?.make.label, detail?.model.label].join("  ")}</p>
+            <div className="d-flex align-items-center text-danger gap-1">
+              <h6 className="m-0 fw-bold">{detail?.currency} </h6>
+              <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString()}</h6>
             </div>
-            <div className="detailsWrapper sellerDetailsWrapper p-3 mt-3">
-              <h6 className="detailsHeading">Seller's Details</h6>
-              {sellerDetails.map(
-                (key) =>
-                  detail?.user?.[key.value] && (
-                    <Row className="my-2">
-                      <Col xs={5} className="small">
-                        {key.label}
-                      </Col>
-                      <Col xs={7} className="small" style={{ wordWrap: "break-word" }}>
-                        {key.value === "whatsapp" || key.value === "email" ? (
-                          <a
-                            href={
-                              key.value === "whatsapp"
-                                ? `https://wa.me/${detail?.user?.[key.value]}`
-                                : `mailto:${detail?.user?.[key.value]}`
-                            }
-                            target="_blank"
-                          >
-                            {parseKey(detail?.user?.[key.value])}
-                          </a>
-                        ) : (
-                          parseKey(detail?.user?.[key.value])
-                        )}
-                      </Col>
-                    </Row>
+            <div>
+              {detail?.city?.name + ", " + detail?.country?.name}
+              <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
+            </div>
+            <div className="detailsWrapper mt-3">
+              <h6 className="detailsHeading">
+                <p> Key Vehicle Details</p>
+              </h6>
+              <div className="p-3">
+                {detailsList.cars?.map((key) => (
+                  <Row className="my-2">
+                    <Col xs={5} className="small">
+                      {key.label}
+                    </Col>
+                    <Col xs={7} className="small">
+                      {typeof detail?.[key.value] !== "object"
+                        ? parseCamelKey(detail?.[key.value]?.toString())
+                        : parseCamelKey(detail?.[key.value]?.name || detail?.[key.value]?.label)}
+                    </Col>
+                  </Row>
+                ))}
+              </div>
+            </div>
+            <div className="detailsWrapper sellerDetailsWrapper mt-3">
+              <h6 className="detailsHeading">
+                <p>Seller's Details</p>
+              </h6>
+              <div className="p-3">
+                {isUserLoggedin() ? (
+                  sellerDetails.map(
+                    (key) =>
+                      detail?.user?.[key.value] && (
+                        <Row className="my-2 align-items-center">
+                          <Col xs={5} className="small">
+                            {key.label}
+                          </Col>
+                          <Col xs={7} className="small" style={{ wordWrap: "break-word" }}>
+                            {key.value === "whatsapp" ? (
+                              <a
+                                href={
+                                  key.value === "whatsapp"
+                                    ? `https://wa.me/${detail?.user?.[key.value]}`
+                                    : `mailto:${detail?.user?.[key.value]}`
+                                }
+                                target="_blank"
+                              >
+                                <FaWhatsappSquare className="whatsappContactIcon" />
+                              </a>
+                            ) : (
+                              parseKey(detail?.user?.[key.value])
+                            )}
+                          </Col>
+                        </Row>
+                      )
                   )
-              )}
+                ) : (
+                  <div className="d-flex justify-content-center">
+                    <p
+                      className="blockSellerDetails pointer border rounded-pill"
+                      onClick={() => navigate("/login")}
+                    >
+                      Login to view Seller
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="detailsWrapper ActionWrapper p-3 mt-3">
-              <h6 className="detailsHeading">Interactive Options</h6>
-              <Row className="my-2">
-                <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
-                  <p
-                    className="small pointer m-0 p-2"
-                    onClick={() => {
-                      if (isUserLoggedin()) {
-                        setAction({ type: "makeOffer", currency: detail?.currency });
-                      } else {
-                        navigate("/login");
-                      }
-                    }}
-                  >
-                    <MdLocalOffer className="text-danger mx-1" />
-                    Make an Offer
-                  </p>
-                  <p className="small pointer m-0 p-2" onClick={handleAddToCompare}>
-                    <CompareIcon className="redIcon" />
-                    Add to Compare
-                  </p>
-                  <p className="small pointer m-0 p-2 " onClick={handleAddToWishlist}>
-                    <Heartcon className="redIcon" />
-                    Add to Wishlist
-                  </p>
-                  <p
-                    className="small pointer m-0 p-2"
-                    onClick={() => {
-                      setAction({ type: "sharePost" });
-                    }}
-                  >
-                    <IoMdShare
-                      className="mx-1 text-danger"
+            <div className="detailsWrapper ActionWrapper mt-3">
+              <h6 className="detailsHeading">
+                <p>Interactive Options</p>
+              </h6>
+              <div className=" p-3">
+                <Row className="">
+                  <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
+                    <p
+                      className="small pointer m-0 p-2"
+                      onClick={() => {
+                        if (isUserLoggedin()) {
+                          setAction({ type: "makeOffer", currency: detail?.currency });
+                        } else {
+                          navigate("/login");
+                        }
+                      }}
+                    >
+                      <MdLocalOffer className="text-danger mx-1" />
+                      Make an Offer
+                    </p>
+                    <p className="small pointer m-0 p-2" onClick={handleAddToCompare}>
+                      <CompareIcon className="redIcon" />
+                      Add to Compare
+                    </p>
+                    <p className="small pointer m-0 p-2 " onClick={handleAddToWishlist}>
+                      <Heartcon className="redIcon" />
+                      Add to Wishlist
+                    </p>
+                    <p
+                      className="small pointer m-0 p-2"
                       onClick={() => {
                         setAction({ type: "sharePost" });
                       }}
-                    />
-                    Share
-                  </p>
-                </Col>
-              </Row>
+                    >
+                      <IoMdShare
+                        className="mx-1 text-danger"
+                        onClick={() => {
+                          setAction({ type: "sharePost" });
+                        }}
+                      />
+                      Share
+                    </p>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </Col>
         </Row>

@@ -12,7 +12,7 @@ const filtersSlice = createSlice({
       return { ...state, filters: { ...state.filters, ...action.payload } };
     },
     resetFilters: (state, action) => {
-      return { filters: {} };
+      return { filters: { country: { value: "", label: "Africa" } } };
     },
   },
   extraReducers: (builder) => {},

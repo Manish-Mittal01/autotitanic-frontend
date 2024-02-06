@@ -395,11 +395,11 @@ export const detailsList = {
 };
 
 export const sellerDetails = [
-  { value: "userType", label: "seller Type" },
-  { value: "name", label: "Seller Name" },
-  { value: "mobile", label: "Contact Number" },
+  { value: "userType", label: "Seller" },
+  { value: "name", label: "Seller's Name" },
+  { value: "mobile", label: "Mobile No." },
   { value: "whatsapp", label: "Whatspp Seller" },
-  { value: "email", label: "Email Seller" },
+  // { value: "email", label: "Email Seller" },
 ];
 
 export const sortingOptions = [

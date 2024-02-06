@@ -43,6 +43,8 @@ const OverlayCarousal = ({ media, isFeatured }) => {
     sliderRef.current.slickGoTo(index);
   };
 
+  console.log("currentSlide", currentSlide);
+
   return (
     <div>
       <Slider ref={sliderRef} {...settingsMain}>
@@ -67,7 +69,11 @@ const OverlayCarousal = ({ media, isFeatured }) => {
 
       <Slider {...settingsThumbnails} className="thumbs">
         {media?.map((item, index) => (
-          <div key={index} onClick={() => handleSlideChange(index)}>
+          <div
+            key={index}
+            className={`${index === currentSlide ? "selectedThum" : ""}`}
+            onClick={() => handleSlideChange(index)}
+          >
             <img
               src={item.url}
               alt={`Thumbnail ${index}`}

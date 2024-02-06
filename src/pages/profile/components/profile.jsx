@@ -7,17 +7,10 @@ import { getAllCountry } from "../../../redux/countryAndCity/thunk";
 import PhoneInput from "react-phone-input-2";
 import SelectBox from "../../../components/selectBox";
 import { getUserProfile, updateProfile } from "../../../redux/profile/thunk";
-
-const detailsFields = [
-  { value: "name", type: "text" },
-  { value: "email", type: "email" },
-  { value: "mobile", type: "phone" },
-  { value: "whatsapp", type: "phone" },
-  { value: "country", type: "select" },
-  { value: "userType", type: "select" },
-];
+import { useNavigate } from "react-router-dom";
 
 export default function MyProfile() {
+  const navigate = useNavigate();
   const { userProfile } = useSelector((state) => state.profile);
   const { allCountries } = useSelector((state) => state.countryAndCity);
 
@@ -65,7 +58,10 @@ export default function MyProfile() {
 
   return (
     <div>
-      <div className="d-flex justify-content-end mb-4">
+      <div className="d-flex justify-content-between mb-4">
+        <Button variant="danger" onClick={() => navigate("/cars/sell")}>
+          Post an Advert
+        </Button>
         {!updatingProfile ? (
           <Button variant="danger" onClick={handleEditProfile}>
             Edit Profile

@@ -71,7 +71,7 @@ export default function PostCard({ post }) {
   // }, [postImageRef.current?.offsetWidth]);
 
   // console.log("showImageModel", showImageModel);
-  console.log("post", post);
+  // console.log("post", post);
 
   return (
     <div
@@ -87,10 +87,12 @@ export default function PostCard({ post }) {
               loading="lazy"
               alt=""
               className="postCardImage img-fluid w-100 "
-              style={{
-                // height: postImageHeight,
-                minHeight: 200,
-              }}
+              style={
+                {
+                  // height: postImageHeight,
+                  // minHeight: 200,
+                }
+              }
             />
             <ActionContainer />
           </div>
@@ -107,7 +109,7 @@ export default function PostCard({ post }) {
                 <p className="m-0">{post?.currency}</p>
                 <p className="m-0"> {post?.price?.toLocaleString()}</p>
               </div>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center overflow-hidden">
                 <p className="postcardCountryName m-0 me-1">{post?.country?.name} </p>
                 <img src={post?.country?.flag} style={{ width: 20 }} />
               </div>

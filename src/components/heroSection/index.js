@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import { handleApiRequest } from "../../services/handleApiRequest";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCountry } from "../../redux/countryAndCity/thunk";
-import SelectBox from "../selectBox";
 import { Button } from "react-bootstrap";
-import { getVehicleCount } from "../../redux/vehicles/thunk";
-import { getAllMake, getAllModel } from "../../redux/makeAndModel/thunk";
 import { useNavigate } from "react-router-dom";
+import africaFlag from "../../Assets/Images/africa-flag.png";
 import { priceList } from "../../utils/filters";
-import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { isArray } from "../../utils/dataTypes";
+import { handleApiRequest } from "../../services/handleApiRequest";
+import { getAllCountry } from "../../redux/countryAndCity/thunk";
+import { getAllMake, getAllModel } from "../../redux/makeAndModel/thunk";
+import { getVehicleCount } from "../../redux/vehicles/thunk";
+import { resetFilters, selectFilters } from "../../redux/filters/slice";
+import SelectBox from "../selectBox";
 
 export default function HeroSection({ showFilterBox = true }) {
   const navigate = useNavigate();
@@ -68,11 +69,9 @@ export default function HeroSection({ showFilterBox = true }) {
   }, [filters.make]);
 
   const CountryFilterOptions = ({ data, isDisabled, innerProps, ...props }) => {
-    const africa =
-      "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2Fafrica.jpg%2F1704646552270?alt=media&token=8583e54d-c990-4135-bccf-3f93bbc0a138";
     return !isDisabled ? (
       <div {...innerProps} className="pointer p-2">
-        <img className="countryDropFlag" src={data.flag || africa} />
+        <img className="countryDropFlag" src={data.flag || africaFlag} />
         <span className="ms-2">{data.name}</span>
       </div>
     ) : null;

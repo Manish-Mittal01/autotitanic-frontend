@@ -7,8 +7,8 @@ export default function SuccessScreen() {
     <div className="text-center h-100">
       <img src={successGif} className="bg-white" />
 
-      <h5>Your post have been sent for review</h5>
-      <h6>It will be reviewd within 24 hours</h6>
+      <h5>Your post has been sent for review</h5>
+      <h6>It will go live in 24 hours once approved</h6>
       <p className="mb-5">
         <Link to="/home">Go to Home</Link>
       </p>

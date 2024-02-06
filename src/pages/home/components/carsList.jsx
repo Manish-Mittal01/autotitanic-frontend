@@ -11,7 +11,7 @@ function CarsList() {
   var settings = {
     className: "slider variable-width",
     infinite: true,
-    speed: 1000,
+    speed: 700,
     autoplay: true,
     autoplaySpeed: 40000,
     cssEase: "linear",
@@ -113,6 +113,7 @@ function CarsList() {
     const request = {
       filters: {
         status: "approved",
+        isFeatured: false,
       },
       paginationDetails: { page: 1, limit: 180, sortBy: "createdAt", order: -1 },
     };

@@ -110,22 +110,18 @@ export default function SellVehicle() {
         <HeroAdd />
 
         <Row className="sellVehicleFeatureContainer mx-2 justify-content-center">
-          <div
-            className="my-3  d-flex justify-content-center align-items-center"
-            style={{ maxWidth: 800 }}
+          <Row
+            className="my-3 d-flex justify-content-center align-items-center"
+            // style={{ maxWidth: 800 }}
           >
             {postUploadStep === 2 && (
-              <h6
-                className="pointer text-nowrap m-0"
-                style={{ width: "fit-content" }}
-                onClick={() => setPostUploadStep(1)}
-              >
+              <h5 className="pointer  m-0" onClick={() => setPostUploadStep(1)}>
                 <FaArrowLeftLong className="me-1" />
                 Back
-              </h6>
+              </h5>
             )}
-            <h4 className="m-0 my-2 w-100 text-center">Car details</h4>
-          </div>
+            <h4 className="m-0 my-2  text-center">Car details</h4>
+          </Row>
           {postUploadStep === 1 ? (
             <PostStepOne
               postDetails={postDetails}
@@ -250,7 +246,10 @@ export const PostStepOne = ({
   }, [postDetails.country]);
 
   const proceedToNextStep =
-    postDetails.country && postDetails.city && postDetails.type && localImages?.length >= 5;
+    postDetails.country &&
+    postDetails.city &&
+    postDetails.type &&
+    (localImages?.length >= 5 || localImages?.length <= 20);
 
   //   console.log("postDetails.media", postDetails.media);
   //   console.log("proceedToNextStep", proceedToNextStep);
@@ -450,7 +449,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               className="form-control"
               placeholder="Enter title"
               name="title"
-              maxLength={100}
+              maxLength={50}
               value={postDetails.title?.value || ""}
               onChange={(e) =>
                 handleChange("title", { value: e.target.value, label: e.target.value })

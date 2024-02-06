@@ -1,10 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { ReactComponent as FilterIcon } from "../../Assets/icons/filter.svg";
-import HeroSection from "../../components/heroSection";
 import CarFilters from "./components/carFilters";
 import VehicleCard from "./components/vehicleCard";
-import MyPagination from "../../components/pagination";
 import SelectBox from "../../components/selectBox";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getVehicleList } from "../../redux/vehicles/thunk";
@@ -13,7 +11,6 @@ import { isArray } from "../../utils/dataTypes";
 import { sortingOptions } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { useLocation, useParams } from "react-router-dom";
-import { myArr } from "../../utils/constants";
 import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
 
@@ -23,7 +20,8 @@ export default function VehiclesList() {
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { showFilterBar } = useSelector((state) => state.common);
-  const { vehiclesList } = useSelector((state) => state.vehicles);
+  // const { vehiclesList } = useSelector((state) => state.vehicles);
+  const [vehiclesList, setVehiclesList] = useState([]);
   const [paginationDetails, setPaginationDetails] = useState({
     page: 1,
     limit: 25,
@@ -31,7 +29,7 @@ export default function VehiclesList() {
     order: 1,
   });
 
-  const totalPage = Math.ceil(vehiclesList.data?.totalCount / paginationDetails.limit) || 0;
+  const totalPage = Math.ceil(vehiclesList?.totalCount / paginationDetails.limit) || 0;
 
   const handleShowFilterBar = () => {
     dispatch(handleFilterBar());
@@ -54,7 +52,12 @@ export default function VehiclesList() {
       filters: { ...newFilters, status: "approved" },
       paginationDetails: paginationDetails,
     };
-    await handleApiRequest(getVehicleList, request);
+    console.log("request", request);
+    const response = await handleApiRequest(getVehicleList, request);
+    console.log("response.data", response.data);
+    if (response.status) {
+      setVehiclesList(response.data);
+    }
   };
 
   useEffect(() => {
@@ -81,9 +84,9 @@ export default function VehiclesList() {
     }
   }, [state]);
 
-  //   console.log("vehiclesList", vehiclesList);
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);
+  console.log("vehiclesList", vehiclesList);
 
   return (
     <>
@@ -166,8 +169,8 @@ export default function VehiclesList() {
                 </div>
               </Col>
             </Row>
-            {vehiclesList.data?.items.length > 0 ? (
-              isArray(vehiclesList.data?.items).map((vehicle, i) => (
+            {vehiclesList?.items?.length > 0 ? (
+              isArray(vehiclesList?.items).map((vehicle, i) => (
                 <Fragment key={vehicle._id}>
                   <VehicleCard vehicle={vehicle} />
                   {i % 10 === 0 && (

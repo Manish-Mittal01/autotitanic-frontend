@@ -53,101 +53,119 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
 
   return (
     <>
-      <div className="position-relative">
-        <Row className="vehicleCardWrapper pointer">
-          <Col
-            lg={3}
-            xs={9}
-            className="position-relative"
-            style={{ paddingInline: 1 }}
-            onClick={() => navigate(`/details/${vehicle._id}`)}
-          >
-            <img
-              ref={imageRef}
-              src={vehicle.media?.[0]?.url}
-              className="mainImage w-100"
-              // style={{ height: mainImageWidth }}
-            />
-            {vehicle?.isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />}
-          </Col>
-          <Col
-            lg={1}
-            xs={3}
-            className="px-0 d-flex flex-column"
-            onClick={() => navigate(`/details/${vehicle._id}`)}
-          >
-            {vehicle.media?.slice(1, 4).map((image, i) => (
+      <div className={`position-relative`}>
+        <div className={`vehicleCardWrapper ${vehicle?.isFeatured ? "shadow-none" : ""} `}>
+          <Row className={` pointer m-0 ${vehicle?.isFeatured ? "featuredVehicleCard" : ""}`}>
+            <Col
+              lg={3}
+              xs={9}
+              className="position-relative"
+              style={{ paddingInline: 1 }}
+              onClick={() => navigate(`/details/${vehicle._id}`)}
+            >
               <img
-                key={image?.url}
-                src={image?.url}
-                className={`sideImage`}
-                style={{ marginBlock: i === 1 ? 1 : 0 }}
+                ref={imageRef}
+                src={vehicle.media?.[0]?.url}
+                className="mainImage w-100"
+                // style={{ height: mainImageWidth }}
               />
-            ))}
-          </Col>
-          <Col lg={7} xs={12} className="my-2 my-lg-0 d-flex flex-column">
-            <h6
-              className="d-flex align-items-center justify-content-between"
+              {/* {vehicle?.isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />} */}
+              {vehicle?.isFeatured && <button className="featuredBtn">Featured</button>}
+            </Col>
+            <Col
+              lg={1}
+              xs={3}
+              className="px-0 d-flex flex-column"
               onClick={() => navigate(`/details/${vehicle._id}`)}
             >
-              <div className="d-flex align-items-center text-danger">
-                <p className="m-0">{vehicle?.currency} </p>
-                <p className="m-0"> {vehicle?.price}</p>
-              </div>
-              <p className="m-0">
-                <LocationIcon />
-                {vehicle.city?.name}, {vehicle.country?.name}
+              {vehicle.media?.slice(1, 4).map((image, i) => (
+                <img
+                  key={image?.url}
+                  src={image?.url}
+                  className={`sideImage`}
+                  style={{ marginBlock: i === 1 ? 1 : 0 }}
+                />
+              ))}
+            </Col>
+            <Col lg={8} xs={12} className="my-2 my-lg-0 d-flex flex-column">
+              <h6
+                className="d-flex align-items-center justify-content-between"
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
+                <div className="d-flex align-items-center text-danger gap-1">
+                  <p className="m-0">{vehicle?.currency} </p>
+                  <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
+                </div>
+                {!myVehicle && !wishlist && (
+                  <Button
+                    className={`rounded-pill py-1 ${
+                      vehicle?.user?.userType === "dealer" ? "bg-danger" : "mainDarkColor"
+                    }`}
+                  >
+                    {parseCamelKey(vehicle?.user?.userType)}
+                  </Button>
+                )}
+              </h6>
+              {/* <div className="vehicledetails"> */}
+              <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
+                {vehicle.make?.label + " " + vehicle.model?.label}
               </p>
-            </h6>
-            {/* <div className="vehicledetails"> */}
-            <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
-              {vehicle.make?.label + " " + vehicle.model?.label}
-            </p>
-            {/* <p>{vehicle.variant?.label}</p> */}
-            <p className="my-2 fw-bold" onClick={() => navigate(`/details/${vehicle._id}`)}>
-              {vehicle.year} | {vehicle.bodyStyle} | {vehicle.mileage}M | {vehicle.engineSize} |{" "}
-              {vehicle.gearBox} | {vehicle.fuelType} | {vehicle.condition}
-            </p>
-            <div style={{ flex: 1 }} onClick={() => navigate(`/details/${vehicle._id}`)} />
-            <div
-              className="d-flex align-items-center justify-content-between"
-              onClick={() => navigate(`/details/${vehicle._id}`)}
-            >
-              <div>
-                <p className="">{`${vehicle?.user?.name} (${parseCamelKey(
-                  vehicle?.user?.userType
-                )})`}</p>
-                <p>
-                  <StarRegular />
-                  {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
-                </p>
-              </div>
-              <img src={vehicle?.user?.dealerLogo} className="dealerLogo" />
-            </div>
-            {myVehicle && (
-              <div className="d-flex gap-10 ">
-                {vehicle.status !== "deleted" && (
-                  <Button
-                    variant="danger"
-                    className=""
-                    onClick={() => setUserAction({ action: "deletePost", id: vehicle._id })}
-                  >
-                    Delete
-                  </Button>
-                )}
-                {vehicle.status === "draft" && (
-                  <Button
-                    variant="danger"
-                    className=""
-                    onClick={() => navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 })}
-                  >
-                    Upload
-                  </Button>
+              <p className={`${vehicle?.isFeatured ? "fw-bold" : ""}`}>{vehicle?.title}</p>
+              <p
+                className="vehicleCardVehicleDetails mb-3 fw-bold"
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
+                {vehicle.year} | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage}M |{" "}
+                {vehicle.engineSize} | {parseCamelKey(vehicle.gearBox)} |{" "}
+                {parseCamelKey(vehicle.fuelType)} | {parseCamelKey(vehicle.condition)}
+              </p>
+              <div style={{ flex: 1 }} onClick={() => navigate(`/details/${vehicle._id}`)} />
+              <div
+                className="d-flex align-items-center justify-content-between"
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
+                <div>
+                  {vehicle?.user?.userType === "dealer" && (
+                    <p className="">{vehicle?.user?.name}</p>
+                  )}
+                  <p className="mb-0">
+                    <StarRegular />
+                    {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
+                  </p>
+                  <p className="m-0">
+                    <LocationIcon />
+                    {vehicle.city?.name}, {vehicle.country?.name}
+                  </p>
+                </div>
+                {vehicle?.user?.userType === "dealer" && (
+                  <img src={vehicle?.user?.dealerLogo} className="dealerLogo" />
                 )}
               </div>
-            )}
-          </Col>
-        </Row>
+              {myVehicle && (
+                <div className="d-flex gap-10 ">
+                  {vehicle.status !== "deleted" && (
+                    <Button
+                      variant="danger"
+                      className=""
+                      onClick={() => setUserAction({ action: "deletePost", id: vehicle._id })}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                  {vehicle.status === "draft" && (
+                    <Button
+                      variant="danger"
+                      className=""
+                      onClick={() => navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 })}
+                    >
+                      Upload
+                    </Button>
+                  )}
+                </div>
+              )}
+            </Col>
+          </Row>
+        </div>
 
         {wishlist && (
           <button
