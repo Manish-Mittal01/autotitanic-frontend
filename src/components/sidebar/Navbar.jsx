@@ -83,7 +83,7 @@ const Navbar = ({ sidebar, setSidebar }) => {
                                 className="d-flex align-items-center"
                                 onClick={handleSidebar}
                               >
-                                Sell {category.label}
+                                Sell your {category.label?.slice(0, -1)}
                               </Link>
                             </li>
                           </>

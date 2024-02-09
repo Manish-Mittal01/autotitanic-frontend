@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { allMakes } = useSelector((state) => state.makeAndModel);
   const [showAllMakes, setShowAllMakes] = useState(false);
 
@@ -18,7 +19,12 @@ export default function Home() {
   };
 
   const handleFilter = async (make) => {
-    navigate("/cars/all", { state: { filters: { make: { value: make._id, label: make.label } } } });
+    dispatch(selectFilters({ make: { value: make._id, label: make.label } }));
+    setTimeout(() => {
+      navigate("/cars/all", {
+        state: { filters: { make: { value: make._id, label: make.label } } },
+      });
+    });
   };
 
   useEffect(() => {

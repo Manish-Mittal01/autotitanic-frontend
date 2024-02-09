@@ -23,6 +23,7 @@ import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { detailsList, sellerDetails } from "../../utils/filters";
 import { WhatsappIcon } from "react-share";
+import ListCrousel from "../home/components/listCrousel";
 
 export default function VehicleDetails() {
   const { id } = useParams();
@@ -64,25 +65,34 @@ export default function VehicleDetails() {
 
   const handleRelatedVehicles = async () => {
     const request = {
-      type: detail?.type,
-      country: detail?.country?._id,
-      minPrice: detail?.price - detail?.price / 20,
-      maxPrice: detail?.price + detail?.price / 20,
+      filters: {
+        type: detail?.type,
+        country: detail?.country?._id,
+        // minPrice: Math.ceil(detail?.price - detail?.price / 20),
+        // maxPrice: Math.ceil(detail?.price + detail?.price / 20),
+      },
+      paginationDetails: {
+        limit: 30,
+        page: 1,
+      },
     };
     await handleApiRequest(getRelatedVehicles, request);
   };
 
   useEffect(() => {
-    handleVehicleDetails();
+    if (id) {
+      handleVehicleDetails();
+    }
   }, [id]);
 
-  // useEffect(()=>{
-  //   if (detail) {
-  //     handleRelatedVehicles();
-  //   }
-  // }, [detail, id])
+  useEffect(() => {
+    if (detail) {
+      handleRelatedVehicles();
+    }
+  }, [detail]);
 
   //   console.log("vehicleDetails", vehicleDetails);
+  console.log("relatedVehicles", relatedVehicles);
 
   return (
     <>
@@ -261,6 +271,8 @@ export default function VehicleDetails() {
             </div>
           </Col>
         </Row>
+
+        {/* <ListCrousel dataList={relatedVehicles.data?.items || []} /> */}
       </section>
 
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}

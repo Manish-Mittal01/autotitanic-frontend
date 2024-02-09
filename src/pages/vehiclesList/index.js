@@ -52,13 +52,17 @@ export default function VehiclesList() {
       filters: { ...newFilters, status: "approved" },
       paginationDetails: paginationDetails,
     };
-    console.log("request", request);
     const response = await handleApiRequest(getVehicleList, request);
-    console.log("response.data", response.data);
     if (response.status) {
       setVehiclesList(response.data);
     }
   };
+
+  // useEffect(() => {
+  //   if (state?.filters) {
+  //     dispatch(selectFilters(state.filters));
+  //   }
+  // }, [state]);
 
   useEffect(() => {
     handleVehicleList();
@@ -78,15 +82,9 @@ export default function VehiclesList() {
     }
   }, [categoryFilter]);
 
-  useEffect(() => {
-    if (state?.filters) {
-      dispatch(selectFilters(state.filters));
-    }
-  }, [state]);
-
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);
-  console.log("vehiclesList", vehiclesList);
+  // console.log("vehiclesList", vehiclesList);
 
   return (
     <>

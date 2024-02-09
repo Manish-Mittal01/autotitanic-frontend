@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import africaFlag from "../../Assets/Images/africa-flag.png";
 
 const initialState = {
-  filters: { country: { value: "", label: "Africa" } },
+  filters: { country: { value: "", label: "Africa", flag: africaFlag } },
 };
 
 const filtersSlice = createSlice({
@@ -12,7 +13,7 @@ const filtersSlice = createSlice({
       return { ...state, filters: { ...state.filters, ...action.payload } };
     },
     resetFilters: (state, action) => {
-      return { filters: { country: { value: "", label: "Africa" } } };
+      return { filters: { country: { value: "", label: "Africa", flag: africaFlag } } };
     },
   },
   extraReducers: (builder) => {},

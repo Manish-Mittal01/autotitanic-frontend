@@ -92,12 +92,28 @@ export default function HeroSection({ showFilterBox = true }) {
         >
           <h5 className="text-center">Find your dream Car</h5>
           <SelectBox
+            isSearchable={false}
             placeholder="Select Country"
             components={{ Option: CountryFilterOptions, IndicatorSeparator: null }}
-            options={[{ _id: "", name: "Africa" }, ...isArray(allCountries.data?.items)]}
+            options={[
+              { _id: "", name: "Africa", flag: africaFlag },
+              ...isArray(allCountries.data?.items),
+            ]}
+            getOptionLabel={(option) => {
+              return (
+                <div className="pointer p-2">
+                  <img className="countryDropFlag" src={option.flag} />
+                  <span className="ms-2">{option.label}</span>
+                </div>
+              );
+            }}
             value={filters.country || ""}
             onChange={(selected) => {
-              handleUpdateFilters("country", { value: selected._id, label: selected.name });
+              handleUpdateFilters("country", {
+                value: selected._id,
+                label: selected.name,
+                flag: selected.flag,
+              });
             }}
           />
           <div className="d-flex justify-content-between my-2 gap-10">

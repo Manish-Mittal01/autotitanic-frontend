@@ -46,7 +46,7 @@ const vehiclesSlice = createSlice({
     builder
       .addCase(getRelatedVehicles.pending, (state, action) => {})
       .addCase(getRelatedVehicles.fulfilled, (state, action) => {
-        state.featuredList = action.payload;
+        state.relatedVehicles = action.payload;
       })
       .addCase(getRelatedVehicles.rejected, (state, action) => {});
     builder

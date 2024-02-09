@@ -8,6 +8,7 @@ import MyLayout from "./layout/myLayout";
 import { categories } from "./utils";
 import NavComponent from "./pages/navComponent";
 import { authRoutes, privateRoutes, publicRoutes } from "./routes";
+import Gallery from "./components/gallery";
 
 function App() {
   const { pathname } = useLocation();
@@ -35,6 +36,7 @@ function App() {
   return (
     <>
       <LoadIndicator />
+
       <Routes>
         <Route path="/" element={<MyLayout />}>
           {!loggedinUser?.data?.token &&

@@ -45,9 +45,10 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
 
   useEffect(() => {
     if (imageRef.current) {
-      setMainImageWidth(imageRef.current.offsetWidth * (3 / 4));
+      console.log("imageRef.current.offsetHeight", imageRef.current.offsetHeight);
+      setMainImageWidth(imageRef.current.offsetHeight * (4 / 3));
     }
-  }, [imageRef.current]);
+  }, [imageRef.current?.offsetHeight]);
 
   // console.log("vehicle.media", vehicle.media);
 
@@ -55,44 +56,45 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     <>
       <div className={`position-relative`}>
         <div className={`vehicleCardWrapper ${vehicle?.isFeatured ? "shadow-none" : ""} `}>
-          <Row className={` pointer m-0 ${vehicle?.isFeatured ? "featuredVehicleCard" : ""}`}>
-            <Col
-              lg={3}
-              xs={9}
-              className="position-relative"
-              style={{ paddingInline: 1 }}
-              onClick={() => navigate(`/details/${vehicle._id}`)}
-            >
-              <img
-                ref={imageRef}
-                src={vehicle.media?.[0]?.url}
-                className="mainImage w-100"
-                // style={{ height: mainImageWidth }}
-              />
-              {/* {vehicle?.isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />} */}
-              {vehicle?.isFeatured && <button className="featuredBtn">Featured</button>}
-            </Col>
-            <Col
-              lg={1}
-              xs={3}
-              className="px-0 d-flex flex-column"
-              onClick={() => navigate(`/details/${vehicle._id}`)}
-            >
-              {vehicle.media?.slice(1, 4).map((image, i) => (
+          <div
+            className={`pointer py-2 d-flex m-0 ${
+              vehicle?.isFeatured ? "featuredVehicleCard" : ""
+            }`}
+          >
+            <div className="vehicleCardImageWrapper d-flex align-items-center">
+              <div
+                className="vehicleCardMainImage position-relative"
+                style={{ paddingInline: 1 }}
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
                 <img
-                  key={image?.url}
-                  src={image?.url}
-                  className={`sideImage`}
-                  style={{ marginBlock: i === 1 ? 1 : 0 }}
+                  ref={imageRef}
+                  src={vehicle.media?.[0]?.url}
+                  className="mainImage"
+                  // style={{ minWidth: mainImageWidth }}
                 />
-              ))}
-            </Col>
-            <Col lg={8} xs={12} className="my-2 my-lg-0 d-flex flex-column">
+                {vehicle?.isFeatured && <button className="featuredBtn">Featured</button>}
+              </div>
+              <div
+                className="vehicleCardSideImage px-0 d-flex flex-column"
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
+                {vehicle.media?.slice(1, 4).map((image, i) => (
+                  <img
+                    key={image?.url}
+                    src={image?.url}
+                    className={`sideImage`}
+                    style={{ height: "33%", marginBlock: i === 1 ? 1 : 0 }}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="vehicleCardDetails px-2 my-2 my-lg-0 d-flex flex-column">
               <h6
                 className="d-flex align-items-center justify-content-between"
                 onClick={() => navigate(`/details/${vehicle._id}`)}
               >
-                <div className="d-flex align-items-center text-danger gap-1">
+                <div className="d-flex align-items-center text-danger gap-1 h5 m-0">
                   <p className="m-0">{vehicle?.currency} </p>
                   <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
                 </div>
@@ -106,11 +108,12 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   </Button>
                 )}
               </h6>
-              {/* <div className="vehicledetails"> */}
               <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
                 {vehicle.make?.label + " " + vehicle.model?.label}
               </p>
-              <p className={`${vehicle?.isFeatured ? "fw-bold" : ""}`}>{vehicle?.title}</p>
+              <p className={`${vehicle?.isFeatured ? "fw-bold text-danger" : ""}`}>
+                {vehicle?.title}
+              </p>
               <p
                 className="vehicleCardVehicleDetails mb-3 fw-bold"
                 onClick={() => navigate(`/details/${vehicle._id}`)}
@@ -163,8 +166,8 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   )}
                 </div>
               )}
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
 
         {wishlist && (
@@ -173,7 +176,6 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
             onClick={handleRemoveWishlistItem}
           >
             Remove
-            {/* <HeartIcon style={{ width: 14, height: 14 }} className="removeWishlistIcon ms-1" /> */}
           </button>
         )}
         {myVehicle && (

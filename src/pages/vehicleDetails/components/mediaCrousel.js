@@ -1,14 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import "react-alice-carousel/lib/alice-carousel.css";
-import ReactPlayer from "react-player";
 import Slider from "react-slick";
-import { IoMdShare } from "react-icons/io";
-import { FaWhatsapp, FaStar } from "react-icons/fa";
 import { isArray } from "../../../utils/dataTypes";
 import SharePop from "./sharePop";
+import Gallery from "../../../components/gallery";
+import { manageGallery } from "../../../redux/common/slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const OverlayCarousal = ({ media, isFeatured }) => {
   const sliderRef = useRef(null);
+  const dispatch = useDispatch();
+  const { galleryMedia } = useSelector((state) => state.common);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [action, setAction] = useState(null);
 
@@ -43,47 +45,50 @@ const OverlayCarousal = ({ media, isFeatured }) => {
     sliderRef.current.slickGoTo(index);
   };
 
-  console.log("currentSlide", currentSlide);
+  const handleGallery = (media) => {
+    dispatch(manageGallery(media));
+  };
+
+  // console.log("currentSlide", currentSlide);
+  // console.log("galleryMedia", galleryMedia);
 
   return (
     <div>
       <Slider ref={sliderRef} {...settingsMain}>
-        {media?.map((item, index) => (
-          <div key={index} className="position-relative">
-            {item.type?.includes("image") ? (
+        {isArray(media)
+          .filter((item) => item.type?.includes("image"))
+          ?.map((item, index) => (
+            <div
+              key={index}
+              className="detailsPageMainImage position-relative"
+              onClick={() => handleGallery(media)}
+            >
               <img src={item.url} alt={`Slide ${index}`} className="detailCrouselImage" />
-            ) : (
-              <ReactPlayer url={item.url} className="detailCrouselImage" />
-            )}
-            <p className="watermark">AutoTitanic</p>
-            {/* <IoMdShare
-              className="shareIcon pointer"
-              onClick={() => {
-                setAction({ type: "sharePost" });
-              }}
-            /> */}
-            {/* {isFeatured && <FaStar className="starIcon" style={{ left: 0, top: 0 }} />} */}
-          </div>
-        ))}
+              <p className="watermark">AutoTitanic</p>
+            </div>
+          ))}
       </Slider>
 
       <Slider {...settingsThumbnails} className="thumbs">
-        {media?.map((item, index) => (
-          <div
-            key={index}
-            className={`${index === currentSlide ? "selectedThum" : ""}`}
-            onClick={() => handleSlideChange(index)}
-          >
-            <img
-              src={item.url}
-              alt={`Thumbnail ${index}`}
-              className="detailsCrouselThumbnailImage"
-            />
-          </div>
-        ))}
+        {isArray(media)
+          .filter((item) => item.type?.includes("image"))
+          ?.map((item, index) => (
+            <div
+              key={index}
+              className={`${index === currentSlide ? "selectedThum" : ""}`}
+              onClick={() => handleSlideChange(index)}
+            >
+              <img
+                src={item.url}
+                alt={`Thumbnail ${index}`}
+                className="detailsCrouselThumbnailImage"
+              />
+            </div>
+          ))}
       </Slider>
 
       {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
+      {isArray(galleryMedia).length > 0 && <Gallery media={media} />}
     </div>
   );
 };
