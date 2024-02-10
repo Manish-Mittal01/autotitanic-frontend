@@ -34,7 +34,7 @@ const DeletePopup = ({ userAction, setUserAction, onDelete }) => {
             <div className="btn-wrap my-2 d-flex align-items-center justify-content-center mt-3">
               <div className="pe-2 w-50">
                 <Button
-                  variant="danger"
+                  variant="secondary"
                   onClick={handleClosePop}
                   className="btn-2 w-100 d-flex align-items-center justify-content-center commonBtn"
                 >
@@ -43,6 +43,7 @@ const DeletePopup = ({ userAction, setUserAction, onDelete }) => {
               </div>
               <div className="pe-2 w-50">
                 <Button
+                  variant="danger"
                   onClick={handleDeletePop}
                   className=" w-100 d-flex align-items-center justify-content-center commonBtn"
                 >

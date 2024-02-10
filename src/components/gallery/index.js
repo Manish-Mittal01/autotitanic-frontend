@@ -41,13 +41,13 @@ export default function Gallery({ media }) {
         </p>
       </div>
       <div className="py-3">
-        <Tab.Container id="left-tabs-example" defaultActiveKey="Account">
+        <Tab.Container id="left-tabs-example" defaultActiveKey="images">
           <Col lg="6" className="mx-auto border-bottom">
             <Nav variant="pills" className="underLineTab" style={{ flexWrap: "unset " }}>
               <Nav.Item className="w-100">
                 <Nav.Link
                   className="pointer w-100 text-white text-center bg-dark"
-                  eventKey="Account"
+                  eventKey="images"
                 >
                   Images
                 </Nav.Link>
@@ -55,7 +55,7 @@ export default function Gallery({ media }) {
               <Nav.Item className="w-100">
                 <Nav.Link
                   className="pointer w-100 text-white text-center bg-dark"
-                  eventKey="Subscription"
+                  eventKey="videos"
                 >
                   Video
                 </Nav.Link>
@@ -63,25 +63,25 @@ export default function Gallery({ media }) {
             </Nav>
           </Col>
           <Tab.Content className="pt-3">
-            <Tab.Pane eventKey="Account">
+            <Tab.Pane eventKey="images">
               <Col lg="12" className="mx-auto">
                 <Slider {...settingsMain}>
                   {isArray(media)
                     .filter((item) => item.type?.includes("image"))
                     ?.map((item, index) => (
-                      <div key={index} className="position-relative">
+                      <div key={index} className="galleryImageWrapper position-relative">
                         <img
                           src={item.url}
                           alt={`Slide ${index}`}
-                          className="detailCrouselImage"
-                          style={{ maxHeight: "80vh", height: "100%" }}
+                          className="detailCrouselImage d-flex algin-items-center"
+                          style={{ height: "100%" }}
                         />
                       </div>
                     ))}
                 </Slider>
               </Col>
             </Tab.Pane>
-            <Tab.Pane eventKey="Subscription">
+            <Tab.Pane eventKey="videos">
               {isArray(media).filter((item) => item.type?.includes("video")).length > 0 ? (
                 isArray(media)
                   .filter((item) => item.type?.includes("video"))

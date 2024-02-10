@@ -72,13 +72,13 @@ export default function MyProfile() {
           </Button>
         )}
       </div>
-      <Row className="align-items-center">
+      <Row className="align-items-center my-2">
         <Col sm={3}>
           <h6>Name</h6>
         </Col>
         <Col lg={9}>
           <input
-            className="profileInput form-control my-2"
+            className="profileInput form-control"
             type="text"
             readOnly={!updatingProfile}
             maxLength={15}
@@ -88,13 +88,13 @@ export default function MyProfile() {
           />
         </Col>
       </Row>
-      <Row className="align-items-center">
+      <Row className="align-items-center my-2">
         <Col sm={3}>
-          <h6>Email</h6>
+          <h6 className="">Email</h6>
         </Col>
         <Col lg={9}>
           <input
-            className="profileInput form-control my-2"
+            className="profileInput form-control"
             type="email"
             readOnly={!updatingProfile}
             name={"email"}

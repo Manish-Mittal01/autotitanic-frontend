@@ -398,7 +398,7 @@ export const sellerDetails = [
   { value: "userType", label: "Seller" },
   { value: "name", label: "Seller's Name" },
   { value: "mobile", label: "Mobile No." },
-  { value: "whatsapp", label: "Whatspp Seller" },
+  { value: "whatsapp", label: "Whatspp No." },
   // { value: "email", label: "Email Seller" },
 ];
 

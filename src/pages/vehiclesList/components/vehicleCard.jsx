@@ -8,7 +8,12 @@ import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
 import dealerLogo from "../../../Assets/Images/mainLogo.png";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { parseCamelKey } from "../../../utils/parseKey";
-import { getWishlist, removeWishlistItem, updateVehicle } from "../../../redux/vehicles/thunk";
+import {
+  getVehicleList,
+  getWishlist,
+  removeWishlistItem,
+  updateVehicle,
+} from "../../../redux/vehicles/thunk";
 import DeletePopup from "../../../components/Modals/DeletePop";
 
 export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
@@ -38,6 +43,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
       _id: userAction.id,
       status: "deleted",
     });
+    console.log("response", response);
     if (response.status) {
       handleVehicleList();
     }
@@ -61,10 +67,9 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
               vehicle?.isFeatured ? "featuredVehicleCard" : ""
             }`}
           >
-            <div className="vehicleCardImageWrapper d-flex align-items-center">
+            <div className="vehicleCardImageWrapper d-flex">
               <div
                 className="vehicleCardMainImage position-relative"
-                style={{ paddingInline: 1 }}
                 onClick={() => navigate(`/details/${vehicle._id}`)}
               >
                 <img
@@ -84,7 +89,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                     key={image?.url}
                     src={image?.url}
                     className={`sideImage`}
-                    style={{ height: "33%", marginBlock: i === 1 ? 1 : 0 }}
+                    style={{ marginBlock: i === 1 ? 1 : 0 }}
                   />
                 ))}
               </div>
@@ -131,13 +136,14 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   {vehicle?.user?.userType === "dealer" && (
                     <p className="">{vehicle?.user?.name}</p>
                   )}
-                  <p className="mb-0">
+                  <p className="">
                     <StarRegular />
                     {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
                   </p>
-                  <p className="m-0">
+                  <p className="mb-2">
                     <LocationIcon />
                     {vehicle.city?.name}, {vehicle.country?.name}
+                    <img src={vehicle?.country?.flag} className="mx-1" style={{ width: 18 }} />
                   </p>
                 </div>
                 {vehicle?.user?.userType === "dealer" && (
@@ -155,15 +161,15 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                       Delete
                     </Button>
                   )}
-                  {vehicle.status === "draft" && (
-                    <Button
-                      variant="danger"
-                      className=""
-                      onClick={() => navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 })}
-                    >
-                      Upload
-                    </Button>
-                  )}
+                  {/* {vehicle.status === "draft" && ( */}
+                  <Button
+                    // variant="danger"
+                    className="mainDarkColor"
+                    onClick={() => navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 })}
+                  >
+                    Edit
+                  </Button>
+                  {/* )} */}
                 </div>
               )}
             </div>
@@ -190,7 +196,6 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   ? "warningMsg"
                   : ""
               }`}
-              onClick={handleRemoveWishlistItem}
             >
               {parseCamelKey(vehicle.status)}
             </button>

@@ -364,7 +364,12 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
   };
 
   const handleCreatePost = async (status) => {
-    const request = { ...postDetails, type: "cars", status: status || "pending" };
+    const request = {
+      ...postDetails,
+      type: "cars",
+      status: status || "pending",
+      isFeatured: false,
+    };
 
     const allKeys = featuresList.map((elem) => elem.value);
     allKeys.push("price", "mileage", "description", "currency", "title", "type");
@@ -449,7 +454,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               className="form-control"
               placeholder="Enter title"
               name="title"
-              maxLength={50}
+              maxLength={60}
               value={postDetails.title?.value || ""}
               onChange={(e) =>
                 handleChange("title", { value: e.target.value, label: e.target.value })

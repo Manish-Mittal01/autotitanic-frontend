@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
-import { FaWhatsappSquare } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
+import { ReactComponent as WhatsappIcon } from "../../Assets/icons/whatsapp.svg";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import {
   addToCompare,
@@ -22,8 +23,6 @@ import { getUserProfile } from "../../redux/profile/thunk";
 import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { detailsList, sellerDetails } from "../../utils/filters";
-import { WhatsappIcon } from "react-share";
-import ListCrousel from "../home/components/listCrousel";
 
 export default function VehicleDetails() {
   const { id } = useParams();
@@ -202,7 +201,11 @@ export default function VehicleDetails() {
                                 }
                                 target="_blank"
                               >
-                                <FaWhatsappSquare className="whatsappContactIcon" />
+                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill">
+                                  {/* <FaWhatsapp className="whatsappContactIcon" /> */}
+                                  <WhatsappIcon className="me-1" />
+                                  Whatsapp Seller
+                                </p>
                               </a>
                             ) : (
                               parseKey(detail?.user?.[key.value])

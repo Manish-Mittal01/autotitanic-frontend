@@ -1518,6 +1518,7 @@ input:disabled {
 .mainWrapper {
   width: 70%;
   margin-inline: auto;
+  max-width: 1300px;
 }
 
 @media (max-width: 992px) {
@@ -1720,16 +1721,21 @@ posts-card-wrp .card-cstm .content p {
 
 .vehicleCardMainImage {
   width: 75%;
-  height: 100%;
+  /* height: 100%; */
+  aspect-ratio: 4/3;
+  flex-shrink: 0;
+  padding-inline: 1px;
 }
 
 .vehicleCardSideImage {
   width: 25%;
-  height: 100%;
+  /* height: 100%; */
+  flex-shrink: 0;
 }
 
 .vehicleCardImageWrapper {
   width: 40%;
+  flex-shrink: 0;
 }
 
 .vehicleCardDetails {
@@ -1753,20 +1759,21 @@ posts-card-wrp .card-cstm .content p {
 .mainImage {
   width: 100%;
   height: 100%;
-  aspect-ratio: 4/3;
   object-fit: cover;
+  /* aspect-ratio: 4/3; */
   background-color: #d3d3d373;
 }
 
 .sideImage {
   width: 100%;
   height: 100%;
-  /* object-fit: cover; */
+  object-fit: cover;
+  height: 33%;
 }
 
 .vehicleCardWrapper {
   width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 8px -8px, rgba(0, 0, 0, 0.1) 0px 0px 2px;
+  box-shadow: rgba(22, 16, 16, 0.16) 0px 8px 8px -8px, rgba(0, 0, 0, 0.1) 0px 0px 2px;
   padding-block: 10px;
 }
 
@@ -2178,6 +2185,18 @@ a {
   fill: red;
 }
 
+@media (max-width:1500px) {
+  .navLinkText {
+    font-size: 10px;
+  }
+}
+
+@media (max-width:1150px) {
+  .navLinkText {
+    font-size: 9px;
+  }
+}
+
 .dropOtions {
   background-color: #fff;
   /* padding-top: 10px; */
@@ -2274,9 +2293,9 @@ input[type="file"]::-webkit-file-upload-button {
 .userName {
   margin: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 55px;
-  /* text-wrap: nowrap; */
+  /* text-overflow: ellipsis; */
+  max-width: 56px;
+  text-wrap: nowrap;
   line-height: 16px;
 }
 
@@ -2702,11 +2721,6 @@ input:read-only {
   display: none !important;
 }
 
-.whatsappContactIcon {
-  color: #23e723;
-  font-size: 30px;
-}
-
 .blockSellerDetails {
   text-align: center;
   background: red;
@@ -2749,3 +2763,38 @@ input:read-only {
 .detailsPageMainImage {
   background-color: #d3d3d373;
 }
+
+.whatsappSeller {
+  width: fit-content;
+  padding: 5px 12px;
+}
+
+.whatsappContactIcon {
+  padding: 5px;
+  background: #00bb00;
+  width: 24px;
+  height: 24px;
+  margin-right: 2px;
+  border-radius: 50%;
+  color: #333;
+}
+
+.galleryImageWrapper {
+  height: calc(100vh - (2rem + 125px));
+}
+
+@media (min-width:992px) {
+  .largeScreenSignIn {
+    display: block !important;
+  }
+
+  .smallScreenSignIn {
+    display: none !important;
+  }
+}
+
+.smallScreenSignIn .dropdown-toggle::after {
+  display: none !important;
+}
+
+/* 992 */

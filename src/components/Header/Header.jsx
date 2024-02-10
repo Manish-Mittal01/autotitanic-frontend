@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, Navbar, Nav } from "react-bootstrap";
+import { Container, Button, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as GridFilledIcon } from "../../Assets/icons/grid-filled.svg";
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { selectFilters } from "../../redux/filters/slice";
+import { logoutUser } from "../../redux/auth/slice";
+import isUserLoggedin from "../../utils/isUserLoggedin";
 
 const Header = ({ sidebar, setSidebar }) => {
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ const Header = ({ sidebar, setSidebar }) => {
         condition: { value: condition, label: condition },
       })
     );
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
   };
 
   useEffect(() => {
@@ -81,13 +87,13 @@ const Header = ({ sidebar, setSidebar }) => {
             >
               New {title.label}
             </li>
-            <li
+            {/* <li
               onClick={() => {
                 navigate(`/${title.value}/sell`);
               }}
             >
               Sell your {title.label?.slice(0, -1)}
-            </li>
+            </li> */}
           </ul>
         )}
         {showMenu === i && title.label === "Car Rentals" && (
@@ -109,7 +115,7 @@ const Header = ({ sidebar, setSidebar }) => {
   return (
     <>
       <header className="px-2 header">
-        <Navbar expand="lg" className="mainWrapper h-100">
+        <Navbar expand="lg" className="mainWrapper h-100 pe-0">
           <div className=" d-flex align-items-center justify-content-between w-100">
             <Container fluid className="m-0 p-0 d-flex">
               <div className="left d-flex align-items-center">
@@ -139,7 +145,11 @@ const Header = ({ sidebar, setSidebar }) => {
                   <Button
                     variant="transparent"
                     className="border-0 p-0"
-                    onClick={() => navigate("/CompareList")}
+                    onClick={() => {
+                      if (userProfile.data?.compareCount > 0) {
+                        navigate("/CompareList");
+                      }
+                    }}
                   >
                     <span className="icn">
                       <CompareIcon />
@@ -150,11 +160,14 @@ const Header = ({ sidebar, setSidebar }) => {
                   </Button>
                 </li>
                 <li
-                  className="d-flex align-items-center gap-10"
+                  className="position-relative d-flex align-items-center gap-10"
                   style={{ minWidth: 45 }}
-                  onClick={() => navigate("/profile")}
                 >
-                  <Button variant="transparent" className="font-small border-0 p-0">
+                  <Button
+                    variant="transparent"
+                    className="largeScreenSignIn d-none font-small border-0 p-0"
+                    onClick={() => navigate("/profile")}
+                  >
                     <p className="m-0 icn">
                       {userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (
                         <img
@@ -165,7 +178,67 @@ const Header = ({ sidebar, setSidebar }) => {
                         <ProfileHolder />
                       )}
                     </p>
-                    <p className="userName">{userProfile.data?.name || "Sign In"}</p>
+                    <p className="userName">
+                      {userProfile.data?.name
+                        ? userProfile.data?.name?.split(" ")[0].length > 6
+                          ? userProfile.data?.name?.split(" ")[0]
+                          : `${userProfile.data?.name?.split(" ")[0]}...`
+                        : "Sign In"}
+                    </p>
+                  </Button>
+                  <Dropdown className="smallScreenSignIn ">
+                    <Dropdown.Toggle variant="transparent" id="dropdown-basic">
+                      <Button
+                        variant="transparent"
+                        className="font-small border-0 p-0"
+                        onClick={() => {
+                          if (!isUserLoggedin()) {
+                            navigate("/profile");
+                          }
+                        }}
+                      >
+                        <p className="m-0 icn">
+                          {userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (
+                            <img
+                              src={userProfile.data.userAvatar || userProfile.data.dealerLogo}
+                              className="headerAvatar"
+                            />
+                          ) : (
+                            <ProfileHolder />
+                          )}
+                        </p>
+                        <p className="userName">{userProfile.data?.name || "Sign In"}</p>
+                      </Button>
+                    </Dropdown.Toggle>
+
+                    {isUserLoggedin() && (
+                      <Dropdown.Menu className="dropdown-menu-end">
+                        <Dropdown.Item onClick={() => navigate("/profile")}>Profile</Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate("/my-items")}>
+                          My Items
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate("/my-wishlist")}>
+                          Wishlist
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate("/change-password")}>
+                          Change password
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                      </Dropdown.Menu>
+                    )}
+                  </Dropdown>
+                </li>
+                <li className="d-flex align-items-center gap-10 position-relative">
+                  <Button
+                    variant="danger"
+                    className="border-0 px-2 py-1 text-nowrap"
+                    onClick={() => {
+                      if (userProfile.data?.compareCount > 0) {
+                        navigate("/cars/sell");
+                      }
+                    }}
+                  >
+                    Post Advert
                   </Button>
                 </li>
               </ul>

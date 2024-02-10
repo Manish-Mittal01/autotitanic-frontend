@@ -103,7 +103,7 @@ export default function HeroSection({ showFilterBox = true }) {
               return (
                 <div className="pointer p-2">
                   <img className="countryDropFlag" src={option.flag} />
-                  <span className="ms-2">{option.label}</span>
+                  <span className="ms-1">{option.label}</span>
                 </div>
               );
             }}
