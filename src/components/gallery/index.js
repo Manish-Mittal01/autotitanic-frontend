@@ -4,6 +4,7 @@ import { isArray } from "../../utils/dataTypes";
 import Slider from "react-slick";
 import { useDispatch } from "react-redux";
 import { manageGallery } from "../../redux/common/slice";
+import ReactPlayer from "react-player";
 
 export default function Gallery({ media }) {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function Gallery({ media }) {
     };
   }, []);
 
-  // console.log("media", media);
+  console.log("media", media);
   return (
     <div className="x-load-indicator-component bg-dark">
       <div className="text-white d-flex justify-content-end p-2">
@@ -63,49 +64,61 @@ export default function Gallery({ media }) {
             </Nav>
           </Col>
           <Tab.Content className="pt-3">
-            <Tab.Pane eventKey="images">
-              <Col lg="12" className="mx-auto">
-                <Slider {...settingsMain}>
-                  {isArray(media)
-                    .filter((item) => item.type?.includes("image"))
-                    ?.map((item, index) => (
-                      <div key={index} className="galleryImageWrapper position-relative">
-                        <img
-                          src={item.url}
-                          alt={`Slide ${index}`}
-                          className="detailCrouselImage d-flex algin-items-center"
-                          style={{ height: "100%" }}
-                        />
-                      </div>
-                    ))}
-                </Slider>
-              </Col>
+            <Tab.Pane eventKey="images" className="galleryTabPane">
+              <div className="d-flex">
+                <div className="galleryAdd border">Add Container</div>
+                <Col lg="12" className="galleryContainer mx-auto">
+                  <Slider {...settingsMain}>
+                    {isArray(media)
+                      .filter((item) => item.type?.includes("image"))
+                      ?.map((item, index) => (
+                        <div key={index} className="galleryImageWrapper position-relative">
+                          <img
+                            src={item.url}
+                            alt={`Slide ${index}`}
+                            className="detailCrouselImage d-flex algin-items-center"
+                            style={{ height: "100%" }}
+                          />
+                        </div>
+                      ))}
+                  </Slider>
+                </Col>
+                <div className="galleryAdd border">Add Container</div>
+              </div>
             </Tab.Pane>
-            <Tab.Pane eventKey="videos">
-              {isArray(media).filter((item) => item.type?.includes("video")).length > 0 ? (
-                isArray(media)
-                  .filter((item) => item.type?.includes("video"))
-                  ?.map((item) => (
+            <Tab.Pane eventKey="videos" className="galleryTabPane">
+              <div className="d-flex">
+                <div className="galleryAdd border">Add Container</div>
+                <Col lg="12" className="galleryContainer mx-auto ">
+                  {isArray(media).filter((item) => item.type?.includes("video")).length > 0 ? (
                     <Slider {...settingsMain}>
                       {isArray(media)
-                        .filter((item) => item.type?.includes("image"))
+                        .filter((item) => item.type?.includes("video"))
                         ?.map((item, index) => (
-                          <div key={index} className="detailsPageMainImage position-relative">
-                            <video>
-                              <source src={item.url} />
-                            </video>
+                          <div
+                            key={index}
+                            className="detailsPageMainImage galleryImageWrapper position-relative"
+                          >
+                            <ReactPlayer
+                              className="react-player mx-auto"
+                              url={item.url}
+                              height="100%"
+                              controls={true}
+                            />
                           </div>
                         ))}
                     </Slider>
-                  ))
-              ) : (
-                <h4
-                  className="text-white d-flex justify-content-center align-items-center"
-                  style={{ height: "70vh" }}
-                >
-                  No video found
-                </h4>
-              )}
+                  ) : (
+                    <h4
+                      className="text-white d-flex justify-content-center align-items-center"
+                      style={{ height: "100%" }}
+                    >
+                      No video found
+                    </h4>
+                  )}
+                </Col>
+                <div className="galleryAdd border">Add Container</div>
+              </div>
             </Tab.Pane>
           </Tab.Content>
         </Tab.Container>

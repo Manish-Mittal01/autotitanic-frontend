@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { ReactComponent as HeartIcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as ExpandIcon } from "../../Assets/icons/expand.svg";
 import { ReactComponent as LinkIcon } from "../../Assets/icons/link.svg";
@@ -6,34 +6,44 @@ import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { FaStar } from "react-icons/fa";
 import { OverlayTrigger } from "react-bootstrap";
 import MyTooltip from "../common/tooltip";
-import Gallery from "./components/gallery";
 import { useDispatch } from "react-redux";
-import { mediaGallery } from "../../redux/vehicles/slice";
 import { useNavigate } from "react-router-dom";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { addToCompare } from "../../redux/vehicles/thunk";
+import { addToCompare, addToWishlist } from "../../redux/vehicles/thunk";
 import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
+import { manageGallery } from "../../redux/common/slice";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const postImageRef = useRef();
-  const [postImageHeight, setPostImageHeight] = useState(0);
 
-  const showGallery = (media) => {
-    dispatch(mediaGallery(media));
+  const showGallery = (e, media) => {
+    e.stopPropagation();
+    dispatch(manageGallery(media));
   };
 
   const handleUserProfile = async () => {
     await handleApiRequest(getUserProfile);
   };
 
-  const handleAddToCompare = async () => {
+  const handleAddToCompare = async (e) => {
+    e.stopPropagation();
+
     const response = await handleApiRequest(addToCompare, { vehicle: post._id });
     if (response.status) {
       successMsg("Added to compare list");
       handleUserProfile();
+    }
+  };
+
+  const handleWishlist = async (e) => {
+    e.stopPropagation();
+
+    const response = await handleApiRequest(addToWishlist, { id: post._id });
+    if (response.status) {
+      successMsg("Added to wishlist");
     }
   };
 
@@ -45,12 +55,12 @@ export default function PostCard({ post }) {
             <LinkIcon fontWeight={500} style={{ width: 20, height: 20 }} />
           </OverlayTrigger>
         </p>
-        <p className="actionWrapper">
+        <p className="actionWrapper" onClick={handleWishlist}>
           <OverlayTrigger overlay={MyTooltip("Wishlist")}>
             <HeartIcon />
           </OverlayTrigger>
         </p>
-        <p className="actionWrapper" onClick={() => showGallery(post?.media)}>
+        <p className="actionWrapper" onClick={(e) => showGallery(e, post?.media)}>
           <OverlayTrigger overlay={MyTooltip("Gallery")}>
             <ExpandIcon />
           </OverlayTrigger>
@@ -63,12 +73,6 @@ export default function PostCard({ post }) {
       </div>
     );
   };
-
-  // useEffect(() => {
-  //   if (postImageRef.current) {
-  //     setPostImageHeight(postImageRef.current.offsetWidth);
-  //   }
-  // }, [postImageRef.current?.offsetWidth]);
 
   // console.log("showImageModel", showImageModel);
   // console.log("post", post);
@@ -87,12 +91,6 @@ export default function PostCard({ post }) {
               loading="lazy"
               alt=""
               className="postCardImage img-fluid w-100 "
-              style={
-                {
-                  // height: postImageHeight,
-                  // minHeight: 200,
-                }
-              }
             />
             <ActionContainer />
           </div>

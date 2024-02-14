@@ -4,6 +4,7 @@ import { handleApiRequest } from "../../services/handleApiRequest";
 import { getCompareList, removeCompareListItem } from "../../redux/vehicles/thunk";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import { getUserProfile } from "../../redux/profile/thunk";
+import { parseCamelKey } from "../../utils/parseKey";
 
 export default function CompareList() {
   const { compareList } = useSelector((state) => state.vehicles);
@@ -37,11 +38,15 @@ export default function CompareList() {
           <table className="table commonTable">
             <thead className="border-0">
               <tr className="">
-                <th className="compareListItem comparePropertyContainer">Selected Items</th>
+                <th className="compareListItem comparePropertyContainer darkColor fw-bold">
+                  Selected Items
+                </th>
                 {compareList.data?.map((details) => (
                   <th key={details._id} className="compareListItem position-relative">
                     <img src={details?.vehicle?.media[0]?.url} style={{ width: 100 }} />
-                    <p className="">{details?.vehicle?.title}</p>
+                    <p className="">
+                      {details?.vehicle?.make?.label + ", " + details?.vehicle?.model?.label}
+                    </p>
                     <p
                       className="imageRemoveIcon compareListItemRemoveIcon"
                       onClick={() => {
@@ -65,9 +70,12 @@ export default function CompareList() {
                     property !== "user" &&
                     property !== "createdAt" &&
                     property !== "user" &&
+                    property !== "isFeatured" &&
                     property !== "updatedAt" && (
                       <>
-                        <td className="comparePropertyContainer">{property}</td>
+                        <td className="comparePropertyContainer darkColor fw-bold">
+                          {parseCamelKey(property)}
+                        </td>
                         {compareList.data?.map((item) => (
                           <td key={item._id}>
                             {typeof item.vehicle[property] !== "object"

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function SuccessScreen() {
   return (
     <div className="text-center h-100">
-      <img src={successGif} className="bg-white" />
+      <img src={successGif} className="successGif bg-white" />
 
       <h5>Your post has been sent for review</h5>
       <h6>It will go live in 24 hours once approved</h6>

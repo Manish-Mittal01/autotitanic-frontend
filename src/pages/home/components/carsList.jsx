@@ -41,8 +41,8 @@ function CarsList() {
 
   return (
     <>
-      <h3 className="my-2 text-center text-danger">Featured Cars</h3>
-      <ListCrousel dataList={featuredList.data?.items || []} />
+      <h4 className="my-2 text-center text-danger">Featured Cars</h4>
+      <ListCrousel dataList={featuredList.data?.items || []} rowsCount={6} rowSize={30} />
 
       <div className="fullSizeAddContainer" style={{ width: 980, height: 120 }}>
         Add Container
@@ -50,8 +50,8 @@ function CarsList() {
         (980 x 120)
       </div>
 
-      <h3 className="my-2 text-center">Recently Posted Cars</h3>
-      <ListCrousel dataList={recentList.data?.items || []} />
+      <h4 className="drakColor my-2 text-center">Recently Posted Cars</h4>
+      <ListCrousel dataList={recentList.data?.items || []} rowsCount={12} rowSize={20} />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { FaStar } from "react-icons/fa";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
+import { ReactComponent as CompareIcon } from "../../../Assets/icons/compare.svg";
 import dealerLogo from "../../../Assets/Images/mainLogo.png";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { parseCamelKey } from "../../../utils/parseKey";
@@ -99,10 +100,13 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                 className="d-flex align-items-center justify-content-between"
                 onClick={() => navigate(`/details/${vehicle._id}`)}
               >
-                <div className="d-flex align-items-center text-danger gap-1 h5 m-0">
-                  <p className="m-0">{vehicle?.currency} </p>
-                  <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
-                </div>
+                <Button
+                  className={`rounded-pill py-1 ${
+                    vehicle?.condition === "used" ? "bg-danger" : "mainDarkColor"
+                  }`}
+                >
+                  {parseCamelKey(vehicle?.condition)}
+                </Button>
                 {!myVehicle && !wishlist && (
                   <Button
                     className={`rounded-pill py-1 ${
@@ -113,19 +117,32 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   </Button>
                 )}
               </h6>
+              <h6
+                className="d-flex align-items-center justify-content-between"
+                onClick={() => navigate(`/details/${vehicle._id}`)}
+              >
+                <div className="d-flex align-items-center text-danger gap-1 h5 m-0">
+                  <p className="m-0">{vehicle?.currency} </p>
+                  <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
+                </div>
+                {!myVehicle && !wishlist && (
+                  <Button variant="" className={`border rounded-pill py-1 `}>
+                    <CompareIcon className="redIcon" />
+                    Add to Compare
+                  </Button>
+                )}
+              </h6>
               <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
                 {vehicle.make?.label + " " + vehicle.model?.label}
               </p>
-              <p className={`${vehicle?.isFeatured ? "fw-bold text-danger" : ""}`}>
-                {vehicle?.title}
-              </p>
+              <p className={`fw-bold text-danger`}>{vehicle?.title}</p>
               <p
                 className="vehicleCardVehicleDetails mb-3 fw-bold"
                 onClick={() => navigate(`/details/${vehicle._id}`)}
               >
                 {vehicle.year} | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage}M |{" "}
                 {vehicle.engineSize} | {parseCamelKey(vehicle.gearBox)} |{" "}
-                {parseCamelKey(vehicle.fuelType)} | {parseCamelKey(vehicle.condition)}
+                {parseCamelKey(vehicle.fuelType)}
               </p>
               <div style={{ flex: 1 }} onClick={() => navigate(`/details/${vehicle._id}`)} />
               <div
@@ -197,7 +214,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   : ""
               }`}
             >
-              {parseCamelKey(vehicle.status)}
+              {vehicle.status === "pending" ? "Under Review" : parseCamelKey(vehicle.status)}
             </button>
           </>
         )}

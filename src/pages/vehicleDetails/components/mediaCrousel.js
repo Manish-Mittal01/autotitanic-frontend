@@ -63,7 +63,7 @@ const OverlayCarousal = ({ media, isFeatured }) => {
               className="detailsPageMainImage position-relative"
               onClick={() => handleGallery(media)}
             >
-              <img src={item.url} alt={`Slide ${index}`} className="detailCrouselImage" />
+              <img src={item.url} alt={`Slide ${index}`} className="detailCrouselImage pointer" />
               <p className="watermark">AutoTitanic</p>
             </div>
           ))}

@@ -48,7 +48,7 @@ const Navbar = ({ sidebar, setSidebar }) => {
                     <Accordion.Header>{category.label}</Accordion.Header>
                     <Accordion.Body>
                       <ul className="list-unstyled  mb-0">
-                        {category.label !== "Car Rentals" ? (
+                        {category.label !== "Rentals" ? (
                           <>
                             <li className="py-1">
                               <Link
@@ -88,10 +88,10 @@ const Navbar = ({ sidebar, setSidebar }) => {
                             </li>
                           </>
                         ) : (
-                          category.label === "Car Rentals" &&
+                          category.label === "Rentals" &&
                           categories.map(
                             (category, i) =>
-                              category.label !== "Car Rentals" && (
+                              category.label !== "Rentals" && (
                                 <li
                                   onClick={() => {
                                     navigate(`/${category.label}/rent`);

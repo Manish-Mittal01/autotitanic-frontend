@@ -50,10 +50,6 @@ const Header = ({ sidebar, setSidebar }) => {
     }
   }, [token]);
 
-  // console.log("userProfile", userProfile);
-  // console.log("admin", admin);
-  // console.log("admin.image", admin.image);
-
   const NavLinks = ({ title, i }) => {
     return (
       <div
@@ -64,7 +60,7 @@ const Header = ({ sidebar, setSidebar }) => {
         <p className="navLinkText">
           {title.label} <DownArrow width={8} height={8} />
         </p>
-        {showMenu === i && title.label !== "Car Rentals" && (
+        {showMenu === i && title.label !== "Rentals" && (
           <ul className="dropOtions list-unstyled position-absolute">
             <li
               onClick={() => {
@@ -96,11 +92,11 @@ const Header = ({ sidebar, setSidebar }) => {
             </li> */}
           </ul>
         )}
-        {showMenu === i && title.label === "Car Rentals" && (
+        {showMenu === i && title.label === "Rentals" && (
           <ul className="dropOtions list-unstyled position-absolute">
             {categories.map(
               (category, i) =>
-                category.label !== "Car Rentals" && (
+                category.label !== "Rentals" && (
                   <li onClick={() => navigate(`/${category.label}/rent`)}>
                     Rent a {category.label.slice(0, -1)}
                   </li>
@@ -111,6 +107,10 @@ const Header = ({ sidebar, setSidebar }) => {
       </div>
     );
   };
+
+  console.log("userProfile", userProfile);
+  // console.log("admin", admin);
+  // console.log("admin.image", admin.image);
 
   return (
     <>
@@ -141,7 +141,7 @@ const Header = ({ sidebar, setSidebar }) => {
                 ))}
               </Nav>
               <ul className="list-unstyled ps-0 mb-0 d-flex align-items-center gap-10">
-                <li className="d-flex align-items-center gap-10 position-relative">
+                <li className="d-flex align-items-center position-relative">
                   <Button
                     variant="transparent"
                     className="border-0 p-0"
@@ -152,11 +152,26 @@ const Header = ({ sidebar, setSidebar }) => {
                     }}
                   >
                     <span className="icn">
-                      <CompareIcon />
+                      <CompareIcon className="headerCompareIcon" />
                     </span>
                     {userProfile.data?.compareCount > 0 && (
                       <p className="compareCount">{userProfile.data?.compareCount}</p>
                     )}
+                  </Button>
+                </li>
+                <li className="d-flex align-items-center mx-1 position-relative">
+                  <Button
+                    variant="danger"
+                    className="headerPostBtn border-0 px-2 py-1 text-nowrap"
+                    onClick={() => {
+                      if (isUserLoggedin()) {
+                        navigate("/cars/sell");
+                      } else {
+                        navigate("/login");
+                      }
+                    }}
+                  >
+                    Post Advert
                   </Button>
                 </li>
                 <li
@@ -169,21 +184,23 @@ const Header = ({ sidebar, setSidebar }) => {
                     onClick={() => navigate("/profile")}
                   >
                     <p className="m-0 icn">
-                      {userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (
-                        <img
-                          src={userProfile.data.userAvatar || userProfile.data.dealerLogo}
-                          className="headerAvatar"
-                        />
+                      {isUserLoggedin() ? (
+                        userProfile.data?.userAvatar || userProfile.data?.dealerLogo ? (
+                          <img
+                            src={userProfile.data.userAvatar || userProfile.data.dealerLogo}
+                            className="headerAvatar"
+                          />
+                        ) : (
+                          <ProfileHolder />
+                        )
                       ) : (
-                        <ProfileHolder />
+                        ""
                       )}
                     </p>
                     <p className="userName">
                       {userProfile.data?.name
-                        ? userProfile.data?.name?.split(" ")[0].length > 6
-                          ? userProfile.data?.name?.split(" ")[0]
-                          : `${userProfile.data?.name?.split(" ")[0]}...`
-                        : "Sign In"}
+                        ? userProfile.data?.name?.split(" ")[0]
+                        : "Sign In | Register"}
                     </p>
                   </Button>
                   <Dropdown className="smallScreenSignIn ">
@@ -227,19 +244,6 @@ const Header = ({ sidebar, setSidebar }) => {
                       </Dropdown.Menu>
                     )}
                   </Dropdown>
-                </li>
-                <li className="d-flex align-items-center gap-10 position-relative">
-                  <Button
-                    variant="danger"
-                    className="border-0 px-2 py-1 text-nowrap"
-                    onClick={() => {
-                      if (userProfile.data?.compareCount > 0) {
-                        navigate("/cars/sell");
-                      }
-                    }}
-                  >
-                    Post Advert
-                  </Button>
                 </li>
               </ul>
             </div>

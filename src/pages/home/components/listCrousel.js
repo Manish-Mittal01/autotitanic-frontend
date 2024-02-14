@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import Slider from "react-slick";
 import PostCard from "../../../components/postcard";
 
-export default function ListCrousel({ dataList = [] }) {
+export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
   var settings = {
     className: "slider variable-width",
     infinite: true,
@@ -65,16 +65,24 @@ export default function ListCrousel({ dataList = [] }) {
   };
 
   const splitList = useCallback(
-    (list = [], rows, rowSize) => {
+    (list = [], numberOfRows, rowSize) => {
       const myList = [...list];
       const newList = [];
 
-      for (let size = 0; size <= rows; size++) {
-        if (myList?.length >= rowSize) {
-          newList.push(myList.splice(0, rowSize));
-        } else if (myList?.length > 0) {
-          newList.push(myList.splice(0));
+      for (let i = 1; i <= numberOfRows; i++) {
+        const limitCount = i * rowSize;
+        if (list.length <= limitCount && list.length > 0) {
+          for (let ind = 1; ind <= i; ind++) {
+            newList.push(myList.splice(0, list.length / i));
+          }
+          return newList;
         }
+
+        // if (myList?.length >= rowSize) {
+        //   newList.push(myList.splice(0, rowSize));
+        // } else if (myList?.length > 0) {
+        //   newList.push(myList.splice(0));
+        // }
       }
       return newList;
     },
@@ -102,11 +110,11 @@ export default function ListCrousel({ dataList = [] }) {
 
   return (
     <>
-      {splitList(dataList, 3, 60).map((rows, i) => {
+      {splitList(dataList, rowsCount / 2, rowSize * 2).map((rows, i) => {
         return (
           <Row key={i + "parent"} className="align-items-center justify-content-between">
             <Col xs={12} xl={10} className="homePostRow">
-              {splitList(rows, 2, 30).map((row, ind) => (
+              {splitList(rows, 2, rowSize).map((row, ind) => (
                 <Row key={ind + "child"}>
                   <Col xs={12}>
                     <Slider {...sliderItemsCountFix(settings, row.length)}>

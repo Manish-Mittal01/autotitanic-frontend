@@ -8,7 +8,9 @@ import { filterOptions } from "../../../utils/filters";
 import { isArray } from "../../../utils/dataTypes";
 import { getAllCity, getAllCountry } from "../../../redux/countryAndCity/thunk";
 import { getAllMake, getAllModel, getAllVariant } from "../../../redux/makeAndModel/thunk";
-import { selectFilters } from "../../../redux/filters/slice";
+import { resetFilters, selectFilters } from "../../../redux/filters/slice";
+import { preventMinus } from "../../../utils";
+import { parseCamelKey } from "../../../utils/parseKey";
 
 export default function CarFilters() {
   const dispatch = useDispatch();
@@ -47,6 +49,10 @@ export default function CarFilters() {
 
   const handleVariantList = async () => {
     handleApiRequest(getAllVariant, filters.model?.value);
+  };
+
+  const handleResetFilters = async () => {
+    dispatch(resetFilters());
   };
 
   useEffect(() => {
@@ -100,6 +106,11 @@ export default function CarFilters() {
     <>
       <div className="border rounded py-3">
         <h4 className="text-center">{vehiclesList.data?.totalCount} Cars found</h4>
+        <div className="text-center">
+          <Button variant="" className="drakColor" onClick={handleResetFilters}>
+            <h6>Reset Filters</h6>
+          </Button>
+        </div>
         {/* <p className="text-center">0 filters selected</p> */}
 
         <ul className="list-unstyled">
@@ -114,7 +125,11 @@ export default function CarFilters() {
                     : ""
                 }`}
               >
-                <span className="text-danger">{filter.label}</span>
+                {filter.label === "Country" && filters[filter.name]?.label === "Africa" ? (
+                  <span className="text-danger">Continent</span>
+                ) : (
+                  <span className="text-danger">{filter.label}</span>
+                )}
                 {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
                   <Tooltip
                     text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}
@@ -167,7 +182,13 @@ export default function CarFilters() {
                       <div className="text-start my-2">
                         <Button
                           variant="outline-primary"
-                          onClick={() => handleSelectFilter(filter.name, "", "")}
+                          onClick={() => {
+                            if (filter.name === "country") {
+                              handleSelectFilter(filter.name, "", "Africa");
+                            } else {
+                              handleSelectFilter(filter.name, "", "");
+                            }
+                          }}
                         >
                           Clear
                         </Button>
@@ -192,10 +213,50 @@ export default function CarFilters() {
                         <Col xs={8} className="p-0">
                           <SelectBox
                             options={filter.filterOptions[filterKey].options}
-                            value={filter[filter.filterOptions[filterKey].key]}
+                            value={filters[filter.filterOptions[filterKey].key] || ""}
                             onChange={(value) => {
                               dispatch(
                                 selectFilters({ [filter.filterOptions[filterKey].key]: value })
+                              );
+                            }}
+                          />
+                        </Col>
+                      </Row>
+                    </li>
+                  ))}
+                </>
+              )}
+              {filter.filterType === "input" && (
+                <>
+                  {Object.keys(filter.filterOptions).map((filterKey) => (
+                    <li
+                      key={filterKey}
+                      className="d-flex justify-content-between align-items-center px-3 py-2 "
+                    >
+                      <Row className="w-100">
+                        <Col xs={4} className="">
+                          <span className="">{filterKey}</span>
+                        </Col>
+                        <Col xs={8} className="p-0">
+                          <input
+                            type="number"
+                            className="form-control"
+                            style={{ height: 40 }}
+                            placeholder={parseCamelKey(filter.filterOptions[filterKey].key)}
+                            min={0}
+                            onKeyDown={preventMinus}
+                            name={filter.filterOptions[filterKey].key}
+                            value={filters[filter.filterOptions[filterKey].key]?.value || ""}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value.length > 10) return;
+                              dispatch(
+                                selectFilters({
+                                  [filter.filterOptions[filterKey].key]: {
+                                    value: value,
+                                    label: value,
+                                  },
+                                })
                               );
                             }}
                           />

@@ -52,7 +52,7 @@ export default function MyItems() {
         <h5>My Items</h5>
         <Form.Select className="myVehiclesFilter" name="status" onChange={handleChange}>
           <option value="">All</option>
-          <option value="pending">Pending</option>
+          <option value="pending">Under Review</option>
           <option value="draft">Draft</option>
           <option value="approved">Approved</option>
           <option value="rejected">Rejected</option>

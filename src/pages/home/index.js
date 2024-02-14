@@ -7,11 +7,15 @@ import HeroSection from "../../components/heroSection";
 import CarsList from "./components/carsList";
 import { selectFilters } from "../../redux/filters/slice";
 import { useNavigate } from "react-router-dom";
+import Gallery from "../../components/gallery";
+import { isArray } from "../../utils/dataTypes";
 
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allMakes } = useSelector((state) => state.makeAndModel);
+  const { galleryMedia } = useSelector((state) => state.common);
+
   const [showAllMakes, setShowAllMakes] = useState(false);
 
   const handleMakeList = async () => {
@@ -38,7 +42,6 @@ export default function Home() {
     <>
       <section>
         <HeroSection />
-
         <CarsList />
 
         <div className="fullSizeAddContainer">
@@ -86,6 +89,7 @@ export default function Home() {
           )}
         </div>
       </section>
+      {isArray(galleryMedia).length > 0 && <Gallery media={galleryMedia} />}
     </>
   );
 }

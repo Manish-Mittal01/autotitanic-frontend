@@ -31,16 +31,27 @@ export const priceList = [
 ];
 
 export const mileageList = [
-  { value: 10, label: 10 },
-  { value: 20, label: 20 },
-  { value: 30, label: 30 },
-  { value: 40, label: 40 },
-  { value: 50, label: 50 },
-  { value: 60, label: 60 },
-  { value: 70, label: 70 },
-  { value: 80, label: 80 },
-  { value: 90, label: 90 },
-  { value: 100, label: 100 },
+  { value: 50, label: "At least 50 miles" },
+  { value: 100, label: "At least 100 miles" },
+  { value: 500, label: "At least 500 miles" },
+  { value: 5000, label: "At least 5,000 miles" },
+  { value: 10000, label: "At least 10,000 miles" },
+  { value: 20000, label: "At least 20,000 miles" },
+  { value: 30000, label: "At least 30,000 miles" },
+  { value: 40000, label: "At least 40,000 miles" },
+  { value: 50000, label: "At least 50,000 miles" },
+  { value: 60000, label: "At least 60,000 miles" },
+  { value: 70000, label: "At least 70,000 miles" },
+  { value: 80000, label: "At least 80,000 miles" },
+  { value: 90000, label: "At least 90,000 miles" },
+  { value: 100000, label: "At least 100,000 miles" },
+  { value: 125000, label: "At least 125,000 miles" },
+  { value: 150000, label: "At least 150,000 miles" },
+  { value: 175000, label: "At least 175,000 miles" },
+  { value: 200000, label: "At least 200,000 miles" },
+  { value: 250000, label: "At least 250,000 miles" },
+  { value: 299000, label: "At least 299,000 miles" },
+  { value: 999999, label: "Over 300,000 miles" },
 ];
 
 export const colorsList = [
@@ -183,6 +194,12 @@ export const doorOptions = [
   { value: 7, label: "7 Doors" },
 ];
 
+export const gearBoxOptions = [
+  { value: "automatic", label: "Automatic" },
+  { value: "manual", label: "Manual" },
+  { value: "unspecified", label: "Unspecified" },
+];
+
 export const filterOptions = [
   { label: "Country", name: "country", filterOptions: [], filterType: "normal" },
   { label: "City", name: "city", filterOptions: [], filterType: "normal" },
@@ -196,15 +213,15 @@ export const filterOptions = [
       Min: { options: priceList.slice(0, -2), key: "minPrice" },
       Max: { options: priceList.slice(2), key: "maxPrice" },
     },
-    filterType: "range",
+    filterType: "input",
   },
   {
     label: "Year",
     name: "year",
     filterOptions: {
-      From: { options: getYearList() },
+      From: { options: getYearList(), key: "minYear" },
       // .slice(0, -2), key: "minYear" },
-      To: { options: getYearList() },
+      To: { options: getYearList(), key: "maxYear" },
       // .slice(2), key: "maxYear" },
     },
     filterType: "range",
@@ -314,11 +331,7 @@ export const postFeatures = [
   {
     label: "Gearbox",
     value: "gearBox",
-    options: [
-      { value: "automatic", label: "Automatic" },
-      { value: "manual", label: "Manual" },
-      { value: "unspecified", label: "Unspecified" },
-    ],
+    options: gearBoxOptions,
     category: ["cars"],
   },
   {
@@ -398,8 +411,8 @@ export const sellerDetails = [
   { value: "userType", label: "Seller" },
   { value: "name", label: "Seller's Name" },
   { value: "mobile", label: "Mobile No." },
-  { value: "whatsapp", label: "Whatspp No." },
-  // { value: "email", label: "Email Seller" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "email", label: "Email" },
 ];
 
 export const sortingOptions = [

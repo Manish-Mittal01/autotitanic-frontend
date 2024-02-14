@@ -109,6 +109,9 @@ export default function VehiclesList() {
           </Col>
 
           <Col xs={12} lg={9} className="vehicleListContainer">
+            <Row>
+              <Col>Back</Col>
+            </Row>
             <Row className="justify-content-between align-items-center w-100 mb-2">
               <Col
                 lg={3}

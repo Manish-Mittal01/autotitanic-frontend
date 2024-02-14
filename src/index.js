@@ -16,8 +16,6 @@ import "react-phone-input-2/lib/style.css";
 import "./Assets/css/style.css";
 import "./Assets/css/hover.css";
 import "./Assets/css/Main.css";
-import "owl.carousel/dist/assets/owl.carousel.css";
-import "owl.carousel/dist/assets/owl.theme.default.css";
 import App from "./App";
 import ScrollToTop from "./ScrollToTop";
 import { persistor, store } from "./redux/store";

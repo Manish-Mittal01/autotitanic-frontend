@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-input-2";
 import { Button } from "react-bootstrap";
 import { isEmail } from "validator";
 import { phone } from "phone";
+import { byCountry } from "country-code-lookup";
 import { ReactComponent as OpenEye } from "../../../Assets/icons/openEye.svg";
 import { ReactComponent as CloseEye } from "../../../Assets/icons/closedEye.svg";
 import mainLogo from "../../../Assets/Images/mainLogo.png";
@@ -28,6 +29,7 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [countryName, setCountryName] = useState("");
 
   const handleChange = (e) => {
     const value =
@@ -91,6 +93,8 @@ const Register = () => {
   // console.log("userCreds", userCreds);
   // console.log("rememberedUser", rememberedUser);
   //   console.log("allCountries", allCountries);
+  console.log("countryName", countryName);
+  console.log("countryCode", byCountry(countryName));
 
   return (
     <>
@@ -110,7 +114,7 @@ const Register = () => {
                     <div className="pt-4 pb-2">
                       <h5 className="text-center pb-0 fs-4 fw-bold">Register</h5>
                       <p className="text-center small">
-                        Already have a account{" "}
+                        <span className="primaryColor">Already have a account </span>
                         <Link to="/login" className="text-danger">
                           Login
                         </Link>
@@ -160,13 +164,38 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Phone Number
+                          Country
                           <Asterik />
                         </label>
                         <div className="input-group has-validation">
+                          <SelectBox
+                            styles={{
+                              container: (baseStyle) => ({ ...baseStyle, height: 45 }),
+                              control: (baseStyle) => ({ ...baseStyle, height: "100%" }),
+                            }}
+                            options={allCountries.data?.items}
+                            getOptionValue={(option) => option._id}
+                            getOptionLabel={(option) => option.name}
+                            value={userCreds.country}
+                            onChange={(selected) => {
+                              setUserCreds((prev) => ({ ...prev, country: selected }));
+                              setCountryName(selected.name);
+                            }}
+                          />
+                        </div>
+                        {errors.country && <p className="errorMsg">*{errors.country}</p>}
+                      </div>
+
+                      <div className="col-12">
+                        <label for="name" className="form-label mb-0">
+                          Phone Number
+                          <Asterik />
+                        </label>
+                        {console.log("byCountry(countryName)?.fips", byCountry(countryName)?.fips)}
+                        <div className="input-group has-validation">
                           <PhoneInput
                             className="phoneInput"
-                            country={"gh"}
+                            country={byCountry(countryName)?.fips?.toLowerCase() || "gh"}
                             value={userCreds.mobile}
                             onChange={(value, country, e, formattedValue) =>
                               setUserCreds((prev) => ({ ...prev, mobile: formattedValue }))
@@ -183,7 +212,7 @@ const Register = () => {
                         <div className="input-group has-validation">
                           <PhoneInput
                             className="phoneInput"
-                            country={"gh"}
+                            country={byCountry(countryName)?.fips?.toLowerCase() || "gh"}
                             value={userCreds.whatsapp}
                             onChange={(value, country, e, formattedValue) =>
                               setUserCreds((prev) => ({ ...prev, whatsapp: formattedValue }))
@@ -191,29 +220,6 @@ const Register = () => {
                           />
                         </div>
                         {errors.mobile && <p className="errorMsg">*{errors.mobile}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="name" className="form-label mb-0">
-                          Country
-                          <Asterik />
-                        </label>
-                        <div className="input-group has-validation">
-                          <SelectBox
-                            styles={{
-                              container: (baseStyle) => ({ ...baseStyle, height: 45 }),
-                              control: (baseStyle) => ({ ...baseStyle, height: "100%" }),
-                            }}
-                            options={allCountries.data?.items}
-                            getOptionValue={(option) => option._id}
-                            getOptionLabel={(option) => option.name}
-                            value={userCreds.country}
-                            onChange={(selected) =>
-                              setUserCreds((prev) => ({ ...prev, country: selected }))
-                            }
-                          />
-                        </div>
-                        {errors.country && <p className="errorMsg">*{errors.country}</p>}
                       </div>
 
                       <div className="col-12">
@@ -242,7 +248,9 @@ const Register = () => {
 
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Profile Image
+                          {userCreds.userType?.value === "dealer"
+                            ? "Business logo"
+                            : "Profile Image"}
                         </label>
                         <div className="input-group has-validation">
                           <input

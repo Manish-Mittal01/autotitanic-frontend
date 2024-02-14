@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
-import { FaWhatsapp } from "react-icons/fa";
+import { MdOutlineEmail } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
@@ -28,6 +28,7 @@ export default function VehicleDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { vehicleDetails, relatedVehicles } = useSelector((state) => state.vehicles);
+  const { userProfile } = useSelector((state) => state.profile);
   const detail = vehicleDetails.data;
   const [action, setAction] = useState(null);
 
@@ -43,8 +44,11 @@ export default function VehicleDetails() {
     if (isUserLoggedin()) {
       const response = await handleApiRequest(addToCompare, { vehicle: id });
       if (response.status) {
+        await handleUserProfile();
         successMsg("Added to compare list");
-        handleUserProfile();
+        if (userProfile.data?.compareCount >= 5) {
+          navigate("/CompareList");
+        }
       }
     } else {
       navigate("/login");
@@ -141,7 +145,7 @@ export default function VehicleDetails() {
               </p>
             </div>
             <div className="my-4">
-              <h5>Vehicle Description</h5>
+              <h5 className="darkColor">Vehicle Description</h5>
               <div
                 dangerouslySetInnerHTML={{ __html: detail?.description }}
                 className="border-bottom"
@@ -160,16 +164,16 @@ export default function VehicleDetails() {
               <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
             </div>
             <div className="detailsWrapper mt-3">
-              <h6 className="detailsHeading">
+              <h6 className="detailsHeading mainDarkColor mb-0 pb-1">
                 <p> Key Vehicle Details</p>
               </h6>
-              <div className="p-3">
+              <div className="p-3" style={{ backgroundColor: "#2c30541a" }}>
                 {detailsList.cars?.map((key) => (
                   <Row className="my-2">
-                    <Col xs={5} className="small">
+                    <Col xs={5} className="darkColor small fw-bold">
                       {key.label}
                     </Col>
-                    <Col xs={7} className="small">
+                    <Col xs={7} className="small primaryColor">
                       {typeof detail?.[key.value] !== "object"
                         ? parseCamelKey(detail?.[key.value]?.toString())
                         : parseCamelKey(detail?.[key.value]?.name || detail?.[key.value]?.label)}
@@ -179,19 +183,29 @@ export default function VehicleDetails() {
               </div>
             </div>
             <div className="detailsWrapper sellerDetailsWrapper mt-3">
-              <h6 className="detailsHeading">
+              <h6 className="detailsHeading bg-danger text-white mb-0 pb-1">
                 <p>Seller's Details</p>
               </h6>
-              <div className="p-3">
+              <div className="p-3" style={{ backgroundColor: "#ff00001a" }}>
                 {isUserLoggedin() ? (
-                  sellerDetails.map(
-                    (key) =>
+                  sellerDetails.map((key, i) => {
+                    const myKey =
+                      key.label === "Seller's Name" &&
+                      detail?.user?.[sellerDetails[i - 1]?.value] === "dealer"
+                        ? "Business Name"
+                        : key.label;
+
+                    return (
                       detail?.user?.[key.value] && (
                         <Row className="my-2 align-items-center">
-                          <Col xs={5} className="small">
-                            {key.label}
+                          <Col xs={5} className="darkColor small fw-bold">
+                            {myKey}
                           </Col>
-                          <Col xs={7} className="small" style={{ wordWrap: "break-word" }}>
+                          <Col
+                            xs={7}
+                            className="small primaryColor"
+                            style={{ wordWrap: "break-word" }}
+                          >
                             {key.value === "whatsapp" ? (
                               <a
                                 href={
@@ -201,10 +215,17 @@ export default function VehicleDetails() {
                                 }
                                 target="_blank"
                               >
-                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill">
+                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill small">
                                   {/* <FaWhatsapp className="whatsappContactIcon" /> */}
-                                  <WhatsappIcon className="me-1" />
+                                  <WhatsappIcon className="me-1" width={20} />
                                   Whatsapp Seller
+                                </p>
+                              </a>
+                            ) : key.value === "email" ? (
+                              <a href={`mailto:${detail?.user?.[key.value]}`} target="_blank">
+                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill small">
+                                  <MdOutlineEmail className="emailIcon me-1" />
+                                  Email Seller
                                 </p>
                               </a>
                             ) : (
@@ -213,11 +234,12 @@ export default function VehicleDetails() {
                           </Col>
                         </Row>
                       )
-                  )
+                    );
+                  })
                 ) : (
                   <div className="d-flex justify-content-center">
                     <p
-                      className="blockSellerDetails pointer border rounded-pill"
+                      className="blockSellerDetails pointer border-0 rounded-pill"
                       onClick={() => navigate("/login")}
                     >
                       Login to view Seller
@@ -227,14 +249,14 @@ export default function VehicleDetails() {
               </div>
             </div>
             <div className="detailsWrapper ActionWrapper mt-3">
-              <h6 className="detailsHeading">
+              <h6 className="detailsHeading mainDarkColor mb-0 pb-1">
                 <p>Interactive Options</p>
               </h6>
-              <div className=" p-3">
+              <div className="p-3" style={{ backgroundColor: "#2c30541a" }}>
                 <Row className="">
                   <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
                     <p
-                      className="small pointer m-0 p-2"
+                      className="small pointer primaryColor m-0 p-2"
                       onClick={() => {
                         if (isUserLoggedin()) {
                           setAction({ type: "makeOffer", currency: detail?.currency });
@@ -246,16 +268,19 @@ export default function VehicleDetails() {
                       <MdLocalOffer className="text-danger mx-1" />
                       Make an Offer
                     </p>
-                    <p className="small pointer m-0 p-2" onClick={handleAddToCompare}>
+                    <p className="small pointer primaryColor m-0 p-2" onClick={handleAddToCompare}>
                       <CompareIcon className="redIcon" />
                       Add to Compare
                     </p>
-                    <p className="small pointer m-0 p-2 " onClick={handleAddToWishlist}>
+                    <p
+                      className="small pointer primaryColor m-0 p-2 "
+                      onClick={handleAddToWishlist}
+                    >
                       <Heartcon className="redIcon" />
                       Add to Wishlist
                     </p>
                     <p
-                      className="small pointer m-0 p-2"
+                      className="small pointer primaryColor m-0 p-2"
                       onClick={() => {
                         setAction({ type: "sharePost" });
                       }}

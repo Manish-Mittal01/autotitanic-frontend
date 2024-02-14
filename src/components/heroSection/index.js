@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import africaFlag from "../../Assets/Images/africa-flag.png";
-import { priceList } from "../../utils/filters";
 import { isArray } from "../../utils/dataTypes";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllCountry } from "../../redux/countryAndCity/thunk";
@@ -11,6 +10,7 @@ import { getAllMake, getAllModel } from "../../redux/makeAndModel/thunk";
 import { getVehicleCount } from "../../redux/vehicles/thunk";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import SelectBox from "../selectBox";
+import { preventMinus } from "../../utils";
 
 export default function HeroSection({ showFilterBox = true }) {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ export default function HeroSection({ showFilterBox = true }) {
   const handleUpdateFilters = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
   };
+
   const handleResetFilters = () => {
     dispatch(resetFilters());
   };
@@ -47,6 +48,7 @@ export default function HeroSection({ showFilterBox = true }) {
       model: filters.model?.value || "",
       minPrice: filters.minPrice?.value,
       maxPrice: filters.maxPrice?.value,
+      status: "approved",
     };
     handleApiRequest(getVehicleCount, { filters: request });
   };
@@ -134,7 +136,7 @@ export default function HeroSection({ showFilterBox = true }) {
               }}
             />
           </div>
-          <div className="d-flex justify-content-between my-2 gap-10">
+          {/* <div className="d-flex justify-content-between my-2 gap-10">
             <SelectBox
               placeholder="Min Price"
               options={priceList.slice(0, -2)}
@@ -149,6 +151,38 @@ export default function HeroSection({ showFilterBox = true }) {
               value={filters.maxPrice || ""}
               onChange={(value) => {
                 handleUpdateFilters("maxPrice", value);
+              }}
+            />
+          </div> */}
+          <div className="d-flex justify-content-between my-2 gap-10">
+            <input
+              type="number"
+              className="form-control"
+              style={{ height: 40 }}
+              placeholder="Min Price"
+              name="minPrice"
+              value={filters.minPrice?.value || ""}
+              min={0}
+              onKeyDown={preventMinus}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length > 10) return;
+                handleUpdateFilters("minPrice", { value: value, label: value });
+              }}
+            />
+            <input
+              type="number"
+              className="form-control"
+              style={{ height: 40 }}
+              placeholder="Max Price"
+              name="maxPrice"
+              value={filters.maxPrice?.value || ""}
+              min={0}
+              onKeyDown={preventMinus}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length > 10) return;
+                handleUpdateFilters("maxPrice", { value: value, label: value });
               }}
             />
           </div>

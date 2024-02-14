@@ -1759,7 +1759,7 @@ posts-card-wrp .card-cstm .content p {
 .mainImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   /* aspect-ratio: 4/3; */
   background-color: #d3d3d373;
 }
@@ -2162,11 +2162,7 @@ a {
 .navLink {
   text-wrap: nowrap;
   padding-inline: 4px;
-  font-weight: bold;
-}
-
-.navLinkText:hover {
-  color: red;
+  font-weight: 400;
 }
 
 .navLinkText {
@@ -2174,7 +2170,13 @@ a {
   display: flex;
   align-items: center;
   height: 60px;
+  color: #2c3054;
+  font-weight: 500;
   /* font-size: 0.88vw !important; */
+}
+
+.navLinkText:hover {
+  color: red;
 }
 
 .navLinkText svg {
@@ -2185,9 +2187,36 @@ a {
   fill: red;
 }
 
+.userName {
+  margin: 0;
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 56px; */
+  max-width: 90px;
+  text-wrap: nowrap;
+  line-height: 16px;
+}
+
+.headerCompareIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.headerCompareIcon g {
+  fill: #2c3054;
+}
+
 @media (max-width:1500px) {
   .navLinkText {
-    font-size: 10px;
+    font-size: 11px;
+  }
+
+  .userName {
+    font-size: 11px;
+  }
+
+  .headerPostBtn {
+    font-size: 11px;
   }
 }
 
@@ -2290,26 +2319,17 @@ input[type="file"]::-webkit-file-upload-button {
   object-fit: cover;
 }
 
-.userName {
-  margin: 0;
-  overflow: hidden;
-  /* text-overflow: ellipsis; */
-  max-width: 56px;
-  text-wrap: nowrap;
-  line-height: 16px;
-}
-
 .vehicleListContainer {
   max-width: calc(100% - 225px);
 }
 
 @media (max-width:1024px) {
-
   .vehicleListContainer {
     max-width: 100%;
   }
 }
 
+/* 
 .galleryContainer {
   position: absolute;
   background-color: #000;
@@ -2319,7 +2339,7 @@ input[type="file"]::-webkit-file-upload-button {
   justify-content: center;
   align-items: center;
   color: #fff;
-}
+} */
 
 .gallerySlider {
   width: 100%;
@@ -2423,14 +2443,20 @@ iframe img {
   display: flex;
   justify-content: center;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 8px -8px, rgba(0, 0, 0, 0.1) 0px 0px 2px;
-  padding-block: 4px;
+
 }
 
 .detailsHeading p {
-  border-bottom: 1px solid red;
+  /* border-bottom: 1px solid red; */
   width: fit-content;
   margin: 0;
   margin-block: 6px;
+  text-shadow: 1px 1px 1px #919191,
+    1px 2px 1px #919191,
+    1px 4px 6px rgba(16, 16, 16, 0.4),
+    1px 2px 10px rgba(16, 16, 16, 0.2),
+    1px 5px 35px rgba(16, 16, 16, 0.2),
+    1px 3px 60px rgba(16, 16, 16, 0.4);
 }
 
 .emailIcon g {
@@ -2591,28 +2617,45 @@ iframe img {
 }
 
 .successMsg {
-  background-color: #00800026 !important;
+  /* background-color: #00800026 !important; */
+  background-color: green !important;
+  color: #fff;
+  /* color: green; */
   border: none;
-  color: green;
   margin: 0;
   padding: 0.185rem 0.75rem;
 }
 
 .rejectMsg {
-  background-color: #ff000026 !important;
+  /* background-color: #ff000026 !important;
+  color: red; */
+  background-color: red !important;
+  color: #fff;
   border: none;
-  color: red;
   margin: 0;
   padding: 0.185rem 0.75rem;
 }
 
 .warningMsg {
-  background-color: #ffa50026 !important;
+  /* background-color: #ffa50026 !important;
+  color: orange; */
+  background-color: orange !important;
+  color: #fff;
   border: none;
-  color: orange;
   margin: 0;
   padding: 0.185rem 0.75rem;
 }
+
+
+.primaryMsg {
+  background-color: #2c3054 !important;
+  color: #fff;
+  border: none;
+  margin: 0;
+  padding: 0.185rem 0.75rem;
+}
+
+
 
 .shareIcon {
   position: absolute;
@@ -2697,9 +2740,7 @@ input:read-only {
   }
 }
 
-.sellerDetailsWrapper {
-  background-color: #ff00001a;
-}
+
 
 .starIcon {
   position: absolute;
@@ -2735,6 +2776,14 @@ input:read-only {
   color: #fff !important;
 }
 
+.darkColor {
+  color: #2c3054 !important;
+}
+
+.primaryColor {
+  color: #4e4eff !important;
+}
+
 .vehicleCardVehicleDetails {
   color: rgb(36, 45, 61);
 }
@@ -2750,8 +2799,8 @@ input:read-only {
 
 .featuredBtn {
   position: absolute;
-  top: 0;
-  left: 7px;
+  top: calc(1px - 0.5rem);
+  left: 1px;
   border: 0;
   background: red;
   color: white;
@@ -2766,7 +2815,16 @@ input:read-only {
 
 .whatsappSeller {
   width: fit-content;
-  padding: 5px 12px;
+  padding: 2px 10px;
+}
+
+.emailIcon {
+  font-size: 20px;
+  /* background-color: #fff; */
+}
+
+.emailIcon path:nth-child(2) {
+  fill: red;
 }
 
 .whatsappContactIcon {
@@ -2797,4 +2855,101 @@ input:read-only {
   display: none !important;
 }
 
-/* 992 */
+.drakColor {
+  color: #2c3054;
+}
+
+.successGif {
+  width: 100%;
+}
+
+@media (min-width:1000px) {
+  .successGif {
+    width: auto;
+  }
+
+}
+
+fieldset {
+  border: 2px groove rgb(192, 192, 192);
+  padding-inline: 0.75rem;
+}
+
+legend {
+  float: unset;
+  width: unset;
+  float: unset;
+  margin-bottom: unset;
+  font-size: unset !important;
+  padding-inline: 2px;
+}
+
+
+.bodyStyleContainer img {
+  width: 100%;
+}
+
+.bodyStyleContainer p {
+  text-align: center;
+}
+
+.activeBody {
+  border: 1px solid red;
+  border-radius: 5px;
+}
+
+.checkIcon {
+  color: red;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.galleryContainer {
+  width: calc(100% - 440px);
+}
+
+.galleryAdd {
+  width: 160px;
+  height: 600px;
+  margin-inline: 20px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+@media (max-height:800px) {
+  .galleryAdd {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-height:400px) {
+  .galleryAdd {
+    display: none;
+  }
+}
+
+.searchIcon {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.allFiltersAdd {
+  border: 1px solid lightgray;
+  width: 300px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width:1365px) {
+  .allFiltersAdd {
+    display: none;
+  }
+}
