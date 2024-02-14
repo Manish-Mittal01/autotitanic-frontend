@@ -1,17 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import HeroSection from "../../components/heroSection";
-import SelectBox from "../../components/selectBox";
-import { filterOptions, priceList } from "../../utils/filters";
-import parseKey from "../../utils/parseKey";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFilters } from "../../redux/filters/slice";
+import Select from "react-select";
+import { IoSearch } from "react-icons/io5";
+import { IoCheckmark } from "react-icons/io5";
+import coupe from "../../Assets/Images/Coupe.png";
+import convertible from "../../Assets/Images/Convertible.png";
+import estate from "../../Assets/Images/Estate.png";
+import hatchback from "../../Assets/Images/Hatchback.png";
+import mpv from "../../Assets/Images/Mpv.png";
+import pickup from "../../Assets/Images/Pickup.png";
+import saloon from "../../Assets/Images/Saloon.png";
+import suv from "../../Assets/Images/suv.png";
+import SelectBox from "../../components/selectBox";
+import {
+  accelerationOptions,
+  bootSpaceOptions,
+  co2EmmisionOptions,
+  colorsList,
+  doorOptions,
+  engineSizeOptions,
+  filterOptions,
+  fuelConsumtionOptions,
+  fuelTypeOptions,
+  gearBoxOptions,
+  getYearList,
+  mileageList,
+  seatOptions,
+} from "../../utils/filters";
+import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
-import { getAllMake, getAllModel, getAllVariant } from "../../redux/makeAndModel/thunk";
 import { getVehicleCount } from "../../redux/vehicles/thunk";
 import { useNavigate } from "react-router-dom";
 import HeroAdd from "../../components/heroSection/heroAdd";
+import CountryFilter from "../../components/filters";
+import { preventMinus } from "../../utils";
+
+const bodyTypeOptions = [
+  { img: convertible, label: "Convertible", value: "convertible" },
+  { img: coupe, label: "Coupe", value: "coupe" },
+  { img: estate, label: "Estate", value: "estate" },
+  { img: hatchback, label: "Hatchback", value: "hatchback" },
+  { img: mpv, label: "MPV", value: "MPV" },
+  { img: pickup, label: "Pickup", value: "SUV/Pick-up" },
+  { img: saloon, label: "Saloon", value: "saloon" },
+  // { img: suv, label: "SUV", value: "SUV/Pick-up" },
+];
 
 export default function AllFilters() {
   const navigate = useNavigate();
@@ -27,24 +61,8 @@ export default function AllFilters() {
     dispatch(selectFilters({ [name]: value }));
   };
 
-  const handleCountryList = async () => {
-    handleApiRequest(getAllCountry);
-  };
-
-  const handleAllCities = async () => {
-    handleApiRequest(getAllCity, filters.country?.value);
-  };
-
-  const handleMakeList = async () => {
-    handleApiRequest(getAllMake);
-  };
-
-  const handleModelList = async () => {
-    handleApiRequest(getAllModel, filters.make?.value);
-  };
-
-  const handleVariantList = async () => {
-    handleApiRequest(getAllVariant, filters.model?.value);
+  const hanldeResetFilters = () => {
+    dispatch(resetFilters());
   };
 
   const handleResultCount = async () => {
@@ -57,16 +75,7 @@ export default function AllFilters() {
   };
 
   useEffect(() => {
-    handleCountryList();
-    handleMakeList();
-  }, []);
-
-  useEffect(() => {
     handleResultCount();
-
-    if (filters.make?.value) handleModelList();
-    // if (filters.model?.value) handleVariantList();
-    if (filters.country?.value) handleAllCities();
   }, [filters]);
 
   useEffect(() => {
@@ -97,67 +106,372 @@ export default function AllFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
+  // console.log("filters", filters);
+  console.log("vehiclesCount", vehiclesCount);
+
   return (
     <>
       <HeroAdd />
+
       <section>
-        <Row className="allFiltersContainer border rounded mx-2 my-5">
-          <div className="my-3 d-flex justify-content-between">
-            <p>ADVANCED SEARCH</p>
-            <h6 className="text-danger fw-bold ">{vehiclesCount.data?.totalCount} Result found</h6>
-          </div>
-          <Col md={9} className="">
-            <Row className="justify-content-center">
-              {filtersList.map((filter) =>
-                Array.isArray(filter.filterOptions) ? (
-                  <Col md={5} className="my-2">
-                    <label className="">
-                      <span className="">{filter.label}</span>
-                    </label>
-                    <SelectBox
-                      options={filter.filterOptions}
-                      value={filters.name}
-                      getOptionLabel={(option) => option.label || option.name}
-                      getOptionValue={(option) => option.value || option._id}
-                      onChange={(selected) => {
-                        const value = {
-                          value: selected.value || selected._id,
-                          label: selected.label || selected.name,
-                        };
-                        handleUpdateFilter(filter.name, value);
-                      }}
-                    />
-                  </Col>
-                ) : (
-                  Object.keys(filter.filterOptions).map((filterKey) => (
-                    <Col md={5} className="my-2">
-                      <label className="">
-                        <span className="">{filterKey + " " + parseKey(filter.name)}</span>
-                      </label>
-                      <SelectBox
-                        options={filter.filterOptions[filterKey].options}
-                        value={filter[filter.filterOptions[filterKey].key]}
-                        onChange={(value) => {
-                          handleUpdateFilter([filter.filterOptions[filterKey].key], value);
-                        }}
-                      />
-                    </Col>
-                  ))
-                )
+        <Row>
+          <h5 className="fw-bold text-center">ADVANCED SEARCH</h5>
+          <h6 className="text-center mb-5">Search the largest choice of cars</h6>
+          <Col lg={4} className="d-flex flex-column" style={{ gap: 10 }}>
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <div className="w-100">
+                <label>Country</label>
+                <CountryFilter filterType={"country"} />
+              </div>
+              {filters.country?.label !== "Africa" && (
+                <div className="w-100">
+                  <label>City</label>
+                  <CountryFilter filterType={"city"} />
+                </div>
               )}
-            </Row>
-            <Button variant="danger" className="my-3 w-100" onClick={() => navigate("/cars")}>
-              Search
-            </Button>
+            </div>
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <div className="w-100">
+                <label>Make</label>
+                <CountryFilter filterType={"make"} />
+              </div>
+              <div className="w-100">
+                <label>Model</label>
+                <CountryFilter filterType={"model"} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <div>
+                <label>Min Price</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  style={{ height: 40 }}
+                  placeholder="Min Price"
+                  name="minPrice"
+                  value={filters.minPrice?.value || ""}
+                  min={0}
+                  onKeyDown={preventMinus}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 10) return;
+                    handleUpdateFilter("minPrice", { value: value, label: value });
+                  }}
+                />
+              </div>
+
+              <div>
+                <label>Min Price</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  style={{ height: 40 }}
+                  placeholder="Max Price"
+                  name="maxPrice"
+                  value={filters.maxPrice?.value || ""}
+                  min={0}
+                  onKeyDown={preventMinus}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 10) return;
+                    handleUpdateFilter("maxPrice", { value: value, label: value });
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <div className="w-100">
+                <label>Min Mileage</label>
+                <SelectBox
+                  placeholder="Max Mileage"
+                  options={mileageList.slice(0, -2)}
+                  value={filters.minMileage || ""}
+                  onChange={(value) => {
+                    handleUpdateFilter("minMileage", value);
+                  }}
+                />
+              </div>
+              <div className="w-100">
+                <label>Max Mileage</label>
+                <SelectBox
+                  placeholder="Max Mileage"
+                  options={mileageList.slice(2)}
+                  value={filters.maxMileage || ""}
+                  onChange={(value) => {
+                    handleUpdateFilter("maxMileage", value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <div className="w-100">
+                <label>From (Year)</label>
+                <SelectBox
+                  options={getYearList()}
+                  value={filters.minYear || ""}
+                  onChange={(value) => {
+                    handleUpdateFilter("minYear", value);
+                  }}
+                />
+              </div>
+              <div className="w-100">
+                <label>To (Year)</label>
+                <SelectBox
+                  options={getYearList()}
+                  value={filters.maxYear || ""}
+                  onChange={(value) => {
+                    handleUpdateFilter("maxYear", value);
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="allFiltersAdd">Add Container</div>
           </Col>
-          <Col
-            md={2}
-            className={`fullSizeAddContainer  d-none d-xl-flex `}
-            style={{ width: 160, height: 400 }}
-          >
-            Add Container
-            <br />
-            (160 x 400)
+          <Col lg={8} className="d-flex flex-column">
+            <fieldset className="border my-3">
+              <legend>Body Type</legend>
+              <Row className="py-3">
+                {bodyTypeOptions.map((bodyType) => (
+                  <Col
+                    lg={2}
+                    sm={3}
+                    xs={4}
+                    className={`bodyStyleContainer pointer position-relative ${
+                      filters.bodyStyle?.value === bodyType.value ? "activeBody" : ""
+                    }`}
+                    onClick={() =>
+                      handleUpdateFilter("bodyStyle", {
+                        value: bodyType.value,
+                        label: bodyType.value,
+                      })
+                    }
+                  >
+                    {filters.bodyStyle?.value === bodyType.value && (
+                      <IoCheckmark className="checkIcon" />
+                    )}
+                    <img src={bodyType.img} />
+                    <p>{bodyType.label}</p>
+                  </Col>
+                ))}
+              </Row>
+            </fieldset>
+            <fieldset className="border my-3">
+              <legend>Fuel Type</legend>
+              <Row className="py-3">
+                {fuelTypeOptions.map((fuelType) => (
+                  <Col lg={4} className="d-flex align-items-center my-2">
+                    <input
+                      type="radio"
+                      name="fuelType"
+                      id={fuelType.value}
+                      onClick={() => handleUpdateFilter("fuelType", fuelType.value)}
+                    />
+                    <label className="m-0 ms-2" htmlFor={fuelType.value}>
+                      {fuelType.label}
+                    </label>
+                  </Col>
+                ))}
+              </Row>
+            </fieldset>
+            <fieldset className="border my-3 py-3">
+              <legend>Specification</legend>
+              <fieldset className="border">
+                <legend>Color</legend>
+                <Row className="py-3">
+                  {colorsList.map((color) => (
+                    <Col lg={4} className="d-flex align-items-center my-2">
+                      <input
+                        type="radio"
+                        name="fuelType"
+                        id={color.value}
+                        onChange={() => handleUpdateFilter("exteriorColor", color)}
+                      />
+                      <label className="m-0 ms-2" htmlFor={color.value}>
+                        {color.label}
+                      </label>
+                    </Col>
+                  ))}
+                </Row>
+              </fieldset>
+              <div className="d-flex justify-content-between my-2 gap-10">
+                <div className="w-100">
+                  <label>Door</label>
+                  <Select
+                    options={doorOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.door}
+                    onChange={(selected) => {
+                      handleUpdateFilter("door", selected);
+                    }}
+                  />
+                </div>
+                <div className="w-100">
+                  <label>Seat</label>
+                  <Select
+                    options={seatOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.seat}
+                    onChange={(selected) => {
+                      handleUpdateFilter("seat", selected);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="d-flex justify-content-between my-2 gap-10">
+                <div className="w-100">
+                  <label>Boot Space</label>
+                  <Select
+                    options={bootSpaceOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.bootSpace}
+                    onChange={(selected) => {
+                      handleUpdateFilter("bootSpace", selected);
+                    }}
+                  />
+                </div>
+                <div className="w-100">
+                  <label>Gear Box</label>
+                  <Select
+                    options={gearBoxOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.gearBox}
+                    onChange={(selected) => {
+                      handleUpdateFilter("gearBox", selected);
+                    }}
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <fieldset className="border my-3  py-3">
+              <legend>Performence</legend>
+              <div className="d-flex justify-content-between my-2 gap-10">
+                <div className="w-100">
+                  <label>Engine Size</label>
+                  <Select
+                    options={engineSizeOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.engineSize}
+                    onChange={(selected) => {
+                      handleUpdateFilter("engineSize", selected);
+                    }}
+                  />
+                </div>
+                <div className="w-100">
+                  <label>Acceleration</label>
+                  <Select
+                    options={accelerationOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.acceleration}
+                    onChange={(selected) => {
+                      handleUpdateFilter("acceleration", selected);
+                    }}
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <fieldset className="border my-3  py-3">
+              <legend>Running Cost</legend>
+              <div className="d-flex justify-content-between my-2 gap-10">
+                <div className="w-100">
+                  <label>Fuel Consumption</label>
+                  <Select
+                    options={fuelConsumtionOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.fuelConsumtion}
+                    onChange={(selected) => {
+                      handleUpdateFilter("fuelConsumtion", selected);
+                    }}
+                  />
+                </div>
+                <div className="w-100">
+                  <label>CO2 Emission</label>
+                  <Select
+                    options={co2EmmisionOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.co2Emmision}
+                    onChange={(selected) => {
+                      handleUpdateFilter("co2Emmision", selected);
+                    }}
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <fieldset className="border my-3  py-3">
+              <legend>Preference</legend>
+              <div className="d-flex justify-content-between my-2 gap-10">
+                <div className="w-100">
+                  <label>Private & Dealer</label>
+                  <Select
+                    options={[
+                      { value: "private", label: "Private" },
+                      { value: "dealer", label: "Dealer" },
+                    ]}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.userType}
+                    onChange={(selected) => {
+                      handleUpdateFilter("userType", selected);
+                    }}
+                  />
+                </div>
+                <div className="w-100">
+                  <label>Condition</label>
+                  <Select
+                    options={[
+                      { value: "used", label: "Used" },
+                      { value: "new", label: "New" },
+                    ]}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.condition}
+                    onChange={(selected) => {
+                      handleUpdateFilter("condition", selected);
+                    }}
+                  />
+                </div>
+              </div>
+            </fieldset>
+            <Button
+              type="submit"
+              variant="danger"
+              className="w-50 mt-3 mx-auto d-flex align-items-center justify-content-center"
+              onClick={() => {
+                navigate("cars/all");
+              }}
+            >
+              <IoSearch className="searchIcon" />
+              Search {vehiclesCount.data?.totalCount}
+            </Button>
+            <Button
+              variant=""
+              className="w-50 mb-3 mx-auto text-primary"
+              style={{ fontSize: 16 }}
+              onClick={() => {
+                hanldeResetFilters();
+              }}
+            >
+              Reset Filters
+            </Button>
           </Col>
         </Row>
       </section>

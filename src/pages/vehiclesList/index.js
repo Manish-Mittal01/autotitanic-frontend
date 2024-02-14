@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { ReactComponent as FilterIcon } from "../../Assets/icons/filter.svg";
 import CarFilters from "./components/carFilters";
 import VehicleCard from "./components/vehicleCard";
@@ -10,12 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
 import { sortingOptions } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
 
 export default function VehiclesList() {
-  const { state } = useLocation();
+  const navigate = useNavigate();
   const { categoryFilter } = useParams();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
@@ -109,9 +110,14 @@ export default function VehiclesList() {
           </Col>
 
           <Col xs={12} lg={9} className="vehicleListContainer">
-            <Row>
-              <Col>Back</Col>
-            </Row>
+            <h6
+              className="mt-3 pointer"
+              style={{ width: "fit-content" }}
+              onClick={() => navigate(-1)}
+            >
+              <FaArrowLeftLong className="me-2" />
+              Back
+            </h6>
             <Row className="justify-content-between align-items-center w-100 mb-2">
               <Col
                 lg={3}

@@ -5,6 +5,7 @@ import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as WhatsappIcon } from "../../Assets/icons/whatsapp.svg";
@@ -99,7 +100,11 @@ export default function VehicleDetails() {
 
   return (
     <>
-      <section className="mt-3">
+      <section>
+        <h6 className="mt-3 pointer" style={{ width: "fit-content" }} onClick={() => navigate(-1)}>
+          <FaArrowLeftLong className="me-2" />
+          Back
+        </h6>
         <Row>
           <Col lg={8}>
             <div className="parentCrousel">
