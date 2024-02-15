@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
@@ -26,6 +26,7 @@ import isUserLoggedin from "../../utils/isUserLoggedin";
 import { detailsList, sellerDetails } from "../../utils/filters";
 
 export default function VehicleDetails() {
+  const whatsappBoxref = useRef();
   const { id } = useParams();
   const navigate = useNavigate();
   const { vehicleDetails, relatedVehicles } = useSelector((state) => state.vehicles);
@@ -103,7 +104,7 @@ export default function VehicleDetails() {
       <section>
         <h6 className="mt-3 pointer" style={{ width: "fit-content" }} onClick={() => navigate(-1)}>
           <FaArrowLeftLong className="me-2" />
-          Back
+          Back to results
         </h6>
         <Row>
           <Col lg={8}>
@@ -172,7 +173,7 @@ export default function VehicleDetails() {
               <h6 className="detailsHeading mainDarkColor mb-0 pb-1">
                 <p> Key Vehicle Details</p>
               </h6>
-              <div className="p-3" style={{ backgroundColor: "#2c30541a" }}>
+              <div className="p-3">
                 {detailsList.cars?.map((key) => (
                   <Row className="my-2">
                     <Col xs={5} className="darkColor small fw-bold">
@@ -191,7 +192,10 @@ export default function VehicleDetails() {
               <h6 className="detailsHeading bg-danger text-white mb-0 pb-1">
                 <p>Seller's Details</p>
               </h6>
-              <div className="p-3" style={{ backgroundColor: "#ff00001a" }}>
+              <div
+                className="p-3"
+                // style={{ backgroundColor: "#ff00001a" }}
+              >
                 {isUserLoggedin() ? (
                   sellerDetails.map((key, i) => {
                     const myKey =
@@ -220,7 +224,10 @@ export default function VehicleDetails() {
                                 }
                                 target="_blank"
                               >
-                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill small">
+                                <p
+                                  className="whatsappSeller mainDarkColor m-0 rounded-pill small"
+                                  ref={whatsappBoxref}
+                                >
                                   {/* <FaWhatsapp className="whatsappContactIcon" /> */}
                                   <WhatsappIcon className="me-1" width={20} />
                                   Whatsapp Seller
@@ -228,7 +235,10 @@ export default function VehicleDetails() {
                               </a>
                             ) : key.value === "email" ? (
                               <a href={`mailto:${detail?.user?.[key.value]}`} target="_blank">
-                                <p className="whatsappSeller mainDarkColor m-0 rounded-pill small">
+                                <p
+                                  className="whatsappSeller mainDarkColor m-0 rounded-pill small"
+                                  style={{ minWidth: whatsappBoxref.current?.offsetWidth }}
+                                >
                                   <MdOutlineEmail className="emailIcon me-1" />
                                   Email Seller
                                 </p>
@@ -257,7 +267,7 @@ export default function VehicleDetails() {
               <h6 className="detailsHeading mainDarkColor mb-0 pb-1">
                 <p>Interactive Options</p>
               </h6>
-              <div className="p-3" style={{ backgroundColor: "#2c30541a" }}>
+              <div className="p-3">
                 <Row className="">
                   <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
                     <p

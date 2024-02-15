@@ -171,7 +171,7 @@ const Header = ({ sidebar, setSidebar }) => {
                       }
                     }}
                   >
-                    Post Advert
+                    Post an Advert
                   </Button>
                 </li>
                 <li

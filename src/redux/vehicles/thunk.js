@@ -13,6 +13,18 @@ export const getVehicleCount = createAsyncThunk(
   }
 );
 
+export const getVehicleCountByBody = createAsyncThunk(
+  "vehicles/getVehicleCountByBody",
+  async (filters, Thunk) => {
+    try {
+      const response = await axios.post(`getResultCountByFilter`, filters);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);
+
 export const getVehicleList = createAsyncThunk(
   "vehicles/getVehicleList",
   async (filters, Thunk) => {

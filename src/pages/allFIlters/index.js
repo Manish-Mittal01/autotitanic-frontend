@@ -30,7 +30,7 @@ import {
 } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { getVehicleCount } from "../../redux/vehicles/thunk";
+import { getVehicleCount, getVehicleCountByBody } from "../../redux/vehicles/thunk";
 import { useNavigate } from "react-router-dom";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import CountryFilter from "../../components/filters";
@@ -50,7 +50,7 @@ const bodyTypeOptions = [
 export default function AllFilters() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { vehiclesCount } = useSelector((state) => state.vehicles);
+  const { vehiclesCount, vehiclesCountByFilter } = useSelector((state) => state.vehicles);
   const { filters } = useSelector((state) => state.filters);
   // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
@@ -71,8 +71,22 @@ export default function AllFilters() {
       newFilters[filter[0]] = filter[1].value || filter[1]._id;
     });
 
-    handleApiRequest(getVehicleCount, { filters: newFilters });
+    handleApiRequest(getVehicleCount, { filters: { ...newFilters, status: "approved" } });
   };
+
+  const getVehicleCountByFilter = async () => {
+    const bodyStyles = bodyTypeOptions.map((type) => {
+      return type.value;
+    });
+    const request = {
+      filters: { bodyStyle: bodyStyles },
+    };
+    const response = await handleApiRequest(getVehicleCountByBody, request);
+  };
+
+  useEffect(() => {
+    getVehicleCountByFilter();
+  }, []);
 
   useEffect(() => {
     handleResultCount();
@@ -107,7 +121,8 @@ export default function AllFilters() {
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
   // console.log("filters", filters);
-  console.log("vehiclesCount", vehiclesCount);
+  // console.log("vehiclesCount", vehiclesCount);
+  console.log("vehiclesCountByFilter", vehiclesCountByFilter);
 
   return (
     <>
@@ -147,7 +162,7 @@ export default function AllFilters() {
                   type="number"
                   className="form-control"
                   style={{ height: 40 }}
-                  placeholder="Min Price"
+                  placeholder="Enter Min Price"
                   name="minPrice"
                   value={filters.minPrice?.value || ""}
                   min={0}
@@ -166,7 +181,7 @@ export default function AllFilters() {
                   type="number"
                   className="form-control"
                   style={{ height: 40 }}
-                  placeholder="Max Price"
+                  placeholder="Enter Max Price"
                   name="maxPrice"
                   value={filters.maxPrice?.value || ""}
                   min={0}
@@ -252,7 +267,14 @@ export default function AllFilters() {
                       <IoCheckmark className="checkIcon" />
                     )}
                     <img src={bodyType.img} />
-                    <p>{bodyType.label}</p>
+                    <p className="m-0">{bodyType.label}</p>
+                    <p>
+                      (
+                      {vehiclesCountByFilter.data?.bodyStyle
+                        .find((style) => style.value === bodyType.value)
+                        ?.count?.toLocaleString()}
+                      )
+                    </p>
                   </Col>
                 ))}
               </Row>
@@ -456,7 +478,7 @@ export default function AllFilters() {
               variant="danger"
               className="w-50 mt-3 mx-auto d-flex align-items-center justify-content-center"
               onClick={() => {
-                navigate("cars/all");
+                navigate("/cars/all");
               }}
             >
               <IoSearch className="searchIcon" />

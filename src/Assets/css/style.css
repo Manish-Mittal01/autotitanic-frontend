@@ -2224,6 +2224,10 @@ a {
   .navLinkText {
     font-size: 9px;
   }
+
+  .headerPostBtn {
+    font-size: 9px;
+  }
 }
 
 .dropOtions {
@@ -2435,15 +2439,20 @@ iframe img {
 }
 
 .detailsWrapper {
-  background-color: #e7eaefdb;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 8px 0px, rgba(0, 0, 0, 0.1) 0px 0px 2px
+  /* background-color: #e7eaefdb; */
+  background-color: #fff;
+  /* background-color: #fff; */
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 8px 0px, rgba(0, 0, 0, 0.1) 0px 0px 2px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .detailsHeading {
   display: flex;
   justify-content: center;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 8px -8px, rgba(0, 0, 0, 0.1) 0px 0px 2px;
-
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .detailsHeading p {
@@ -2824,7 +2833,7 @@ input:read-only {
 }
 
 .emailIcon path:nth-child(2) {
-  fill: red;
+  /* fill: red; */
 }
 
 .whatsappContactIcon {
@@ -2927,9 +2936,23 @@ legend {
   }
 }
 
-@media (max-height:400px) {
+@media (max-height:500px) {
   .galleryAdd {
     display: none;
+  }
+
+  .galleryContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width:1000px) {
+  .galleryAdd {
+    display: none;
+  }
+
+  .galleryContainer {
+    width: 100%;
   }
 }
 

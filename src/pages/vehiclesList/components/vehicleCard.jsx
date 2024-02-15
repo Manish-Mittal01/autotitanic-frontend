@@ -10,12 +10,15 @@ import dealerLogo from "../../../Assets/Images/mainLogo.png";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { parseCamelKey } from "../../../utils/parseKey";
 import {
+  addToCompare,
   getVehicleList,
   getWishlist,
   removeWishlistItem,
   updateVehicle,
 } from "../../../redux/vehicles/thunk";
 import DeletePopup from "../../../components/Modals/DeletePop";
+import { successMsg } from "../../../utils/toastMsg";
+import { getUserProfile } from "../../../redux/profile/thunk";
 
 export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   const navigate = useNavigate();
@@ -31,6 +34,20 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     const response = await handleApiRequest(removeWishlistItem, { id: wishlist });
     if (response.status) {
       handleWishlist();
+    }
+  };
+
+  const handleUserProfile = async () => {
+    await handleApiRequest(getUserProfile);
+  };
+
+  const handleAddToCompare = async (e) => {
+    e.stopPropagation();
+
+    const response = await handleApiRequest(addToCompare, { vehicle: vehicle._id });
+    if (response.status) {
+      successMsg("Added to compare list");
+      handleUserProfile();
     }
   };
 
@@ -50,12 +67,12 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     }
   };
 
-  useEffect(() => {
-    if (imageRef.current) {
-      console.log("imageRef.current.offsetHeight", imageRef.current.offsetHeight);
-      setMainImageWidth(imageRef.current.offsetHeight * (4 / 3));
-    }
-  }, [imageRef.current?.offsetHeight]);
+  // useEffect(() => {
+  //   if (imageRef.current) {
+  //     console.log("imageRef.current.offsetHeight", imageRef.current.offsetHeight);
+  //     setMainImageWidth(imageRef.current.offsetHeight * (4 / 3));
+  //   }
+  // }, [imageRef.current?.offsetHeight]);
 
   // console.log("vehicle.media", vehicle.media);
 
@@ -126,7 +143,11 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
                 </div>
                 {!myVehicle && !wishlist && (
-                  <Button variant="" className={`border rounded-pill py-1 `}>
+                  <Button
+                    variant=""
+                    className={`border rounded-pill py-1 `}
+                    onClick={handleAddToCompare}
+                  >
                     <CompareIcon className="redIcon" />
                     Add to Compare
                   </Button>

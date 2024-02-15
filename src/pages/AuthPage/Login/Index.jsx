@@ -70,7 +70,7 @@ const Login = () => {
                     <div className="pt-4 pb-2">
                       <h5 className="text-center pb-0 fs-4 fw-bold">Login</h5>
                       <p className="text-center small">
-                        <span className="primaryColor">New to Autotitanic? </span>
+                        <span className="darkColor">New to Autotitanic? </span>
                         <Link to="/register" className="text-danger">
                           Create Account
                         </Link>

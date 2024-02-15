@@ -5,6 +5,7 @@ import {
   getRecentList,
   getRelatedVehicles,
   getVehicleCount,
+  getVehicleCountByBody,
   getVehicleDetails,
   getVehicleList,
   getWishlist,
@@ -20,6 +21,7 @@ const initialState = {
   compareList: {},
   wishlist: {},
   gallery: {},
+  vehiclesCountByFilter: {},
 };
 
 const vehiclesSlice = createSlice({
@@ -61,6 +63,12 @@ const vehiclesSlice = createSlice({
         state.vehiclesCount = action.payload;
       })
       .addCase(getVehicleCount.rejected, (state, action) => {});
+    builder
+      .addCase(getVehicleCountByBody.pending, (state, action) => {})
+      .addCase(getVehicleCountByBody.fulfilled, (state, action) => {
+        state.vehiclesCountByFilter = action.payload;
+      })
+      .addCase(getVehicleCountByBody.rejected, (state, action) => {});
     builder
       .addCase(getVehicleDetails.pending, (state, action) => {})
       .addCase(getVehicleDetails.fulfilled, (state, action) => {

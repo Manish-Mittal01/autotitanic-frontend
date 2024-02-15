@@ -14,7 +14,7 @@ export const categories = [
   { value: "farms", label: "Farms" },
   { value: "plants", label: "Plants" },
   { value: "carRentals", label: "Rentals" },
-  { value: "partAndAccessories", label: "Part & Accessories" },
+  { value: "partAndAccessories", label: "Parts & Accessories" },
 ];
 
 export const preventMinus = (e) => {

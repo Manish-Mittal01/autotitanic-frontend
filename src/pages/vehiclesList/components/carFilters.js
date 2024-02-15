@@ -83,6 +83,7 @@ export default function CarFilters() {
     // if (filters.model && allVariants.data) {
     //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
     // }
+
     if (allCountries.data) {
       oldFilters[countryIndex].filterOptions = allCountries.data.items;
     }
@@ -159,18 +160,23 @@ export default function CarFilters() {
                                   .slice(i * 4, i * 4 + 4)
                                   .map((filterValue, ind) => (
                                     <td key={ind} className="filterOption pointer">
-                                      <p
-                                        className="m-0 text-primary"
-                                        onClick={() =>
-                                          handleSelectFilter(
-                                            filter.name,
-                                            filterValue.value || filterValue._id,
-                                            filterValue.label || filterValue.name
-                                          )
-                                        }
-                                      >
-                                        {filterValue.label || filterValue.name}
-                                      </p>
+                                      <div className="d-flex align-items-center">
+                                        {filter.label === "Country" && (
+                                          <img src={filterValue.flag} width={20} className="me-1" />
+                                        )}
+                                        <p
+                                          className="m-0 text-primary"
+                                          onClick={() =>
+                                            handleSelectFilter(
+                                              filter.name,
+                                              filterValue.value || filterValue._id,
+                                              filterValue.label || filterValue.name
+                                            )
+                                          }
+                                        >
+                                          {filterValue.label || filterValue.name}
+                                        </p>
+                                      </div>
                                     </td>
                                   ))}
                               </tr>

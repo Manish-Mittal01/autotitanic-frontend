@@ -124,7 +124,7 @@ const Register = () => {
                     <form onSubmit={handleRegister} className="row g-3 needs-validation">
                       <div className="col-12">
                         <label for="name" className="form-label mb-0">
-                          Name
+                          Full Name
                           <Asterik />
                         </label>
                         <div className="input-group has-validation">

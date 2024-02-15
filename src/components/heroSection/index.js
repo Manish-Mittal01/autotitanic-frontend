@@ -89,7 +89,7 @@ export default function HeroSection({ showFilterBox = true }) {
     <div className="mx-0 mx-lg-2">
       <section className="heroSectionWrapper" style={{ minHeight: !showFilterBox ? 250 : "" }}>
         <div
-          className="searchBoxWrapper bg-white p-4 rounded ms-4"
+          className="searchBoxWrapper bg-white p-4 rounded mx-4"
           style={{ display: showFilterBox ? "" : "none" }}
         >
           <h5 className="text-center">Find your dream Car</h5>
