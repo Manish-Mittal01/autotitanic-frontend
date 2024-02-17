@@ -19,6 +19,7 @@ import {
   co2EmmisionOptions,
   colorsList,
   doorOptions,
+  driverPositions,
   engineSizeOptions,
   filterOptions,
   fuelConsumtionOptions,
@@ -283,7 +284,7 @@ export default function AllFilters() {
               <legend>Fuel Type</legend>
               <Row className="py-3">
                 {fuelTypeOptions.map((fuelType) => (
-                  <Col lg={4} className="d-flex align-items-center my-2">
+                  <Col lg={4} xs={6} className="d-flex align-items-center my-2">
                     <input
                       type="radio"
                       name="fuelType"
@@ -303,7 +304,7 @@ export default function AllFilters() {
                 <legend>Color</legend>
                 <Row className="py-3">
                   {colorsList.map((color) => (
-                    <Col lg={4} className="d-flex align-items-center my-2">
+                    <Col lg={4} xs={6} className="d-flex align-items-center my-2">
                       <input
                         type="radio"
                         name="fuelType"
@@ -409,15 +410,15 @@ export default function AllFilters() {
               <legend>Running Cost</legend>
               <div className="d-flex justify-content-between my-2 gap-10">
                 <div className="w-100">
-                  <label>Fuel Consumption</label>
+                  <label>Driver Position</label>
                   <Select
-                    options={fuelConsumtionOptions}
+                    options={driverPositions}
                     components={{
                       IndicatorSeparator: () => null,
                     }}
-                    value={filters.fuelConsumtion}
+                    value={filters.driverPosition}
                     onChange={(selected) => {
-                      handleUpdateFilter("fuelConsumtion", selected);
+                      handleUpdateFilter("driverPosition", selected);
                     }}
                   />
                 </div>

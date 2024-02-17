@@ -24,6 +24,7 @@ import { getUserProfile } from "../../redux/profile/thunk";
 import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { detailsList, sellerDetails } from "../../utils/filters";
+import ListCrousel from "../home/components/listCrousel";
 
 export default function VehicleDetails() {
   const whatsappBoxref = useRef();
@@ -72,12 +73,12 @@ export default function VehicleDetails() {
     const request = {
       filters: {
         type: detail?.type,
-        country: detail?.country?._id,
+        // country: detail?.country?._id,
         // minPrice: Math.ceil(detail?.price - detail?.price / 20),
         // maxPrice: Math.ceil(detail?.price + detail?.price / 20),
       },
       paginationDetails: {
-        limit: 30,
+        limit: 50,
         page: 1,
       },
     };
@@ -91,13 +92,13 @@ export default function VehicleDetails() {
   }, [id]);
 
   useEffect(() => {
-    if (detail) {
+    if (detail && id) {
       handleRelatedVehicles();
     }
   }, [detail]);
 
   //   console.log("vehicleDetails", vehicleDetails);
-  console.log("relatedVehicles", relatedVehicles);
+  // console.log("relatedVehicles", relatedVehicles);
 
   return (
     <>
@@ -159,7 +160,7 @@ export default function VehicleDetails() {
             </div>
           </Col>
           <Col lg={4}>
-            <h6 className="my-2">{detail?.title}</h6>
+            <h6 className="darkColor my-2">{detail?.title}</h6>
             <p>{[detail?.make.label, detail?.model.label].join("  ")}</p>
             <div className="d-flex align-items-center text-danger gap-1">
               <h6 className="m-0 fw-bold">{detail?.currency} </h6>
@@ -315,7 +316,14 @@ export default function VehicleDetails() {
           </Col>
         </Row>
 
-        {/* <ListCrousel dataList={relatedVehicles.data?.items || []} /> */}
+        <h4 className="my-4 darkColor">Related Vehicles</h4>
+
+        <ListCrousel
+          className={"justify-content-center"}
+          dataList={relatedVehicles.data?.items || []}
+          rowsCount={1}
+          rowSize={50}
+        />
       </section>
 
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}

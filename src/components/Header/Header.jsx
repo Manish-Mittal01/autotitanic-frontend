@@ -148,6 +148,8 @@ const Header = ({ sidebar, setSidebar }) => {
                     onClick={() => {
                       if (userProfile.data?.compareCount > 0) {
                         navigate("/CompareList");
+                      } else if (!isUserLoggedin()) {
+                        navigate("/login");
                       }
                     }}
                   >

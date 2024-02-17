@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import Slider from "react-slick";
 import PostCard from "../../../components/postcard";
 
-export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
+export default function ListCrousel({ dataList = [], rowsCount, rowSize, className = "" }) {
   var settings = {
     className: "slider variable-width",
     infinite: true,
@@ -17,7 +17,7 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
       {
         breakpoint: 3000,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: rowsCount > 1 ? 5 : 6,
           slidesToScroll: 5,
           infinite: true,
         },
@@ -25,7 +25,7 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
       {
         breakpoint: 2400,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: rowsCount > 1 ? 4 : 5,
           slidesToScroll: 4,
           infinite: true,
         },
@@ -33,7 +33,7 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
       {
         breakpoint: 1400,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: rowsCount > 1 ? 3 : 4,
           slidesToScroll: 3,
           infinite: true,
         },
@@ -110,10 +110,17 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
 
   return (
     <>
-      {splitList(dataList, rowsCount / 2, rowSize * 2).map((rows, i) => {
+      {splitList(dataList, Math.ceil(rowsCount / 2), rowSize * 2).map((rows, i) => {
         return (
-          <Row key={i + "parent"} className="align-items-center justify-content-between">
-            <Col xs={12} xl={10} className="homePostRow">
+          <Row
+            key={i + "parent"}
+            className={`align-items-center ${className ? className : "justify-content-between"}`}
+          >
+            <Col
+              xs={12}
+              xl={rowsCount > 1 ? 10 : 12}
+              className={`${rowsCount > 1 ? "homePostRow" : "homePostRowSingle"}`}
+            >
               {splitList(rows, 2, rowSize).map((row, ind) => (
                 <Row key={ind + "child"}>
                   <Col xs={12}>
@@ -126,15 +133,17 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize }) {
                 </Row>
               ))}
             </Col>
-            <Col
-              xl={2}
-              className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
-              style={{ width: 160, height: 600 }}
-            >
-              Add Container
-              <br />
-              (160 x 600)
-            </Col>
+            {rowsCount > 1 && (
+              <Col
+                xl={2}
+                className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
+                style={{ width: 160, height: 600 }}
+              >
+                Add Container
+                <br />
+                (160 x 600)
+              </Col>
+            )}
           </Row>
         );
       })}

@@ -253,6 +253,27 @@ export const filterOptions = [
     filterType: "normal",
   },
   {
+    label: "Private or dealer",
+    name: "userType",
+    filterOptions: [
+      { value: "private", label: "Private" },
+      { value: "Dealer", label: "dealer" },
+    ],
+    filterType: "normal",
+  },
+  {
+    label: "Body Type",
+    name: "bodyStyle",
+    filterOptions: bodyStyleOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Engine Size",
+    name: "engineSize",
+    filterOptions: engineSizeOptions,
+    filterType: "normal",
+  },
+  {
     label: "Door",
     name: "door",
     filterOptions: doorOptions,
@@ -279,9 +300,22 @@ export const filterOptions = [
   },
   { label: "Boot Space", name: "bootSpace", filterOptions: bootSpaceOptions, filterType: "normal" },
   {
+    label: "Gear Box",
+    name: "gearBox",
+    filterOptions: gearBoxOptions,
+    filterType: "normal",
+  },
+
+  {
     label: "Acceleration",
     name: "accelration",
     filterOptions: accelerationOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Fuel Type",
+    name: "fuelType",
+    filterOptions: fuelTypeOptions,
     filterType: "normal",
   },
   // {

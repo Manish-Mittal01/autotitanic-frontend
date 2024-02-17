@@ -14,6 +14,7 @@ import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { useNavigate, useParams } from "react-router-dom";
 import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
+import MyPagination from "../../components/pagination";
 
 export default function VehiclesList() {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ export default function VehiclesList() {
 
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);
-  // console.log("vehiclesList", vehiclesList);
+  console.log("vehiclesList", vehiclesList);
 
   return (
     <>
@@ -195,6 +196,12 @@ export default function VehiclesList() {
             ) : (
               <h1 className="text-center my-5">0 Results Found</h1>
             )}
+
+            <MyPagination
+              paginationDetails={paginationDetails}
+              setPaginationDetails={setPaginationDetails}
+              totalPosts={vehiclesList?.totalCount}
+            />
           </Col>
         </Row>
       </section>

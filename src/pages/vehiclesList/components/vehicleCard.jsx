@@ -138,7 +138,10 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                 className="d-flex align-items-center justify-content-between"
                 onClick={() => navigate(`/details/${vehicle._id}`)}
               >
-                <div className="d-flex align-items-center text-danger gap-1 h5 m-0">
+                <div
+                  className="darkColor d-flex align-items-center gap-1 m-0 fw-bold"
+                  style={{ fontSize: 18 }}
+                >
                   <p className="m-0">{vehicle?.currency} </p>
                   <p className="m-0"> {vehicle?.price?.toLocaleString()}</p>
                 </div>

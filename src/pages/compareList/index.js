@@ -5,8 +5,10 @@ import { getCompareList, removeCompareListItem } from "../../redux/vehicles/thun
 import HeroAdd from "../../components/heroSection/heroAdd";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { parseCamelKey } from "../../utils/parseKey";
+import { useNavigate } from "react-router-dom";
 
 export default function CompareList() {
+  const navigate = useNavigate();
   const { compareList } = useSelector((state) => state.vehicles);
 
   const handleCompareList = async () => {
@@ -43,7 +45,13 @@ export default function CompareList() {
                 </th>
                 {compareList.data?.map((details) => (
                   <th key={details._id} className="compareListItem position-relative">
-                    <img src={details?.vehicle?.media[0]?.url} style={{ width: 100 }} />
+                    <img
+                      className="pointer"
+                      style={{ width: 100 }}
+                      src={details?.vehicle?.media[0]?.url}
+                      alt=""
+                      onClick={() => navigate(`/details/${details.vehicle._id}`)}
+                    />
                     <p className="">
                       {details?.vehicle?.make?.label + ", " + details?.vehicle?.model?.label}
                     </p>
@@ -70,6 +78,10 @@ export default function CompareList() {
                     property !== "user" &&
                     property !== "createdAt" &&
                     property !== "user" &&
+                    property !== "status" &&
+                    property !== "title" &&
+                    property !== "sellOrRent" &&
+                    property !== "type" &&
                     property !== "isFeatured" &&
                     property !== "updatedAt" && (
                       <>
