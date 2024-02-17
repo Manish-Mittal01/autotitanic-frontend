@@ -6,6 +6,7 @@ import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { IoIosCall } from "react-icons/io";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as WhatsappIcon } from "../../Assets/icons/whatsapp.svg";
@@ -46,12 +47,12 @@ export default function VehicleDetails() {
   const handleAddToCompare = async () => {
     if (isUserLoggedin()) {
       const response = await handleApiRequest(addToCompare, { vehicle: id });
+      if (userProfile.data?.compareCount >= 4) {
+        navigate("/CompareList");
+      }
       if (response.status) {
         await handleUserProfile();
         successMsg("Added to compare list");
-        if (userProfile.data?.compareCount >= 5) {
-          navigate("/CompareList");
-        }
       }
     } else {
       navigate("/login");
@@ -103,7 +104,11 @@ export default function VehicleDetails() {
   return (
     <>
       <section>
-        <h6 className="mt-3 pointer" style={{ width: "fit-content" }} onClick={() => navigate(-1)}>
+        <h6
+          className="primaryColor mt-3 pointer"
+          style={{ width: "fit-content" }}
+          onClick={() => navigate(-1)}
+        >
           <FaArrowLeftLong className="me-2" />
           Back to results
         </h6>
@@ -193,10 +198,7 @@ export default function VehicleDetails() {
               <h6 className="detailsHeading bg-danger text-white mb-0 pb-1">
                 <p>Seller's Details</p>
               </h6>
-              <div
-                className="p-3"
-                // style={{ backgroundColor: "#ff00001a" }}
-              >
+              <div className="p-3">
                 {isUserLoggedin() ? (
                   sellerDetails.map((key, i) => {
                     const myKey =
@@ -229,7 +231,6 @@ export default function VehicleDetails() {
                                   className="whatsappSeller mainDarkColor m-0 rounded-pill small"
                                   ref={whatsappBoxref}
                                 >
-                                  {/* <FaWhatsapp className="whatsappContactIcon" /> */}
                                   <WhatsappIcon className="me-1" width={20} />
                                   Whatsapp Seller
                                 </p>
@@ -243,6 +244,28 @@ export default function VehicleDetails() {
                                   <MdOutlineEmail className="emailIcon me-1" />
                                   Email Seller
                                 </p>
+                              </a>
+                            ) : key.value === "mobile" ? (
+                              // <a href={`tel:${detail?.user?.[key.value]}`} target="_blank">
+                              //   <p
+                              //     className="whatsappSeller mainDarkColor m-0 rounded-pill small"
+                              //     style={{ minWidth: whatsappBoxref.current?.offsetWidth }}
+                              //   >
+                              //     <IoIosCall className="callIcon" />
+                              //     Call Seller
+                              //   </p>
+                              // </a>
+                              <a
+                                href={`mailto:${detail?.user?.[key.value]}`}
+                                target="_blank"
+                                className="primaryColor d-flex align-items-center"
+                              >
+                                <img
+                                  src={detail?.user.country?.flag}
+                                  width={15}
+                                  className=" me-1"
+                                />
+                                {parseKey(detail?.user?.[key.value])}
                               </a>
                             ) : (
                               parseKey(detail?.user?.[key.value])

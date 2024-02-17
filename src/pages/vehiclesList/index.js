@@ -86,7 +86,7 @@ export default function VehiclesList() {
 
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);
-  console.log("vehiclesList", vehiclesList);
+  // console.log("vehiclesList", vehiclesList);
 
   return (
     <>
@@ -112,7 +112,7 @@ export default function VehiclesList() {
 
           <Col xs={12} lg={9} className="vehicleListContainer">
             <h6
-              className="mt-3 pointer"
+              className="primaryColor pointer mt-3"
               style={{ width: "fit-content" }}
               onClick={() => navigate(-1)}
             >

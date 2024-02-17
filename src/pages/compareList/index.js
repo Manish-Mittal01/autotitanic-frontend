@@ -6,6 +6,7 @@ import HeroAdd from "../../components/heroSection/heroAdd";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { parseCamelKey } from "../../utils/parseKey";
 import { useNavigate } from "react-router-dom";
+import { compareListDetails } from "../../utils/filters";
 
 export default function CompareList() {
   const navigate = useNavigate();
@@ -68,39 +69,31 @@ export default function CompareList() {
               </tr>
             </thead>
             <tbody>
-              {Object.keys(compareList.data?.[0]?.vehicle || {})?.map((property, i) => (
-                <tr key={property._id}>
-                  {property !== "_id" &&
-                    property !== "country" &&
-                    property !== "city" &&
-                    property !== "description" &&
-                    property !== "media" &&
-                    property !== "user" &&
-                    property !== "createdAt" &&
-                    property !== "user" &&
-                    property !== "status" &&
-                    property !== "title" &&
-                    property !== "sellOrRent" &&
-                    property !== "type" &&
-                    property !== "isFeatured" &&
-                    property !== "updatedAt" && (
-                      <>
-                        <td className="comparePropertyContainer darkColor fw-bold">
-                          {parseCamelKey(property)}
+              {compareListDetails.cars.map((property, i) => (
+                <tr key={property.value}>
+                  <>
+                    <td className="comparePropertyContainer darkColor fw-bold">{property.label}</td>
+                    {compareList.data?.map((item) => {
+                      return (
+                        <td key={item._id}>
+                          {property.value === "location" ? (
+                            <span className="d-flex align-items-center">
+                              <img src={item.vehicle.country?.flag} width={15} className="me-1" />
+                              {item.vehicle.country?.name + ", " + item.vehicle.city?.name}
+                            </span>
+                          ) : property.value === "price" ? (
+                            item.vehicle.currency + " " + item.vehicle[property.value]
+                          ) : typeof item.vehicle[property.value] !== "object" ? (
+                            parseCamelKey(item.vehicle[property.value])
+                          ) : typeof item.vehicle[property.value] === "object" ? (
+                            item.vehicle[property.value]?.label
+                          ) : (
+                            ""
+                          )}
                         </td>
-                        {compareList.data?.map((item) => (
-                          <td key={item._id}>
-                            {typeof item.vehicle[property] !== "object"
-                              ? item.vehicle[property]
-                              : property === "make" ||
-                                property === "model" ||
-                                property === "variant"
-                              ? item.vehicle[property]?.label
-                              : ""}
-                          </td>
-                        ))}
-                      </>
-                    )}
+                      );
+                    })}
+                  </>
                 </tr>
               ))}
             </tbody>

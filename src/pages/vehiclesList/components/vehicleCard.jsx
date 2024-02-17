@@ -1,12 +1,9 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaStar } from "react-icons/fa";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
-import { ReactComponent as HeartIcon } from "../../../Assets/icons/heart.svg";
 import { ReactComponent as CompareIcon } from "../../../Assets/icons/compare.svg";
-import dealerLogo from "../../../Assets/Images/mainLogo.png";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { parseCamelKey } from "../../../utils/parseKey";
 import {
@@ -19,18 +16,20 @@ import {
 import DeletePopup from "../../../components/Modals/DeletePop";
 import { successMsg } from "../../../utils/toastMsg";
 import { getUserProfile } from "../../../redux/profile/thunk";
+import { useSelector } from "react-redux";
 
 export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   const navigate = useNavigate();
   const imageRef = useRef();
-  const [mainImageWidth, setMainImageWidth] = useState();
+  const { userProfile } = useSelector((state) => state.profile);
   const [userAction, setUserAction] = useState(null);
 
   const handleWishlist = async () => {
     await handleApiRequest(getWishlist);
   };
 
-  const handleRemoveWishlistItem = async () => {
+  const handleRemoveWishlistItem = async (e) => {
+    e.stopPropagation();
     const response = await handleApiRequest(removeWishlistItem, { id: wishlist });
     if (response.status) {
       handleWishlist();
@@ -45,7 +44,10 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     e.stopPropagation();
 
     const response = await handleApiRequest(addToCompare, { vehicle: vehicle._id });
-    if (response.status) {
+    if (userProfile.data?.compareCount >= 4) {
+      navigate("/CompareList");
+    }
+    if (response?.status) {
       successMsg("Added to compare list");
       handleUserProfile();
     }
@@ -67,18 +69,11 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     }
   };
 
-  // useEffect(() => {
-  //   if (imageRef.current) {
-  //     console.log("imageRef.current.offsetHeight", imageRef.current.offsetHeight);
-  //     setMainImageWidth(imageRef.current.offsetHeight * (4 / 3));
-  //   }
-  // }, [imageRef.current?.offsetHeight]);
-
   // console.log("vehicle.media", vehicle.media);
 
   return (
     <>
-      <div className={`position-relative`}>
+      <div className={`position-relative`} onClick={() => navigate(`/details/${vehicle._id}`)}>
         <div className={`vehicleCardWrapper ${vehicle?.isFeatured ? "shadow-none" : ""} `}>
           <div
             className={`pointer py-2 d-flex m-0 ${
@@ -86,22 +81,11 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
             }`}
           >
             <div className="vehicleCardImageWrapper d-flex">
-              <div
-                className="vehicleCardMainImage position-relative"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
-                <img
-                  ref={imageRef}
-                  src={vehicle.media?.[0]?.url}
-                  className="mainImage"
-                  // style={{ minWidth: mainImageWidth }}
-                />
+              <div className="vehicleCardMainImage position-relative">
+                <img ref={imageRef} src={vehicle.media?.[0]?.url} className="mainImage" />
                 {vehicle?.isFeatured && <button className="featuredBtn">Featured</button>}
               </div>
-              <div
-                className="vehicleCardSideImage px-0 d-flex flex-column"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
+              <div className="vehicleCardSideImage px-0 d-flex flex-column">
                 {vehicle.media?.slice(1, 4).map((image, i) => (
                   <img
                     key={image?.url}
@@ -113,10 +97,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
               </div>
             </div>
             <div className="vehicleCardDetails px-2 my-2 my-lg-0 d-flex flex-column">
-              <h6
-                className="d-flex align-items-center justify-content-between"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
+              <h6 className="d-flex align-items-center justify-content-between">
                 <Button
                   className={`rounded-pill py-1 ${
                     vehicle?.condition === "used" ? "bg-danger" : "mainDarkColor"
@@ -134,10 +115,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   </Button>
                 )}
               </h6>
-              <h6
-                className="d-flex align-items-center justify-content-between"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
+              <h6 className="d-flex align-items-center justify-content-between">
                 <div
                   className="darkColor d-flex align-items-center gap-1 m-0 fw-bold"
                   style={{ fontSize: 18 }}
@@ -156,23 +134,15 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   </Button>
                 )}
               </h6>
-              <p className="m-0" onClick={() => navigate(`/details/${vehicle._id}`)}>
-                {vehicle.make?.label + " " + vehicle.model?.label}
-              </p>
+              <p className="m-0">{vehicle.make?.label + " " + vehicle.model?.label}</p>
               <p className={`fw-bold text-danger`}>{vehicle?.title}</p>
-              <p
-                className="vehicleCardVehicleDetails mb-3 fw-bold"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
+              <p className="vehicleCardVehicleDetails mb-3 fw-bold">
                 {vehicle.year} | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage}M |{" "}
                 {vehicle.engineSize} | {parseCamelKey(vehicle.gearBox)} |{" "}
                 {parseCamelKey(vehicle.fuelType)}
               </p>
-              <div style={{ flex: 1 }} onClick={() => navigate(`/details/${vehicle._id}`)} />
-              <div
-                className="d-flex align-items-center justify-content-between"
-                onClick={() => navigate(`/details/${vehicle._id}`)}
-              >
+              <div style={{ flex: 1 }} />
+              <div className="d-flex align-items-center justify-content-between">
                 <div>
                   {vehicle?.user?.userType === "dealer" && (
                     <p className="">{vehicle?.user?.name}</p>
@@ -196,21 +166,23 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   {vehicle.status !== "deleted" && (
                     <Button
                       variant="danger"
-                      className=""
-                      onClick={() => setUserAction({ action: "deletePost", id: vehicle._id })}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setUserAction({ action: "deletePost", id: vehicle._id });
+                      }}
                     >
                       Delete
                     </Button>
                   )}
-                  {/* {vehicle.status === "draft" && ( */}
                   <Button
-                    // variant="danger"
                     className="mainDarkColor"
-                    onClick={() => navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 });
+                    }}
                   >
                     Edit
                   </Button>
-                  {/* )} */}
                 </div>
               )}
             </div>
@@ -226,21 +198,19 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
           </button>
         )}
         {myVehicle && (
-          <>
-            <button
-              className={`removeBtn border rounded-pill bg-white ${
-                vehicle.status === "approved"
-                  ? "successMsg"
-                  : vehicle.status === "rejected" || vehicle.status === "deleted"
-                  ? "rejectMsg"
-                  : vehicle.status === "pending" || vehicle.status === "draft"
-                  ? "warningMsg"
-                  : ""
-              }`}
-            >
-              {vehicle.status === "pending" ? "Under Review" : parseCamelKey(vehicle.status)}
-            </button>
-          </>
+          <button
+            className={`removeBtn border rounded-pill bg-white ${
+              vehicle.status === "approved"
+                ? "successMsg"
+                : vehicle.status === "rejected" || vehicle.status === "deleted"
+                ? "rejectMsg"
+                : vehicle.status === "pending" || vehicle.status === "draft"
+                ? "warningMsg"
+                : ""
+            }`}
+          >
+            {vehicle.status === "pending" ? "Under Review" : parseCamelKey(vehicle.status)}
+          </button>
         )}
       </div>
 

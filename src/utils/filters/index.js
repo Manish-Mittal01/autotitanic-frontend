@@ -441,6 +441,30 @@ export const detailsList = {
   ],
 };
 
+export const compareListDetails = {
+  cars: [
+    { value: "location", label: "Location" },
+    { value: "price", label: "Price" },
+    { value: "make", label: "Make" },
+    { value: "model", label: "Model" },
+    { value: "condition", label: "Condition" },
+    { value: "year", label: "Year" },
+    { value: "mileage", label: "Mileage" },
+    { value: "fuelType", label: "Fuel Type" },
+    { value: "bodyStyle", label: "Body Style" },
+    { value: "gearBox", label: "Gear Box" },
+    { value: "engineSize", label: "Engine Size" },
+    { value: "door", label: "Door" },
+    { value: "seat", label: "Seats" },
+    { value: "driverPosition", label: "Driver Position" },
+    { value: "exteriorColor", label: "Colour" },
+    { value: "bootSpace", label: "Boot Space" },
+    { value: "accelration", label: "Acceleration" },
+    { value: "co2Emission", label: "Co2 Emission" },
+    { value: "reviews", label: "Reviews" },
+  ],
+};
+
 export const sellerDetails = [
   { value: "userType", label: "Seller" },
   { value: "name", label: "Seller's Name" },

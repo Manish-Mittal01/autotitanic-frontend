@@ -120,16 +120,17 @@ export default function CarFilters() {
               <li
                 key={filter.label}
                 className={`d-flex justify-content-between px-3 py-2 border-top ${
-                  !filters.make && filter.label === "Model"
+                  (!filters.make && filter.label === "Model") ||
+                  (!filters.country?.value && filter.label === "City")
                     ? // || (!filters.model && filter.label === "Variant")
                       "disabled"
                     : ""
                 }`}
               >
                 {filter.label === "Country" && filters[filter.name]?.label === "Africa" ? (
-                  <span className="text-danger">Continent</span>
+                  <span className="darkColor">Continent</span>
                 ) : (
-                  <span className="text-danger">{filter.label}</span>
+                  <span className="darkColor">{filter.label}</span>
                 )}
                 {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
                   <Tooltip
@@ -165,7 +166,7 @@ export default function CarFilters() {
                                           <img src={filterValue.flag} width={20} className="me-1" />
                                         )}
                                         <p
-                                          className="m-0 text-primary"
+                                          className="darkColor m-0"
                                           onClick={() =>
                                             handleSelectFilter(
                                               filter.name,
@@ -248,7 +249,11 @@ export default function CarFilters() {
                             type="number"
                             className="form-control"
                             style={{ height: 40 }}
-                            placeholder={parseCamelKey(filter.filterOptions[filterKey].key)}
+                            placeholder={
+                              filter.filterOptions[filterKey].key === "minPrice"
+                                ? "Enter min Price"
+                                : "Enter max Price"
+                            }
                             min={0}
                             onKeyDown={preventMinus}
                             name={filter.filterOptions[filterKey].key}

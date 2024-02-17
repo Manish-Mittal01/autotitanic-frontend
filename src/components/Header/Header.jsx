@@ -108,7 +108,7 @@ const Header = ({ sidebar, setSidebar }) => {
     );
   };
 
-  console.log("userProfile", userProfile);
+  // console.log("userProfile", userProfile);
   // console.log("admin", admin);
   // console.log("admin.image", admin.image);
 
@@ -164,7 +164,7 @@ const Header = ({ sidebar, setSidebar }) => {
                 <li className="d-flex align-items-center mx-1 position-relative">
                   <Button
                     variant="danger"
-                    className="headerPostBtn border-0 px-2 py-1 text-nowrap"
+                    className="headerPostBtn border-0 text-nowrap"
                     onClick={() => {
                       if (isUserLoggedin()) {
                         navigate("/cars/sell");
@@ -205,7 +205,7 @@ const Header = ({ sidebar, setSidebar }) => {
                         : "Sign In | Register"}
                     </p>
                   </Button>
-                  <Dropdown className="smallScreenSignIn ">
+                  <Dropdown className="smallScreenSignIn">
                     <Dropdown.Toggle variant="transparent" id="dropdown-basic">
                       <Button
                         variant="transparent"
