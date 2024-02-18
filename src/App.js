@@ -26,7 +26,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (loggedinUser?.data?.token && pathname === "/login") navigate("/profile");
+    // if (loggedinUser?.data?.token && pathname === "/login") navigate("/profile");
     if (pathname === "/") {
       navigate("/home");
     }

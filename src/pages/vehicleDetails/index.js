@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
@@ -28,6 +28,7 @@ import { detailsList, sellerDetails } from "../../utils/filters";
 import ListCrousel from "../home/components/listCrousel";
 
 export default function VehicleDetails() {
+  const { pathname } = useLocation();
   const whatsappBoxref = useRef();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -278,10 +279,10 @@ export default function VehicleDetails() {
                 ) : (
                   <div className="d-flex justify-content-center">
                     <p
-                      className="blockSellerDetails pointer border-0 rounded-pill"
-                      onClick={() => navigate("/login")}
+                      className="mainDarkColor blockSellerDetails pointer border-0 rounded-pill"
+                      onClick={() => navigate("/login", { state: pathname })}
                     >
-                      Login to view Seller
+                      Sign In I Register to view Contact Details
                     </p>
                   </div>
                 )}

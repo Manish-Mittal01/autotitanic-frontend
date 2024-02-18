@@ -137,7 +137,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
               <p className="m-0">{vehicle.make?.label + " " + vehicle.model?.label}</p>
               <p className={`fw-bold text-danger`}>{vehicle?.title}</p>
               <p className="vehicleCardVehicleDetails mb-3 fw-bold">
-                {vehicle.year} | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage}M |{" "}
+                {vehicle.year} Reg | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage} miles |{" "}
                 {vehicle.engineSize} | {parseCamelKey(vehicle.gearBox)} |{" "}
                 {parseCamelKey(vehicle.fuelType)}
               </p>
@@ -151,7 +151,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                     <StarRegular />
                     {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
                   </p>
-                  <p className="mb-2">
+                  <p className="darkColor mb-2 fw-bold">
                     <LocationIcon />
                     {vehicle.city?.name}, {vehicle.country?.name}
                     <img src={vehicle?.country?.flag} className="mx-1" style={{ width: 18 }} />

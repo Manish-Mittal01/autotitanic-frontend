@@ -43,7 +43,7 @@ const bodyTypeOptions = [
   { img: estate, label: "Estate", value: "estate" },
   { img: hatchback, label: "Hatchback", value: "hatchback" },
   { img: mpv, label: "MPV", value: "MPV" },
-  { img: pickup, label: "Pickup", value: "SUV/Pick-up" },
+  { img: pickup, label: "SUV/Pickup", value: "SUV/Pick-up" },
   { img: saloon, label: "Saloon", value: "saloon" },
   // { img: suv, label: "SUV", value: "SUV/Pick-up" },
 ];

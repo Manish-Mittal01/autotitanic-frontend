@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import PhoneInput from "react-phone-input-2";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { isEmail } from "validator";
 import { phone } from "phone";
-import { byCountry } from "country-code-lookup";
 import { ReactComponent as OpenEye } from "../../../Assets/icons/openEye.svg";
 import { ReactComponent as CloseEye } from "../../../Assets/icons/closedEye.svg";
 import mainLogo from "../../../Assets/Images/mainLogo.png";
@@ -29,7 +27,14 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [countryName, setCountryName] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState({});
+
+  const ghanaFlag = useMemo(() => {
+    if (allCountries.data) {
+      const ghana = allCountries.data?.items?.find((country) => country.name === "Ghana");
+      return ghana?.flag;
+    }
+  }, [allCountries]);
 
   const handleChange = (e) => {
     const value =
@@ -52,15 +57,31 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    Object.keys(userCreds).map((value) => {
-      if (!userCreds[value])
-        return setErrors((prev) => ({ ...prev, [value]: `Please enter ${value}` }));
-      else setErrors((prev) => ({ ...prev, [value]: `` }));
-    });
+    let myErrors = {};
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    for (let value of Object.keys(userCreds)) {
+      if (!userCreds[value]) {
+        myErrors = { ...myErrors, [value]: `Please enter ${value}` };
+      } else {
+        myErrors = { ...myErrors, [value]: "" };
+      }
+    }
+
+    if (Object.values(myErrors).filter((value) => value)?.length > 0) {
+      return setErrors(myErrors);
+    }
 
     if (userCreds.email && !isEmail(userCreds.email)) return setErrors({ email: `Invalid email` });
-    if (userCreds.mobile && !phone(userCreds.mobile).isValid)
-      return setErrors({ mobile: `Invalid mobile` });
+    if (userCreds.mobile && (!phone(userCreds.mobile).isValid || !selectedCountry.mobile))
+      return setErrors({ mobile: `Invalid mobile or country` });
+    if (userCreds.whatsapp && (!phone(userCreds.whatsapp).isValid || !selectedCountry.whatsapp))
+      return setErrors({ whatsapp: `Invalid whatsApp or country` });
+    if (!passwordRegex.test(userCreds.password))
+      return setErrors({
+        password:
+          "Password must include number, small letter, capital, special character atleast 8 character long",
+      });
     if (userCreds.password !== userCreds.confirmPassword)
       return setErrors({ password: "Password and confirm password should be same" });
 
@@ -90,11 +111,29 @@ const Register = () => {
     handleCountryList();
   }, []);
 
+  useEffect(() => {
+    if (userCreds.mobile) {
+      const mobileCode = userCreds.mobile.split(" ")[0].slice(1);
+      const selectedCountry = allCountries.data?.items.find((country) =>
+        country.countryCode.startsWith(mobileCode)
+      );
+
+      setSelectedCountry((prev) => ({ ...prev, mobile: selectedCountry }));
+    }
+    if (userCreds.whatsapp) {
+      const mobileCode = userCreds.whatsapp.split(" ")[0].slice(1);
+      const selectedCountry = allCountries.data?.items.find((country) =>
+        country.countryCode.startsWith(mobileCode)
+      );
+
+      setSelectedCountry((prev) => ({ ...prev, whatsapp: selectedCountry }));
+    }
+  }, [userCreds.mobile, userCreds.whatsapp]);
+
   // console.log("userCreds", userCreds);
   // console.log("rememberedUser", rememberedUser);
   //   console.log("allCountries", allCountries);
-  console.log("countryName", countryName);
-  console.log("countryCode", byCountry(countryName));
+  console.log("selectedCountry", selectedCountry);
 
   return (
     <>
@@ -123,107 +162,10 @@ const Register = () => {
 
                     <form onSubmit={handleRegister} className="row g-3 needs-validation">
                       <div className="col-12">
-                        <label for="name" className="form-label mb-0">
-                          Full Name
-                          <Asterik />
-                        </label>
-                        <div className="input-group has-validation">
-                          <input
-                            type="text"
-                            maxLength={15}
-                            className="form-control"
-                            placeholder="Enter Name"
-                            name="name"
-                            value={userCreds.name || ""}
-                            onChange={handleChange}
-                          />
-                        </div>
-                        {errors.name && <p className="errorMsg">*{errors.name}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="email" className="form-label mb-0">
-                          Email Address
-                          <Asterik />
-                        </label>
-                        <div className="input-group has-validation">
-                          <span className="input-group-text bg-dark" id="inputGroupPrepend">
-                            <i className="bi bi-envelope text-white" />
-                          </span>
-                          <input
-                            type="email"
-                            className="form-control"
-                            placeholder="Email Address"
-                            name="email"
-                            value={userCreds.email || ""}
-                            onChange={handleChange}
-                          />
-                        </div>
-                        {errors.email && <p className="errorMsg">*{errors.email}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="name" className="form-label mb-0">
-                          Country
-                          <Asterik />
-                        </label>
-                        <div className="input-group has-validation">
-                          <SelectBox
-                            styles={{
-                              container: (baseStyle) => ({ ...baseStyle, height: 45 }),
-                              control: (baseStyle) => ({ ...baseStyle, height: "100%" }),
-                            }}
-                            options={allCountries.data?.items}
-                            getOptionValue={(option) => option._id}
-                            getOptionLabel={(option) => option.name}
-                            value={userCreds.country}
-                            onChange={(selected) => {
-                              setUserCreds((prev) => ({ ...prev, country: selected }));
-                              setCountryName(selected.name);
-                            }}
-                          />
-                        </div>
-                        {errors.country && <p className="errorMsg">*{errors.country}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="name" className="form-label mb-0">
-                          Phone Number
-                          <Asterik />
-                        </label>
-                        {console.log("byCountry(countryName)?.fips", byCountry(countryName)?.fips)}
-                        <div className="input-group has-validation">
-                          <PhoneInput
-                            className="phoneInput"
-                            country={byCountry(countryName)?.fips?.toLowerCase() || "gh"}
-                            value={userCreds.mobile}
-                            onChange={(value, country, e, formattedValue) =>
-                              setUserCreds((prev) => ({ ...prev, mobile: formattedValue }))
-                            }
-                          />
-                        </div>
-                        {errors.mobile && <p className="errorMsg">*{errors.mobile}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="name" className="form-label mb-0">
-                          Whatsapp Number
-                        </label>
-                        <div className="input-group has-validation">
-                          <PhoneInput
-                            className="phoneInput"
-                            country={byCountry(countryName)?.fips?.toLowerCase() || "gh"}
-                            value={userCreds.whatsapp}
-                            onChange={(value, country, e, formattedValue) =>
-                              setUserCreds((prev) => ({ ...prev, whatsapp: formattedValue }))
-                            }
-                          />
-                        </div>
-                        {errors.mobile && <p className="errorMsg">*{errors.mobile}</p>}
-                      </div>
-
-                      <div className="col-12">
-                        <label for="name" className="form-label mb-0">
+                        <label
+                          for="name"
+                          className="darkColor darkColor form-label fw-bold fw-bold mb-0"
+                        >
                           User Type
                           <Asterik />
                         </label>
@@ -245,12 +187,185 @@ const Register = () => {
                         </div>
                         {errors.userType && <p className="errorMsg">*{errors.userType}</p>}
                       </div>
-
                       <div className="col-12">
-                        <label for="name" className="form-label mb-0">
+                        <label for="name" className="darkColor form-label fw-bold mb-0">
+                          {userCreds.userType?.value === "dealer" ? "Business Name" : "Full Name"}
+                          <Asterik />
+                        </label>
+                        <div className="input-group has-validation">
+                          <input
+                            type="text"
+                            maxLength={15}
+                            className="form-control"
+                            placeholder="Enter Name"
+                            name="name"
+                            value={userCreds.name || ""}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        {errors.name && <p className="errorMsg">*{errors.name}</p>}
+                      </div>
+                      <div className="col-12">
+                        <label for="email" className="darkColor form-label fw-bold mb-0">
+                          Email Address
+                          <Asterik />
+                        </label>
+                        <div className="input-group has-validation">
+                          <span className="input-group-text bg-dark" id="inputGroupPrepend">
+                            <i className="bi bi-envelope text-white" />
+                          </span>
+                          <input
+                            type="email"
+                            className="form-control"
+                            placeholder="Email Address"
+                            name="email"
+                            value={userCreds.email || ""}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        {errors.email && <p className="errorMsg">*{errors.email}</p>}
+                      </div>
+                      <div className="col-12">
+                        <label for="name" className="darkColor form-label fw-bold mb-0">
+                          Country
+                          <Asterik />
+                        </label>
+                        <div className="input-group has-validation">
+                          <SelectBox
+                            styles={{
+                              container: (baseStyle) => ({ ...baseStyle, height: 45 }),
+                              control: (baseStyle) => ({ ...baseStyle, height: "100%" }),
+                            }}
+                            options={allCountries.data?.items}
+                            getOptionValue={(option) => option._id}
+                            getOptionLabel={(option) => option.name}
+                            value={userCreds.country}
+                            onChange={(selected) => {
+                              setUserCreds((prev) => ({
+                                ...prev,
+                                country: selected,
+                                mobile: `+${selected.countryCode}`,
+                                whatsapp: `+${selected.countryCode}`,
+                              }));
+                            }}
+                          />
+                        </div>
+                        {errors.country && <p className="errorMsg">*{errors.country}</p>}
+                      </div>
+                      <div className="col-12">
+                        <label for="name" className="darkColor form-label fw-bold mb-0">
+                          Phone Number
+                          <Asterik />
+                        </label>
+                        <div className="input-group has-validation">
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant=""
+                              id="dropdown-basic"
+                              className="countryCodeSelector"
+                            >
+                              <img src={selectedCountry.mobile?.flag || ghanaFlag} width={18} />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="countryCodeSelectorBox">
+                              {allCountries.data?.items?.map((country) => (
+                                <Dropdown.Item
+                                  className="countryCodeSelectorItem"
+                                  onClick={() => {
+                                    setUserCreds((prev) => ({
+                                      ...prev,
+                                      mobile: `+${country.countryCode}`,
+                                    }));
+                                  }}
+                                >
+                                  <p>
+                                    <img src={country.flag} width={15} className="me-2" />
+                                    {country?.name}
+                                    {` (+${country?.countryCode})`}
+                                  </p>
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Phone"
+                            name="mobile"
+                            value={userCreds.mobile || "+233"}
+                            onChange={(e) => {
+                              const value = e.target.value.slice(1);
+                              const updatedValue = value.replace(/\D+/g, "");
+
+                              setUserCreds((prev) => ({
+                                ...prev,
+                                mobile: "+" + updatedValue,
+                              }));
+                            }}
+                          />
+                        </div>
+
+                        {errors.mobile && <p className="errorMsg">*{errors.mobile}</p>}
+                      </div>
+                      <div className="col-12">
+                        <label for="name" className="darkColor form-label fw-bold mb-0">
+                          WhatsApp Number
+                        </label>
+                        <div className="input-group has-validation">
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant=""
+                              id="dropdown-basic"
+                              className="countryCodeSelector"
+                            >
+                              <img src={selectedCountry.whatsapp?.flag || ghanaFlag} width={18} />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="countryCodeSelectorBox">
+                              {allCountries.data?.items?.map((country) => (
+                                <Dropdown.Item
+                                  className="countryCodeSelectorItem"
+                                  onClick={() => {
+                                    setUserCreds((prev) => ({
+                                      ...prev,
+                                      whatsapp: `+${country.countryCode}`,
+                                    }));
+                                  }}
+                                >
+                                  <p>
+                                    <img src={country.flag} width={15} className="me-2" />
+                                    {country?.name}
+                                    {` (+${country?.countryCode})`}
+                                  </p>
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Phone"
+                            name="whatsapp"
+                            value={userCreds.whatsapp || "+233"}
+                            onChange={(e) => {
+                              const value = e.target.value.slice(1);
+                              const updatedValue = value.replace(/\D+/g, "");
+
+                              setUserCreds((prev) => ({
+                                ...prev,
+                                whatsapp: "+" + updatedValue,
+                              }));
+                            }}
+                          />
+                        </div>
+                        {errors.whatsapp && <p className="errorMsg">*{errors.whatsapp}</p>}
+                      </div>
+                      <div className="col-12">
+                        <label for="name" className="darkColor form-label fw-bold mb-0">
                           {userCreds.userType?.value === "dealer"
-                            ? "Business logo"
-                            : "Profile Image"}
+                            ? "Business logo "
+                            : "Profile Image "}
+                          (png, jpg, jpeg)
                         </label>
                         <div className="input-group has-validation">
                           <input
@@ -262,9 +377,8 @@ const Register = () => {
                         </div>
                         {errors.image && <p className="errorMsg">*{errors.image}</p>}
                       </div>
-
                       <div className="col-12">
-                        <label for="password" className="form-label mb-0">
+                        <label for="password" className="darkColor form-label fw-bold mb-0">
                           Password
                           <Asterik />
                         </label>
@@ -287,9 +401,8 @@ const Register = () => {
                         </div>
                         {errors.password && <p className="errorMsg">*{errors.password}</p>}
                       </div>
-
                       <div className="col-12">
-                        <label for="password" className="form-label mb-0">
+                        <label for="password" className="darkColor form-label fw-bold mb-0">
                           Confirm Password
                           <Asterik />
                         </label>
@@ -314,7 +427,6 @@ const Register = () => {
                           <p className="errorMsg">*{errors.confirmPassword}</p>
                         )}
                       </div>
-
                       <div className="col-12">
                         <Button variant="danger" type="submit" className="btn w-100 ">
                           {/* hvr-float */}

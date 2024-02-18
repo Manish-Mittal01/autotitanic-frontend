@@ -41,7 +41,7 @@ function CarsList() {
 
   return (
     <>
-      <h4 className="my-2 text-center text-danger">Featured Cars</h4>
+      {/* <h4 className="my-2 text-center text-danger">Featured Cars</h4> */}
       <ListCrousel dataList={featuredList.data?.items || []} rowsCount={6} rowSize={30} />
 
       <div className="fullSizeAddContainer" style={{ width: 980, height: 120 }}>

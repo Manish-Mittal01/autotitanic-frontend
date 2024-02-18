@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // img
 import { ReactComponent as OpenEye } from "../../../Assets/icons/openEye.svg";
@@ -10,6 +10,7 @@ import { login } from "../../../redux/auth/thunk";
 import { Button } from "react-bootstrap";
 
 const Login = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
   const { rememberedUser } = useSelector((state) => state.auth);
   const [userCreds, setUserCreds] = useState({});
@@ -28,8 +29,14 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     const response = await handleApiRequest(login, userCreds);
-
-    // console.log("login response", response);
+    console.log("response", response);
+    if (response.status) {
+      if (state) {
+        navigate(state);
+      } else {
+        navigate("/profile");
+      }
+    }
   };
 
   const handleSubmit = (e) => {

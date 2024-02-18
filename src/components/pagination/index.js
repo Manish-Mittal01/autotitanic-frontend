@@ -101,6 +101,7 @@ const MyPagination = ({
 
   const onPageChange = (page) => {
     setPaginationDetails((prev) => ({ ...prev, page: page }));
+    window.scrollTo(0, 0);
   };
 
   let lastPage = paginationRange[paginationRange.length - 1];

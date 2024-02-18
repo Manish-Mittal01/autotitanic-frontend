@@ -11,6 +11,7 @@ import { compareListDetails } from "../../utils/filters";
 export default function CompareList() {
   const navigate = useNavigate();
   const { compareList } = useSelector((state) => state.vehicles);
+  const { userProfile } = useSelector((state) => state.profile);
 
   const handleCompareList = async () => {
     await handleApiRequest(getCompareList);
@@ -22,9 +23,12 @@ export default function CompareList() {
 
   const handleRemoveItem = async (id) => {
     const response = await handleApiRequest(removeCompareListItem, { id });
-    if (response.status) {
+    if (response.status)  {
       handleCompareList();
       handleUserProfile();
+      if(userProfile.data.compareCount<=1){
+        navigate("/cars/all")
+      }
     }
   };
 

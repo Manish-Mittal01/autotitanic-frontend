@@ -127,11 +127,11 @@ export default function CarFilters() {
                     : ""
                 }`}
               >
-                {filter.label === "Country" && filters[filter.name]?.label === "Africa" ? (
-                  <span className="darkColor">Continent</span>
-                ) : (
-                  <span className="darkColor">{filter.label}</span>
-                )}
+                <span className="darkColor fw-bold">
+                  {filter.label === "Country" && filters[filter.name]?.label === "Africa"
+                    ? "Continent"
+                    : filter.label}
+                </span>
                 {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
                   <Tooltip
                     text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}
@@ -215,7 +215,7 @@ export default function CarFilters() {
                     >
                       <Row className="w-100">
                         <Col xs={4} className="">
-                          <span className="">{filterKey}</span>
+                          <span className="darkColor fw-bold">{filterKey}</span>
                         </Col>
                         <Col xs={8} className="p-0">
                           <SelectBox
@@ -242,7 +242,7 @@ export default function CarFilters() {
                     >
                       <Row className="w-100">
                         <Col xs={4} className="">
-                          <span className="">{filterKey}</span>
+                          <span className="darkColor fw-bold">{filterKey}</span>
                         </Col>
                         <Col xs={8} className="p-0">
                           <input

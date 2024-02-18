@@ -1779,11 +1779,12 @@ posts-card-wrp .card-cstm .content p {
 }
 
 .sideImage {
-  /* width: 100%; */
-  width: auto;
+  width: 100%;
+  /* width: auto; */
   /* height: 100%; */
-  /* object-fit: contain; */
+  object-fit: contain;
   height: 33%;
+  background-color: #d3d3d373;
 }
 
 .vehicleCardVehicleDetails {
@@ -2242,7 +2243,7 @@ a {
 }
 
 .headerCompareIcon g {
-  fill: #2c3054;
+  fill: #0534ff;
 }
 
 .headerPostBtn {
@@ -2813,10 +2814,8 @@ input:read-only {
 
 .blockSellerDetails {
   text-align: center;
-  background: red;
   width: fit-content;
   padding: 4px 14px;
-  color: #fff;
   font-weight: bold;
 }
 
@@ -3019,4 +3018,33 @@ legend {
 
 .smallScreenSignIn>button {
   padding-left: 0;
+}
+
+.countryCodeSelector {
+  border: 1px solid #ced4da !important;
+  border-radius: 0;
+  height: 100%;
+  padding: 4px 9px;
+  z-index: 0 !important;
+}
+
+.countryCodeSelectorBox {
+  padding: 0;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.35);
+  background-color: white;
+  width: 300px;
+  max-height: 200px;
+  overflow-y: scroll;
+  border-radius: 0 0 3px 3px;
+  margin: 10px 0 10px -1px;
+}
+
+.countryCodeSelectorItem {
+  padding: 7px 9px;
+}
+
+.countryCodeSelectorItem p {
+  margin: 0;
+  color: #000;
+  font-family: Roboto, sans-serif;
 }
