@@ -41,7 +41,7 @@ export default function HeroSection({ showFilterBox = true }) {
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, filters.make.value);
+    handleApiRequest(getAllModel, { makeId: filters.make.value });
   };
 
   const handleResultCount = async () => {

@@ -17,7 +17,7 @@ export const vansCabTypeOptions = [
   { value: "unlisted", label: "Unlisted" },
 ];
 
-export const engineSizeOptions = [
+export const vansEnginePowerOptions = [
   { value: 0, label: "0bhp" },
   { value: 50, label: "50bhp" },
   { value: 100, label: "100bhp" },

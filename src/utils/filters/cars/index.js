@@ -29,6 +29,10 @@ export const carsFilters = [
   {
     label: "Price",
     name: "price",
+    filterOptions: {
+      Min: { options: getYearList(), key: "minPrice" },
+      Max: { options: getYearList(), key: "maxPrice" },
+    },
     filterType: "input",
   },
   {

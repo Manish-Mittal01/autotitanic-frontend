@@ -16,32 +16,7 @@ import { errorMsg, successMsg } from "../../utils/toastMsg";
 import { uploadFile } from "../../redux/common/thunk";
 import parseKey, { parseCamelKey } from "../../utils/parseKey";
 import { carsPostFeatures, handlePopularCarsMakeList } from "../../utils/filters/cars";
-
-const files = [
-  {
-    url: "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(48).png%2F1704943169423?alt=media&token=06f46508-a8f8-4f61-9c83-9bd9332c34fb",
-    type: "image/png",
-  },
-  {
-    url: "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(51).png%2F1704943175678?alt=media&token=06da3ab6-4e9e-4e11-964a-75f5087a8796",
-    type: "image/png",
-  },
-  {
-    url: "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(52).png%2F1704943180559?alt=media&token=77d5e4db-27f8-4df2-a9bd-c8e745ff63a9",
-    type: "image/png",
-  },
-  {
-    url: "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(53).png%2F1704943182969?alt=media&token=80932fb7-e628-494b-95a0-47fe1f659baa",
-    type: "image/png",
-  },
-  {
-    url: "https://firebasestorage.googleapis.com/v0/b/autotitanic-fde97.appspot.com/o/autotitanic%2FScreenshot%20(54).png%2F1704943189097?alt=media&token=802c7914-eaf0-4438-a9d4-e6832dfa118c",
-    type: "image/png",
-  },
-  {
-    type: "video/mp4",
-  },
-];
+import { vansPostFeatures } from "../../utils/filters/vans";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -53,7 +28,7 @@ export default function SellVehicle() {
   const [postUploadStep, setPostUploadStep] = useState(state || 1);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [localImages, setLocalImages] = useState([...postDetails.media]);
-  const [featuresList, setFeaturesList] = useState(carsPostFeatures);
+  const [featuresList, setFeaturesList] = useState();
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -120,7 +95,9 @@ export default function SellVehicle() {
                 Back
               </h5>
             )}
-            <h4 className="m-0 my-2  text-center">Car details</h4>
+            <h4 className="m-0 my-2  text-center">
+              {postDetails.type?.label ? postDetails.type?.label?.slice(0, -1) : "Car"} details
+            </h4>
           </Row>
           {postUploadStep === 1 ? (
             <PostStepOne
@@ -129,6 +106,7 @@ export default function SellVehicle() {
               setPostUploadStep={setPostUploadStep}
               localImages={localImages}
               setLocalImages={setLocalImages}
+              setFeaturesList={setFeaturesList}
             />
           ) : (
             <PostStepTwo
@@ -150,15 +128,27 @@ export const PostStepOne = ({
   setPostUploadStep,
   localImages,
   setLocalImages,
+  setFeaturesList,
 }) => {
   const { userProfile } = useSelector((state) => state.profile);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
   const handleChange = (name, value) => {
-    setPostDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPostDetails((prev) => {
+      if (name === "type") {
+        return {
+          ...prev,
+          [name]: value,
+          make: "",
+          model: "",
+        };
+      } else {
+        return {
+          ...prev,
+          [name]: value,
+        };
+      }
+    });
   };
 
   const getMediaLocalUrl = (e) => {
@@ -226,7 +216,7 @@ export const PostStepOne = ({
         };
       }
     });
-    if (myPosts.length < 5) return errorMsg("Atleast 5 images required");
+    // if (myPosts.length < 5) return errorMsg("Atleast 5 images required");
     setPostUploadStep(2);
   };
 
@@ -259,11 +249,16 @@ export const PostStepOne = ({
     }
   }, [userProfile]);
 
-  const proceedToNextStep =
-    postDetails.country &&
-    postDetails.city &&
-    postDetails.type &&
-    (localImages?.length >= 5 || localImages?.length <= 20);
+  useEffect(() => {
+    if (postDetails.type && postDetails.type?.value === "cars") {
+      setFeaturesList(carsPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "vans") {
+      setFeaturesList(vansPostFeatures);
+    }
+  }, [postDetails.type]);
+
+  const proceedToNextStep = postDetails.country && postDetails.city && postDetails.type;
+  // &&    (localImages?.length >= 5 || localImages?.length <= 20);
 
   //   console.log("postDetails.media", postDetails.media);
   //   console.log("proceedToNextStep", proceedToNextStep);
@@ -281,7 +276,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories}
+          options={categories.slice(0, 2)}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
@@ -417,7 +412,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
   const handleCreatePost = async (status) => {
     const request = {
       ...postDetails,
-      type: "cars",
       status: status || "pending",
       isFeatured: false,
     };
@@ -460,11 +454,14 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
   };
 
   const handleMakeList = async () => {
-    handleApiRequest(getAllMake);
+    handleApiRequest(getAllMake, { type: postDetails.type?.value || postDetails.type });
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, postDetails.make?.value || postDetails.make?._id);
+    handleApiRequest(getAllModel, {
+      makeId: postDetails.make?.value || postDetails.make?._id,
+      type: postDetails.type?.value || postDetails.type,
+    });
   };
 
   const handleVariantList = async () => {
@@ -509,7 +506,8 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
 
   // console.log("postDetails", postDetails);
   // console.log("allModels", allModels);
-  console.log("errors", errors);
+  // console.log("errors", errors);
+  // console.log("featuresList", featuresList);
 
   return (
     <>

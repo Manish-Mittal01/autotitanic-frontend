@@ -77,12 +77,6 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize, classNa
           }
           return newList;
         }
-
-        // if (myList?.length >= rowSize) {
-        //   newList.push(myList.splice(0, rowSize));
-        // } else if (myList?.length > 0) {
-        //   newList.push(myList.splice(0));
-        // }
       }
       return newList;
     },
@@ -110,42 +104,48 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize, classNa
 
   return (
     <>
-      {splitList(dataList, Math.ceil(rowsCount / 2), rowSize * 2).map((rows, i) => {
-        return (
-          <Row
-            key={i + "parent"}
-            className={`align-items-center ${className ? className : "justify-content-between"}`}
-          >
-            <Col
-              xs={12}
-              xl={rowsCount > 1 ? 10 : 12}
-              className={`${rowsCount > 1 ? "homePostRow" : "homePostRowSingle"}`}
+      {splitList(dataList, rowsCount / 2, rowSize * 2).map((rows, i) => {
+        if ((rows.length === rowSize && i === 0) || rows.length > rowSize) {
+          return (
+            <Row
+              key={i + "parent"}
+              className={`align-items-center ${className ? className : "justify-content-between"}`}
             >
-              {splitList(rows, 2, rowSize).map((row, ind) => (
-                <Row key={ind + "child"}>
-                  <Col xs={12}>
-                    <Slider {...sliderItemsCountFix(settings, row.length)}>
-                      {row.map((post, i) => (
-                        <PostCard key={i} post={post} />
-                      ))}
-                    </Slider>
-                  </Col>
-                </Row>
-              ))}
-            </Col>
-            {rowsCount > 1 && (
               <Col
-                xl={2}
-                className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
-                style={{ width: 160, height: 600 }}
+                xs={12}
+                xl={rowsCount > 1 ? 10 : 12}
+                className={`${rowsCount > 1 ? "homePostRow" : "homePostRowSingle"}`}
               >
-                Add Container
-                <br />
-                (160 x 600)
+                {splitList(
+                  rows.length === rowSize ? dataList.slice(0, -1) : rows,
+                  rowsCount / 2,
+                  rowSize
+                ).map((row, ind) => (
+                  <Row key={ind + "child"}>
+                    <Col xs={12}>
+                      <Slider {...sliderItemsCountFix(settings, row.length)}>
+                        {row.map((post, i) => (
+                          <PostCard key={i} post={post} />
+                        ))}
+                      </Slider>
+                    </Col>
+                  </Row>
+                ))}
               </Col>
-            )}
-          </Row>
-        );
+              {rowsCount > 1 && (
+                <Col
+                  xl={2}
+                  className={`fullSizeAddContainer me-3 d-none d-xl-flex ms-0`}
+                  style={{ width: 160, height: 600 }}
+                >
+                  Add Container
+                  <br />
+                  (160 x 600)
+                </Col>
+              )}
+            </Row>
+          );
+        }
       })}
     </>
   );

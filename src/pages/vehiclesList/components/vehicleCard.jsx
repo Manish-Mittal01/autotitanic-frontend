@@ -94,8 +94,8 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     }
   };
 
-  console.log("vehicle", vehicle);
-  console.log("myWishlist", myWishlist.data);
+  // console.log("vehicle", vehicle);
+  // console.log("myWishlist", myWishlist.data);
 
   return (
     <>

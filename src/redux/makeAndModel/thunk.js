@@ -16,9 +16,9 @@ export const getAllMake = createAsyncThunk("makeAndModel/getAllMake", async (fil
   }
 });
 
-export const getAllModel = createAsyncThunk("makeAndModel/getAllModel", async (makeId, Thunk) => {
+export const getAllModel = createAsyncThunk("makeAndModel/getAllModel", async (filters, Thunk) => {
   try {
-    const response = await axios.get(`allModel/${makeId}`);
+    const response = await axios.get(`allModel/${filters.makeId}?type=${filters.type || "cars"}`);
     return response?.data;
   } catch (error) {
     return Thunk.rejectWithValue(error);

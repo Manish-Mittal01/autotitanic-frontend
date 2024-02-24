@@ -9,10 +9,13 @@ import { getAllCity, getAllCountry } from "../../../redux/countryAndCity/thunk";
 import { getAllMake, getAllModel, getAllVariant } from "../../../redux/makeAndModel/thunk";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";
 import { preventMinus } from "../../../utils";
-import { parseCamelKey } from "../../../utils/parseKey";
 import { carsFilters } from "../../../utils/filters/cars";
+import { useLocation } from "react-router-dom";
+import { vansFilters } from "../../../utils/filters/vans";
+import parseKey from "../../../utils/parseKey";
 
 export default function CarFilters() {
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { vehiclesList } = useSelector((state) => state.vehicles);
@@ -21,7 +24,9 @@ export default function CarFilters() {
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
   const [showFilterOptions, setShowFilterOptions] = useState(null);
-  const [filtersList, setFiltersList] = useState([...carsFilters]);
+  const [filtersList, setFiltersList] = useState([]);
+
+  const category = pathname?.split("/")[1];
 
   const handleSelectFilter = (name, value, label) => {
     if (name === "make")
@@ -40,11 +45,11 @@ export default function CarFilters() {
   };
 
   const handleMakeList = async () => {
-    handleApiRequest(getAllMake);
+    handleApiRequest(getAllMake, { type: category });
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, filters.make?.value);
+    handleApiRequest(getAllModel, { makeId: filters.make?.value, type: category });
   };
 
   const handleVariantList = async () => {
@@ -52,61 +57,71 @@ export default function CarFilters() {
   };
 
   const handleResetFilters = async () => {
-    dispatch(resetFilters());
+    const category = pathname?.split("/")[1];
+    dispatch(resetFilters({ type: { value: category, label: category } }));
   };
 
   useEffect(() => {
     handleCountryList();
     handleMakeList();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (filters.make?.value) handleModelList();
-    if (filters.model?.value) handleVariantList();
+    // if (filters.model?.value) handleVariantList();
     if (filters.country?.value) handleCityList();
   }, [filters]);
 
   useEffect(() => {
-    const oldFilters = [...filtersList];
-    const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
-    const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
-    // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
-    const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
-    const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
+    if (pathname) {
+      let oldFilters = [];
+      switch (category) {
+        case "cars":
+          oldFilters = [...carsFilters];
+          break;
+        case "vans":
+          oldFilters = [...vansFilters];
+          break;
+        default:
+          oldFilters = [...carsFilters];
+          break;
+      }
+      const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
+      const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
+      // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
+      const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
+      const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
 
-    if (allMakes.data) {
-      oldFilters[makeIndex].filterOptions = allMakes.data?.items;
-    }
-    if (filters.make && allModels.data) {
-      oldFilters[modelIndex].filterOptions = allModels.data.items;
-    }
-    // if (filters.model && allVariants.data) {
-    //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
-    // }
+      if (allMakes.data) {
+        oldFilters[makeIndex].filterOptions = allMakes.data?.items;
+      }
+      if (filters.make && allModels.data) {
+        oldFilters[modelIndex].filterOptions = allModels.data.items;
+      }
+      // if (filters.model && allVariants.data) {
+      //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
+      // }
 
-    if (allCountries.data) {
-      oldFilters[countryIndex].filterOptions = allCountries.data.items;
-    }
-    if (filters.country && allCities.data) {
-      oldFilters[cityIndex].filterOptions = allCities.data.items;
-    }
+      if (allCountries.data) {
+        oldFilters[countryIndex].filterOptions = allCountries.data.items;
+      }
+      if (filters.country && allCities.data) {
+        oldFilters[cityIndex].filterOptions = allCities.data.items;
+      }
 
-    setFiltersList(oldFilters);
-  }, [allMakes, allModels, allCountries, allCities]);
+      setFiltersList(oldFilters);
+    }
+  }, [allMakes, allModels, allCountries, allCities, pathname]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  //   console.log("allMakes", allMakes);
-  //   console.log("allModels", allModels);
-  //   console.log("filtersList", filtersList);
-  //   console.log("allVariants", allVariants);
-  // console.log("filters", filters);
-  // console.log("allCountries", allCountries);
-  // console.log("vehiclesList", vehiclesList);
+  console.log("category", category);
 
   return (
     <>
       <div className="border rounded py-3">
-        <h4 className="text-center">{vehiclesList.data?.totalCount} Cars found</h4>
+        <h4 className="text-center">
+          {vehiclesList.data?.totalCount} {parseKey(category)} found
+        </h4>
         <div className="text-center">
           <Button variant="" className="drakColor" onClick={handleResetFilters}>
             <h6>Reset Filters</h6>
@@ -131,7 +146,7 @@ export default function CarFilters() {
                     ? "Continent"
                     : filter.label}
                 </span>
-                {filter.filterType === "normal" && filter.filterOptions.length > 0 ? (
+                {filter.filterType === "normal" && filter?.filterOptions?.length > 0 ? (
                   <Tooltip
                     text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}
                     showTooltip={() => setShowFilterOptions(i)}
@@ -234,7 +249,7 @@ export default function CarFilters() {
               )}
               {filter.filterType === "input" && (
                 <>
-                  {Object.keys(filter.filterOptions || {}).map((filterKey) => (
+                  {Object.keys(filter?.filterOptions || {}).map((filterKey) => (
                     <li
                       key={filterKey}
                       className="d-flex justify-content-between align-items-center px-3 py-2 "

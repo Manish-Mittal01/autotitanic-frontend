@@ -13,7 +13,9 @@ const filtersSlice = createSlice({
       return { ...state, filters: { ...state.filters, ...action.payload } };
     },
     resetFilters: (state, action) => {
-      return { filters: { country: { value: "", label: "Africa", flag: africaFlag } } };
+      return {
+        filters: { country: { value: "", label: "Africa", flag: africaFlag }, ...action.payload },
+      };
     },
   },
   extraReducers: (builder) => {},

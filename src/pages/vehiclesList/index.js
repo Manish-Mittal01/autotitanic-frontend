@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { ReactComponent as FilterIcon } from "../../Assets/icons/filter.svg";
@@ -12,13 +11,14 @@ import { getVehicleList, getWishlist } from "../../redux/vehicles/thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
 import MyPagination from "../../components/pagination";
 import { sortingOptions } from "../../utils/filters/common";
 
 export default function VehiclesList() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { categoryFilter } = useParams();
   const dispatch = useDispatch();
@@ -67,7 +67,9 @@ export default function VehiclesList() {
   };
 
   useEffect(() => {
-    handleVehicleList();
+    if (filters.type) {
+      handleVehicleList();
+    }
   }, [filters, paginationDetails]);
 
   useEffect(() => {
@@ -78,13 +80,20 @@ export default function VehiclesList() {
   }, []);
 
   useEffect(() => {
+    const category = pathname.split("/");
     if (categoryFilter === "used" || categoryFilter === "new") {
-      dispatch(selectFilters({ condition: { value: categoryFilter, label: categoryFilter } }));
+      dispatch(
+        selectFilters({
+          condition: { value: categoryFilter, label: categoryFilter },
+          type: { value: category[1], label: category[1] },
+        })
+      );
     } else {
-      dispatch(selectFilters({ condition: "" }));
+      dispatch(selectFilters({ condition: "", type: { value: category[1], label: category[1] } }));
     }
-  }, [categoryFilter]);
+  }, [categoryFilter, pathname]);
 
+  // console.log("pathname", pathname);
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);
   // console.log("vehiclesList", vehiclesList);
@@ -203,7 +212,7 @@ export default function VehiclesList() {
                   )}
                 </Fragment>
               ))
-            ) : vehiclesList.totalCount ? (
+            ) : vehiclesList.totalCount === 0 ? (
               <h1 className="text-center my-5">0 Results Found</h1>
             ) : (
               <h1 className="text-center my-5">Loading...</h1>

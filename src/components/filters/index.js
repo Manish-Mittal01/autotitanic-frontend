@@ -46,7 +46,7 @@ export default function CountryFilter({ filterType }) {
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, filters.make.value);
+    handleApiRequest(getAllModel, { makeId: filters.make.value });
   };
 
   useEffect(() => {
