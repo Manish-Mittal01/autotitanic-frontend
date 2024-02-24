@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const OverlayCarousal = ({ media, isFeatured }) => {
   const sliderRef = useRef(null);
+  const childrenSliderRef = useRef(null);
   const dispatch = useDispatch();
   const { galleryMedia } = useSelector((state) => state.common);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,7 +21,10 @@ const OverlayCarousal = ({ media, isFeatured }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    afterChange: (slideIndex) => setCurrentSlide(slideIndex),
+    afterChange: (slideIndex) => {
+      childrenSliderRef.current.slickGoTo(slideIndex);
+      setCurrentSlide(slideIndex);
+    },
   };
 
   const settingsThumbnails = {
@@ -69,7 +73,7 @@ const OverlayCarousal = ({ media, isFeatured }) => {
           ))}
       </Slider>
 
-      <Slider {...settingsThumbnails} className="thumbs">
+      <Slider ref={childrenSliderRef} {...settingsThumbnails} className="thumbs">
         {isArray(media)
           .filter((item) => item.type?.includes("image"))
           ?.map((item, index) => (

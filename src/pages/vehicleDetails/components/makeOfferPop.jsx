@@ -97,7 +97,7 @@ export default function MakeOfferPop({ action, setAction }) {
                 onChange={handleChange}
               />
               <label htmlFor="whatsappUpdate" className="form-check-label">
-                Recieve update on Whatsapp
+                Recieve update on WhatsApp
               </label>
             </div>
             <div className="form-check mb-2">

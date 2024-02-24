@@ -800,7 +800,7 @@ table .TableBtnWrp svg {
 }
 
 *::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
   height: 8px;
   background-color: #fff;
 }
@@ -1793,7 +1793,7 @@ posts-card-wrp .card-cstm .content p {
 
 .dealerLogo {
   width: 100%;
-  max-width: 150px;
+  max-width: 100px;
   max-height: 50px;
 }
 
@@ -1822,9 +1822,14 @@ posts-card-wrp .card-cstm .content p {
 /* ******************************************************************************** */
 
 .paginationBtn {
-  border: none;
+  border: 1px solid lightgray;
+  background-color: transparent;
   margin-inline: 4px;
-  padding: 4px 10px;
+  padding: 3px 8px;
+}
+
+.paginationBtn:not(.disabled):hover {
+  border: 1px solid #2c3054;
 }
 
 .filterBoxWrapper {
@@ -2816,7 +2821,8 @@ input:read-only {
   text-align: center;
   width: fit-content;
   padding: 4px 14px;
-  font-weight: bold;
+  background-color: #4e4eff;
+  color: #fff;
 }
 
 .selectedThum {
@@ -3047,4 +3053,30 @@ legend {
   margin: 0;
   color: #000;
   font-family: Roboto, sans-serif;
+}
+
+.filterInput::placeholder {
+  font-size: 12px;
+}
+
+.loginTOViewDetails {
+  animation: zoom-in-zoom-out 1s ease infinite;
+}
+
+@keyframes zoom-in-zoom-out {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.1, 1.1);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.makeSelector__group-heading {
+  padding: 0 !important;
 }

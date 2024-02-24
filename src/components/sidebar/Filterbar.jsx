@@ -4,19 +4,18 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as CrossIcon } from "../../Assets/icons/cross.svg";
 import mainLogo from "../../Assets/Images/mainLogo.png";
-import { categories } from "../../utils";
 import { handleFilterBar } from "../../redux/common/slice";
-import { filterOptions } from "../../utils/filters";
 import SelectBox from "../selectBox";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import parseKey from "../../utils/parseKey";
+import { carsFilters } from "../../utils/filters/cars";
 
 const FilterBar = () => {
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
-  const [filtersList, setFiltersList] = useState(filterOptions);
+  const [filtersList, setFiltersList] = useState(carsFilters);
 
   const handleSidebar = () => {
     dispatch(handleFilterBar());

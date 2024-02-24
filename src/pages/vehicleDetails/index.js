@@ -6,7 +6,7 @@ import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoMdShare } from "react-icons/io";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { IoIosCall } from "react-icons/io";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as WhatsappIcon } from "../../Assets/icons/whatsapp.svg";
@@ -24,11 +24,12 @@ import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
 import MakeOfferPop from "./components/makeOfferPop";
 import isUserLoggedin from "../../utils/isUserLoggedin";
-import { detailsList, sellerDetails } from "../../utils/filters";
 import ListCrousel from "../home/components/listCrousel";
+import { sellerDetails } from "../../utils/filters/common";
+import { carsDetailsList } from "../../utils/filters/cars";
 
 export default function VehicleDetails() {
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const whatsappBoxref = useRef();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -108,9 +109,12 @@ export default function VehicleDetails() {
         <h6
           className="primaryColor mt-3 pointer"
           style={{ width: "fit-content" }}
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            state === "afterLogin" ? navigate("cars/all") : navigate(-1);
+          }}
         >
-          <FaArrowLeftLong className="me-2" />
+          {/* <FaArrowLeftLong className="me-2" /> */}
+          <MdOutlineArrowBackIosNew className="me-1" />
           Back to results
         </h6>
         <Row>
@@ -166,11 +170,11 @@ export default function VehicleDetails() {
             </div>
           </Col>
           <Col lg={4}>
-            <h6 className="darkColor my-2">{detail?.title}</h6>
-            <p>{[detail?.make.label, detail?.model.label].join("  ")}</p>
+            <h6 className="darkColor my-2">{detail?.title || "--"}</h6>
+            <p>{[detail?.make?.label || "--", detail?.model?.label || "--"].join("  ")}</p>
             <div className="d-flex align-items-center text-danger gap-1">
               <h6 className="m-0 fw-bold">{detail?.currency} </h6>
-              <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString()}</h6>
+              <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString() || "--"}</h6>
             </div>
             <div>
               {detail?.city?.name + ", " + detail?.country?.name}
@@ -181,15 +185,17 @@ export default function VehicleDetails() {
                 <p> Key Vehicle Details</p>
               </h6>
               <div className="p-3">
-                {detailsList.cars?.map((key) => (
+                {carsDetailsList?.map((key) => (
                   <Row className="my-2">
                     <Col xs={5} className="darkColor small fw-bold">
                       {key.label}
                     </Col>
                     <Col xs={7} className="small primaryColor">
                       {typeof detail?.[key.value] !== "object"
-                        ? parseCamelKey(detail?.[key.value]?.toString())
-                        : parseCamelKey(detail?.[key.value]?.name || detail?.[key.value]?.label)}
+                        ? parseCamelKey(detail?.[key.value]?.toString() || "--")
+                        : parseCamelKey(
+                            detail?.[key.value]?.name || detail?.[key.value]?.label || "--"
+                          )}
                     </Col>
                   </Row>
                 ))}
@@ -233,7 +239,7 @@ export default function VehicleDetails() {
                                   ref={whatsappBoxref}
                                 >
                                   <WhatsappIcon className="me-1" width={20} />
-                                  Whatsapp Seller
+                                  WhatsApp Seller
                                 </p>
                               </a>
                             ) : key.value === "email" ? (
@@ -247,15 +253,6 @@ export default function VehicleDetails() {
                                 </p>
                               </a>
                             ) : key.value === "mobile" ? (
-                              // <a href={`tel:${detail?.user?.[key.value]}`} target="_blank">
-                              //   <p
-                              //     className="whatsappSeller mainDarkColor m-0 rounded-pill small"
-                              //     style={{ minWidth: whatsappBoxref.current?.offsetWidth }}
-                              //   >
-                              //     <IoIosCall className="callIcon" />
-                              //     Call Seller
-                              //   </p>
-                              // </a>
                               <a
                                 href={`mailto:${detail?.user?.[key.value]}`}
                                 target="_blank"
@@ -268,6 +265,8 @@ export default function VehicleDetails() {
                                 />
                                 {parseKey(detail?.user?.[key.value])}
                               </a>
+                            ) : key.value === "name" && detail.user?.userType === "private" ? (
+                              parseKey(detail?.user?.[key.value].split(" ")[0])
                             ) : (
                               parseKey(detail?.user?.[key.value])
                             )}
@@ -277,9 +276,9 @@ export default function VehicleDetails() {
                     );
                   })
                 ) : (
-                  <div className="d-flex justify-content-center">
+                  <div className="loginTOViewDetails d-flex justify-content-center">
                     <p
-                      className="mainDarkColor blockSellerDetails pointer border-0 rounded-pill"
+                      className="blockSellerDetails pointer m-0 border-0 rounded-pill"
                       onClick={() => navigate("/login", { state: pathname })}
                     >
                       Sign In I Register to view Contact Details
@@ -294,7 +293,7 @@ export default function VehicleDetails() {
               </h6>
               <div className="p-3">
                 <Row className="">
-                  <Col xs={12} className="small" style={{ wordWrap: "break-word" }}>
+                  <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
                     <p
                       className="small pointer primaryColor m-0 p-2"
                       onClick={() => {
@@ -308,10 +307,14 @@ export default function VehicleDetails() {
                       <MdLocalOffer className="text-danger mx-1" />
                       Make an Offer
                     </p>
+                  </Col>
+                  <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
                     <p className="small pointer primaryColor m-0 p-2" onClick={handleAddToCompare}>
                       <CompareIcon className="redIcon" />
                       Add to Compare
                     </p>
+                  </Col>
+                  <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
                     <p
                       className="small pointer primaryColor m-0 p-2 "
                       onClick={handleAddToWishlist}
@@ -319,6 +322,8 @@ export default function VehicleDetails() {
                       <Heartcon className="redIcon" />
                       Add to Wishlist
                     </p>
+                  </Col>
+                  <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
                     <p
                       className="small pointer primaryColor m-0 p-2"
                       onClick={() => {

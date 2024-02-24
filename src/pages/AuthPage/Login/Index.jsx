@@ -32,7 +32,7 @@ const Login = () => {
     console.log("response", response);
     if (response.status) {
       if (state) {
-        navigate(state);
+        navigate(state, { state: "afterLogin" });
       } else {
         navigate("/profile");
       }

@@ -115,7 +115,7 @@ const Register = () => {
     if (userCreds.mobile) {
       const mobileCode = userCreds.mobile.split(" ")[0].slice(1);
       const selectedCountry = allCountries.data?.items.find((country) =>
-        country.countryCode.startsWith(mobileCode)
+        mobileCode.startsWith(country.countryCode)
       );
 
       setSelectedCountry((prev) => ({ ...prev, mobile: selectedCountry }));
@@ -133,7 +133,7 @@ const Register = () => {
   // console.log("userCreds", userCreds);
   // console.log("rememberedUser", rememberedUser);
   //   console.log("allCountries", allCountries);
-  console.log("selectedCountry", selectedCountry);
+  // console.log("selectedCountry", selectedCountry);
 
   return (
     <>
@@ -195,7 +195,7 @@ const Register = () => {
                         <div className="input-group has-validation">
                           <input
                             type="text"
-                            maxLength={15}
+                            maxLength={25}
                             className="form-control"
                             placeholder="Enter Name"
                             name="name"
@@ -264,10 +264,11 @@ const Register = () => {
                               id="dropdown-basic"
                               className="countryCodeSelector"
                             >
-                              <img src={selectedCountry.mobile?.flag || ghanaFlag} width={18} />
+                              <img src={userCreds.country?.flag || ghanaFlag} width={18} />
+                              {/* <img src={selectedCountry.mobile?.flag || ghanaFlag} width={18} /> */}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu className="countryCodeSelectorBox">
+                            {/* <Dropdown.Menu className="countryCodeSelectorBox">
                               {allCountries.data?.items?.map((country) => (
                                 <Dropdown.Item
                                   className="countryCodeSelectorItem"
@@ -285,7 +286,7 @@ const Register = () => {
                                   </p>
                                 </Dropdown.Item>
                               ))}
-                            </Dropdown.Menu>
+                            </Dropdown.Menu> */}
                           </Dropdown>
                           <input
                             type="text"
@@ -294,12 +295,17 @@ const Register = () => {
                             name="mobile"
                             value={userCreds.mobile || "+233"}
                             onChange={(e) => {
+                              const countryCode = userCreds.country.countryCode
+                                ? "+" + userCreds.country.countryCode
+                                : "+233";
                               const value = e.target.value.slice(1);
-                              const updatedValue = value.replace(/\D+/g, "");
+                              let updatedValue = value.replace(/\D+/g, "");
+                              updatedValue =
+                                countryCode + updatedValue.slice(countryCode.length - 1);
 
                               setUserCreds((prev) => ({
                                 ...prev,
-                                mobile: "+" + updatedValue,
+                                mobile: updatedValue,
                               }));
                             }}
                           />
@@ -318,10 +324,11 @@ const Register = () => {
                               id="dropdown-basic"
                               className="countryCodeSelector"
                             >
-                              <img src={selectedCountry.whatsapp?.flag || ghanaFlag} width={18} />
+                              <img src={userCreds.country?.flag || ghanaFlag} width={18} />
+                              {/* <img src={selectedCountry.whatsapp?.flag || ghanaFlag} width={18} /> */}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu className="countryCodeSelectorBox">
+                            {/* <Dropdown.Menu className="countryCodeSelectorBox">
                               {allCountries.data?.items?.map((country) => (
                                 <Dropdown.Item
                                   className="countryCodeSelectorItem"
@@ -339,7 +346,7 @@ const Register = () => {
                                   </p>
                                 </Dropdown.Item>
                               ))}
-                            </Dropdown.Menu>
+                            </Dropdown.Menu> */}
                           </Dropdown>
                           <input
                             type="text"
@@ -348,13 +355,26 @@ const Register = () => {
                             name="whatsapp"
                             value={userCreds.whatsapp || "+233"}
                             onChange={(e) => {
+                              const countryCode = userCreds.country.countryCode
+                                ? "+" + userCreds.country.countryCode
+                                : "+233";
                               const value = e.target.value.slice(1);
-                              const updatedValue = value.replace(/\D+/g, "");
+                              let updatedValue = value.replace(/\D+/g, "");
+                              updatedValue =
+                                countryCode + updatedValue.slice(countryCode.length - 1);
 
                               setUserCreds((prev) => ({
                                 ...prev,
-                                whatsapp: "+" + updatedValue,
+                                whatsapp: updatedValue,
                               }));
+
+                              // const value = e.target.value.slice(1);
+                              // const updatedValue = value.replace(/\D+/g, "");
+
+                              // setUserCreds((prev) => ({
+                              //   ...prev,
+                              //   whatsapp: "+" + updatedValue,
+                              // }));
                             }}
                           />
                         </div>

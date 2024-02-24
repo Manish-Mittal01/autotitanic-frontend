@@ -10,12 +10,12 @@ import Asterik from "../../components/common/asterik";
 import { categories, preventMinus } from "../../utils";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
-import { postFeatures } from "../../utils/filters";
 import { getAllMake, getAllModel, getAllVariant } from "../../redux/makeAndModel/thunk";
 import { addVehicle, getVehicleDetails, updateVehicle } from "../../redux/vehicles/thunk";
 import { errorMsg, successMsg } from "../../utils/toastMsg";
 import { uploadFile } from "../../redux/common/thunk";
-import parseKey from "../../utils/parseKey";
+import parseKey, { parseCamelKey } from "../../utils/parseKey";
+import { carsPostFeatures, handlePopularCarsMakeList } from "../../utils/filters/cars";
 
 const files = [
   {
@@ -53,7 +53,7 @@ export default function SellVehicle() {
   const [postUploadStep, setPostUploadStep] = useState(state || 1);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [localImages, setLocalImages] = useState([...postDetails.media]);
-  const [featuresList, setFeaturesList] = useState(postFeatures);
+  const [featuresList, setFeaturesList] = useState(carsPostFeatures);
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -151,6 +151,7 @@ export const PostStepOne = ({
   localImages,
   setLocalImages,
 }) => {
+  const { userProfile } = useSelector((state) => state.profile);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
   const handleChange = (name, value) => {
@@ -242,8 +243,21 @@ export const PostStepOne = ({
   }, []);
 
   useEffect(() => {
-    if (allCountries.data && postDetails.country) handleCityList();
+    if (postDetails.country) handleCityList();
   }, [postDetails.country]);
+
+  useEffect(() => {
+    if (userProfile.data) {
+      setPostDetails((prev) => ({
+        ...prev,
+        country: userProfile.data.country,
+        currency: {
+          value: userProfile.data.country.currency,
+          label: userProfile.data.country.currency,
+        },
+      }));
+    }
+  }, [userProfile]);
 
   const proceedToNextStep =
     postDetails.country &&
@@ -255,22 +269,33 @@ export const PostStepOne = ({
   //   console.log("proceedToNextStep", proceedToNextStep);
   // console.log("postDetails", postDetails);
   // console.log("localImages", localImages);
+  // console.log("userProfile", userProfile);
 
   return (
     <>
       <Col md={6} className="sellFeatureBoxWrapper">
         <SelectBox
           className="my-3"
-          placeholder="Category*"
+          placeholder={
+            <span>
+              Category<span className="text-danger">*</span>
+            </span>
+          }
           options={categories}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
         <SelectBox
+          isDisabled
           className="sellFeatureBox my-3"
-          placeholder="Country*"
+          placeholder={
+            <span>
+              Country<span className="text-danger">*</span>
+            </span>
+          }
           options={allCountries.data?.items}
-          value={postDetails.country}
+          value={userProfile.data?.country}
+          // value={postDetails.country}
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option._id}
           onChange={(selected) =>
@@ -289,14 +314,38 @@ export const PostStepOne = ({
         />
         <SelectBox
           className="sellFeatureBox my-3"
-          placeholder="City*"
-          options={allCities.data?.items}
+          placeholder={
+            <span>
+              City<span className="text-danger">*</span>
+            </span>
+          }
+          options={
+            allCities.data?.items
+              ? [
+                  ...allCities.data?.items,
+                  //  { _id: "other", name: "Other" }
+                ]
+              : []
+          }
           value={postDetails.city || ""}
           getOptionLabel={(option) => option.name}
           getOptionValue={(option) => option._id}
           onChange={(selected) => handleChange("city", selected)}
         />
-        <label>Images*</label>
+
+        {postDetails.city?._id === "other" && (
+          <input
+            type="text"
+            className="form-control my-3"
+            placeholder="Enter city name"
+            value={postDetails.city?._id === "other" ? "" : postDetails.city}
+            onChange={(e) => handleChange("city", e.target.value)}
+          />
+        )}
+
+        <label>
+          Images<span className="text-danger">*</span>
+        </label>
         <p className="small text-muted">Add at least 5 and maximum 20 images ( Max 5MB )</p>
         <div className="postImageWrapper d-flex align-items-center">
           <label htmlFor="selectpostImage" className="imageploadBtn">
@@ -355,6 +404,8 @@ export const PostStepOne = ({
 export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeaturesList }) => {
   const navigate = useNavigate();
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
+  const [errors, setErrors] = useState({});
+  const [popularMakes, setPopularMakes] = useState([]);
 
   const handleChange = (name, value) => {
     if (name === "make")
@@ -374,11 +425,21 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const allKeys = featuresList.map((elem) => elem.value);
     allKeys.push("price", "mileage", "description", "currency", "title", "type");
 
+    let myErrors = {};
+
     for (let key of allKeys) {
-      if (!postDetails[key]) return errorMsg(`${key} is required`);
+      if (!postDetails[key] && request.status !== "draft") {
+        myErrors = { ...myErrors, [key]: `*${parseCamelKey(key)} is required` };
+        // errorMsg(`${key} is required`);
+      }
       if (key !== "media" && key !== "description") {
         request[key] = postDetails[key]?.value || postDetails[key]?._id;
       }
+    }
+
+    if (Object.values(myErrors || {}).filter((item) => item).length > 0) {
+      setErrors(myErrors);
+      return;
     }
 
     let response = {};
@@ -425,8 +486,11 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const modelIndex = oldFeatures.findIndex((elem) => elem.label === "Model");
     // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
 
-    if (allMakes.data) {
-      oldFeatures[makeIndex].options = allMakes.data?.items;
+    if (allMakes.data && popularMakes) {
+      oldFeatures[makeIndex].options = [
+        { label: "most searched for", options: popularMakes },
+        { label: "All makes", options: allMakes.data?.items },
+      ];
     }
     if (postDetails.make && allModels.data) {
       oldFeatures[modelIndex].options = allModels.data.items;
@@ -436,10 +500,16 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     // }
 
     setFeaturesList(oldFeatures);
-  }, [allMakes, allModels]);
+  }, [allMakes, allModels, popularMakes]);
+
+  useEffect(async () => {
+    const myMakes = await handlePopularCarsMakeList();
+    setPopularMakes(myMakes);
+  }, [allMakes]);
 
   // console.log("postDetails", postDetails);
   // console.log("allModels", allModels);
+  console.log("errors", errors);
 
   return (
     <>
@@ -447,20 +517,22 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
         <Col xs={12}>
           <label htmlFor="" className="form-label mb-0">
             Title
+            <Asterik />
           </label>
           <div className="input-group has-validation">
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${errors.title ? "border-danger" : ""}`}
               placeholder="Enter title"
               name="title"
-              maxLength={60}
+              maxLength={65}
               value={postDetails.title?.value || ""}
               onChange={(e) =>
                 handleChange("title", { value: e.target.value, label: e.target.value })
               }
             />
           </div>
+          {errors.title && <p className="m-0 text-danger">{errors.title}</p>}
         </Col>
         {featuresList.map(
           (filter, i) =>
@@ -474,6 +546,11 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
                   </span>
                 </label>
                 <SelectBox
+                  styles={{
+                    control: (baseStyle) => {
+                      return { ...baseStyle, border: errors[filter.value] ? "1px solid red" : "" };
+                    },
+                  }}
                   options={filter.options}
                   value={postDetails[filter.value]}
                   getOptionLabel={(option) => option.label || option.name}
@@ -486,6 +563,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
                     handleChange(filter.value, value);
                   }}
                 />
+                {errors[filter.value] && <p className="m-0 text-danger">{errors[filter.value]}</p>}
               </Col>
             )
         )}
@@ -497,7 +575,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
           <div className="input-group has-validation">
             <input
               type="number"
-              className="form-control"
+              className={`form-control ${errors.mileage ? "border-danger" : ""}`}
               style={{ height: 40 }}
               placeholder="Enter Mileage"
               name="mileage"
@@ -511,6 +589,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               }}
             />
           </div>
+          {errors.mileage && <p className="m-0 text-danger">{errors.mileage}</p>}
         </Col>
         <Col md={6} className="my-2">
           <label htmlFor="" className="form-label mb-0">
@@ -520,7 +599,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
           <div className="input-group has-validation">
             <input
               type="number"
-              className="form-control"
+              className={`form-control ${errors.price ? "border-danger" : ""}`}
               style={{ height: 40 }}
               placeholder="Enter Price"
               name="price"
@@ -534,15 +613,20 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               }}
             />
           </div>
+          {errors.price && <p className="m-0 text-danger">{errors.price}</p>}
         </Col>
 
         <Col xs={12}>
           <label htmlFor="" className="form-label mb-0 mt-2">
             Description
+            <Asterik />
           </label>
-          <div className="input-group has-validation">
+          <div
+            className="input-group has-validation"
+            style={{ border: errors.description ? "1px solid red" : "" }}
+          >
             <CKEditor
-              activeClass="p10 w-100"
+              activeClass={`p-10 w-100`}
               content={postDetails.description}
               events={{
                 change: (e) => {
@@ -562,13 +646,14 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               }}
             />
           </div>
+          {errors.description && <p className="m-0 text-danger">{errors.description}</p>}
         </Col>
         <Col className="my-2">
           <Button variant="danger" onClick={() => handleCreatePost("pending")}>
             Post Advert
           </Button>
           <Button variant="danger" className="mx-2" onClick={() => handleCreatePost("draft")}>
-            Save Draft
+            Save as Draft
           </Button>
         </Col>
       </Row>

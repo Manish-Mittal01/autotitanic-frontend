@@ -13,7 +13,7 @@ export default function MyItems() {
     page: 1,
     limit: 25,
     sortBy: "createdAt",
-    order: 1,
+    order: -1,
   });
   const [filters, setFilters] = useState({});
 

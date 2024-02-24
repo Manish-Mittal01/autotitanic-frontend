@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import SelectBox from "../../../components/selectBox";
 import Tooltip from "../../../components/myTooltip";
 import { handleApiRequest } from "../../../services/handleApiRequest";
-import { filterOptions } from "../../../utils/filters";
 import { isArray } from "../../../utils/dataTypes";
 import { getAllCity, getAllCountry } from "../../../redux/countryAndCity/thunk";
 import { getAllMake, getAllModel, getAllVariant } from "../../../redux/makeAndModel/thunk";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";
 import { preventMinus } from "../../../utils";
 import { parseCamelKey } from "../../../utils/parseKey";
+import { carsFilters } from "../../../utils/filters/cars";
 
 export default function CarFilters() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function CarFilters() {
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
   const [showFilterOptions, setShowFilterOptions] = useState(null);
-  const [filtersList, setFiltersList] = useState([...filterOptions]);
+  const [filtersList, setFiltersList] = useState([...carsFilters]);
 
   const handleSelectFilter = (name, value, label) => {
     if (name === "make")
@@ -122,8 +122,7 @@ export default function CarFilters() {
                 className={`d-flex justify-content-between px-3 py-2 border-top ${
                   (!filters.make && filter.label === "Model") ||
                   (!filters.country?.value && filter.label === "City")
-                    ? // || (!filters.model && filter.label === "Variant")
-                      "disabled"
+                    ? "disabled"
                     : ""
                 }`}
               >
@@ -203,7 +202,7 @@ export default function CarFilters() {
                     </div>
                   </Tooltip>
                 ) : (
-                  <span>{"Any>"}</span>
+                  <span>{filter.filterType === "normal" && "Any >"}</span>
                 )}
               </li>
               {filter.filterType === "range" && (
@@ -215,7 +214,7 @@ export default function CarFilters() {
                     >
                       <Row className="w-100">
                         <Col xs={4} className="">
-                          <span className="darkColor fw-bold">{filterKey}</span>
+                          <span className="darkColor">{filterKey}</span>
                         </Col>
                         <Col xs={8} className="p-0">
                           <SelectBox
@@ -235,19 +234,19 @@ export default function CarFilters() {
               )}
               {filter.filterType === "input" && (
                 <>
-                  {Object.keys(filter.filterOptions).map((filterKey) => (
+                  {Object.keys(filter.filterOptions || {}).map((filterKey) => (
                     <li
                       key={filterKey}
                       className="d-flex justify-content-between align-items-center px-3 py-2 "
                     >
                       <Row className="w-100">
                         <Col xs={4} className="">
-                          <span className="darkColor fw-bold">{filterKey}</span>
+                          <span className="darkColor">{filterKey}</span>
                         </Col>
                         <Col xs={8} className="p-0">
                           <input
                             type="number"
-                            className="form-control"
+                            className="filterInput form-control"
                             style={{ height: 40 }}
                             placeholder={
                               filter.filterOptions[filterKey].key === "minPrice"

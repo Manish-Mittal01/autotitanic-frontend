@@ -13,6 +13,7 @@ import { addToCompare, addToWishlist } from "../../redux/vehicles/thunk";
 import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { manageGallery } from "../../redux/common/slice";
+import parseKey from "../../utils/parseKey";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
@@ -95,8 +96,9 @@ export default function PostCard({ post }) {
             <ActionContainer />
           </div>
           <div className="content">
-            <p className="head postCardDetails fw-bold pb-1 mt-2 mb-0 font-middle">
-              {post?.year} Reg | {post?.gearBox} | {post?.mileage} miles
+            <p className="head postCardDetails pb-1 mt-2 mb-0 font-middle">
+              {parseKey(post?.year)} Reg | {parseKey(post?.gearBox)} | {parseKey(post?.mileage)}{" "}
+              Miles
             </p>
             <p className="m-0 text-danger fw-bold">
               {post?.make?.label + " " + post?.model?.label}

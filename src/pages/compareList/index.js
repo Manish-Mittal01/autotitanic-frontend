@@ -6,7 +6,7 @@ import HeroAdd from "../../components/heroSection/heroAdd";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { parseCamelKey } from "../../utils/parseKey";
 import { useNavigate } from "react-router-dom";
-import { compareListDetails } from "../../utils/filters";
+import { compareListDetails } from "../../utils/filters/common";
 
 export default function CompareList() {
   const navigate = useNavigate();
@@ -23,11 +23,11 @@ export default function CompareList() {
 
   const handleRemoveItem = async (id) => {
     const response = await handleApiRequest(removeCompareListItem, { id });
-    if (response.status)  {
+    if (response.status) {
       handleCompareList();
       handleUserProfile();
-      if(userProfile.data.compareCount<=1){
-        navigate("/cars/all")
+      if (userProfile.data.compareCount <= 1) {
+        navigate("/cars/all");
       }
     }
   };

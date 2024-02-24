@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ import { getVehicleCount } from "../../redux/vehicles/thunk";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import SelectBox from "../selectBox";
 import { preventMinus } from "../../utils";
+import { handlePopularCarsMakeList } from "../../utils/filters/cars";
+// import { handlePopularMakeList } from "../../utils/filters";
 
 export default function HeroSection({ showFilterBox = true }) {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ export default function HeroSection({ showFilterBox = true }) {
   const { allCountries } = useSelector((state) => state.countryAndCity);
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   const { vehiclesCount } = useSelector((state) => state.vehicles);
+
+  const [popularMakes, setPopularMakes] = useState([]);
 
   const handleUpdateFilters = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
@@ -70,6 +74,11 @@ export default function HeroSection({ showFilterBox = true }) {
     }
   }, [filters.make]);
 
+  useEffect(async () => {
+    const myMakes = await handlePopularCarsMakeList();
+    setPopularMakes(myMakes);
+  }, [allMakes]);
+
   const CountryFilterOptions = ({ data, isDisabled, innerProps, ...props }) => {
     return !isDisabled ? (
       <div {...innerProps} className="pointer p-2">
@@ -79,9 +88,15 @@ export default function HeroSection({ showFilterBox = true }) {
     ) : null;
   };
 
+  const MakeGroupLabel = (data) => (
+    <div className="mainDarkColor text-white p-2 fw-bold">
+      <span>{data.label}</span>
+    </div>
+  );
+
   // console.log("filters", filters);
   //   console.log("allCountries", allCountries);
-  //   console.log("allMakes", allMakes);
+  // console.log("allMakes", allMakes);
   //   console.log("allModels", allModels);
   // console.log("vehiclesCount", vehiclesCount);
 
@@ -120,8 +135,19 @@ export default function HeroSection({ showFilterBox = true }) {
           />
           <div className="d-flex justify-content-between my-2 gap-10">
             <SelectBox
+              classNamePrefix={"makeSelector"}
+              formatGroupLabel={MakeGroupLabel}
               placeholder="Make"
-              options={allMakes.data?.items || []}
+              options={[
+                {
+                  label: "Most Searched for",
+                  options: popularMakes,
+                },
+                {
+                  label: "All Makes",
+                  options: allMakes.data?.items || [],
+                },
+              ]}
               value={filters.make || ""}
               onChange={(selected) => {
                 handleUpdateFilters("make", { value: selected._id, label: selected.label });
@@ -136,24 +162,7 @@ export default function HeroSection({ showFilterBox = true }) {
               }}
             />
           </div>
-          {/* <div className="d-flex justify-content-between my-2 gap-10">
-            <SelectBox
-              placeholder="Min Price"
-              options={priceList.slice(0, -2)}
-              value={filters.minPrice || ""}
-              onChange={(value) => {
-                handleUpdateFilters("minPrice", value);
-              }}
-            />
-            <SelectBox
-              placeholder="Max Price"
-              options={priceList.slice(2)}
-              value={filters.maxPrice || ""}
-              onChange={(value) => {
-                handleUpdateFilters("maxPrice", value);
-              }}
-            />
-          </div> */}
+
           <div className="d-flex justify-content-between my-2 gap-10">
             <input
               type="number"

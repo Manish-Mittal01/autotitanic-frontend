@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Navbar, Nav, Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as GridFilledIcon } from "../../Assets/icons/grid-filled.svg";
 import { ReactComponent as ProfileHolder } from "../../Assets/icons/Profile-holder.svg";
 import { ReactComponent as DownArrow } from "../../Assets/icons/down-arrow.svg";
 import mainLogo from "../../Assets/Images/mainLogo.png";
 import { categories } from "../../utils";
-import { useDispatch, useSelector } from "react-redux";
+import isUserLoggedin from "../../utils/isUserLoggedin";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { selectFilters } from "../../redux/filters/slice";
 import { logoutUser } from "../../redux/auth/slice";
-import isUserLoggedin from "../../utils/isUserLoggedin";
 
 const Header = ({ sidebar, setSidebar }) => {
   const navigate = useNavigate();
@@ -65,6 +65,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <li
               onClick={() => {
                 navigate(`/${title.value}/all`);
+                setShowMenu(false);
               }}
             >
               All {title.label}
@@ -72,6 +73,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <li
               onClick={() => {
                 navigate(`/${title.value}/used`);
+                setShowMenu(false);
               }}
             >
               Used {title.label}
@@ -79,6 +81,7 @@ const Header = ({ sidebar, setSidebar }) => {
             <li
               onClick={() => {
                 navigate(`/${title.value}/new`);
+                setShowMenu(false);
               }}
             >
               New {title.label}

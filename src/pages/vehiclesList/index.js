@@ -1,20 +1,22 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { ReactComponent as FilterIcon } from "../../Assets/icons/filter.svg";
 import CarFilters from "./components/carFilters";
 import VehicleCard from "./components/vehicleCard";
 import SelectBox from "../../components/selectBox";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { getVehicleList } from "../../redux/vehicles/thunk";
+import { getVehicleList, getWishlist } from "../../redux/vehicles/thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
-import { sortingOptions } from "../../utils/filters";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { useNavigate, useParams } from "react-router-dom";
 import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
 import MyPagination from "../../components/pagination";
+import { sortingOptions } from "../../utils/filters/common";
 
 export default function VehiclesList() {
   const navigate = useNavigate();
@@ -60,17 +62,16 @@ export default function VehiclesList() {
     }
   };
 
-  // useEffect(() => {
-  //   if (state?.filters) {
-  //     dispatch(selectFilters(state.filters));
-  //   }
-  // }, [state]);
+  const handleWishlist = async () => {
+    await handleApiRequest(getWishlist);
+  };
 
   useEffect(() => {
     handleVehicleList();
   }, [filters, paginationDetails]);
 
   useEffect(() => {
+    handleWishlist();
     return () => {
       dispatch(resetFilters());
     };
@@ -116,12 +117,13 @@ export default function VehiclesList() {
               style={{ width: "fit-content" }}
               onClick={() => navigate(-1)}
             >
-              <FaArrowLeftLong className="me-2" />
+              {/* <FaArrowLeftLong className="me-2" /> */}
+              <MdOutlineArrowBackIosNew className="me-1" />
               Back
             </h6>
             <Row className="justify-content-between align-items-center w-100 mb-2">
               <Col
-                lg={3}
+                lg={4}
                 xs={12}
                 className="my-2 m-lg-0 d-lg-block d-flex justify-content-between align-items-center"
               >
@@ -129,12 +131,19 @@ export default function VehiclesList() {
                   <FilterIcon onClick={handleShowFilterBar} />
                 </div>
                 <div>
-                  {" "}
-                  <button className="paginationBtn" onClick={() => handlePage("back")}>
-                    {"<"}
+                  <button
+                    className={`paginationBtn ${paginationDetails.page === 1 ? "disabled" : ""}`}
+                    onClick={() => handlePage("back")}
+                  >
+                    <MdOutlineArrowBackIosNew />
                   </button>
-                  <button className="paginationBtn" onClick={() => handlePage("next")}>
-                    {">"}
+                  <button
+                    className={`paginationBtn ${
+                      paginationDetails.page === totalPage ? "disabled" : ""
+                    }`}
+                    onClick={() => handlePage("next")}
+                  >
+                    <MdOutlineArrowForwardIos />
                   </button>
                   <span>
                     Page {paginationDetails.page} of {totalPage}
@@ -142,7 +151,7 @@ export default function VehiclesList() {
                 </div>
               </Col>
 
-              <Col lg={9} className="pe-0">
+              <Col lg={8} className="pe-0">
                 <div className="w-100 d-flex justify-content-between justify-content-lg-end">
                   <div className="">
                     <SelectBox
@@ -167,6 +176,7 @@ export default function VehiclesList() {
                         onChange={(value) => {
                           setPaginationDetails((prev) => ({
                             ...prev,
+                            page: 1,
                             sortBy: value.key,
                             order: value.order,
                           }));
@@ -193,9 +203,13 @@ export default function VehiclesList() {
                   )}
                 </Fragment>
               ))
-            ) : (
+            ) : vehiclesList.totalCount ? (
               <h1 className="text-center my-5">0 Results Found</h1>
+            ) : (
+              <h1 className="text-center my-5">Loading...</h1>
             )}
+
+            {console.log("vehiclesList", vehiclesList)}
 
             <MyPagination
               paginationDetails={paginationDetails}

@@ -8,6 +8,7 @@ import PhoneInput from "react-phone-input-2";
 import SelectBox from "../../../components/selectBox";
 import { getUserProfile, updateProfile } from "../../../redux/profile/thunk";
 import { useNavigate } from "react-router-dom";
+import { errorMsg } from "../../../utils/toastMsg";
 
 export default function MyProfile() {
   const navigate = useNavigate();
@@ -32,9 +33,14 @@ export default function MyProfile() {
   };
 
   const handleUpdateProfile = async () => {
-    const request = { ...newProfile };
+    if (`+${newProfile.country?.countryCode}` !== newProfile.mobile?.split(" ")[0]) {
+      return errorMsg("Mobile number should be of the same country");
+    } else if (`+${newProfile.country?.countryCode}` !== newProfile.whatsapp?.split(" ")[0]) {
+      return errorMsg("Whatsapp number should be of the same country");
+    }
+
+    const request = { ...newProfile, userType: newProfile.userType?.value || newProfile.userType };
     const response = await handleApiRequest(updateProfile, request);
-    console.log("response", response);
     if (response.status) {
       handleUserProfile();
     }
@@ -120,7 +126,7 @@ export default function MyProfile() {
       </Row>
       <Row className="align-items-center my-2">
         <Col sm={3}>
-          <h6>Whatsapp</h6>
+          <h6>WhatsApp</h6>
         </Col>
         <Col lg={9}>
           <PhoneInput

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllMake, getAllModel } from "../../redux/makeAndModel/thunk";
 import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
-import { priceList } from "../../utils/filters";
 import { selectFilters } from "../../redux/filters/slice";
 
 export default function CountryFilter({ filterType }) {
@@ -128,24 +127,6 @@ export default function CountryFilter({ filterType }) {
       value={filters.model || ""}
       onChange={(selected) => {
         handleUpdateFilters("model", { value: selected._id, label: selected.label });
-      }}
-    />
-  ) : filterType === "minPrice" ? (
-    <SelectBox
-      placeholder="Min Price"
-      options={priceList.slice(0, -2)}
-      value={filters.minPrice || ""}
-      onChange={(value) => {
-        handleUpdateFilters("minPrice", value);
-      }}
-    />
-  ) : filterType === "maxPrice" ? (
-    <SelectBox
-      placeholder="Max Price"
-      options={priceList.slice(2)}
-      value={filters.maxPrice || ""}
-      onChange={(value) => {
-        handleUpdateFilters("maxPrice", value);
       }}
     />
   ) : (

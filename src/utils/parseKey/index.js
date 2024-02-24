@@ -1,5 +1,5 @@
 export default function parseKey(key) {
-  const text = key || "";
+  const text = key.toString() || "";
   return text.slice(0, 1).toUpperCase() + text.slice(1);
 }
 

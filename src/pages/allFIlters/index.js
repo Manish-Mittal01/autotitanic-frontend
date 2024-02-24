@@ -13,22 +13,7 @@ import pickup from "../../Assets/Images/Pickup.png";
 import saloon from "../../Assets/Images/Saloon.png";
 import suv from "../../Assets/Images/suv.png";
 import SelectBox from "../../components/selectBox";
-import {
-  accelerationOptions,
-  bootSpaceOptions,
-  co2EmmisionOptions,
-  colorsList,
-  doorOptions,
-  driverPositions,
-  engineSizeOptions,
-  filterOptions,
-  fuelConsumtionOptions,
-  fuelTypeOptions,
-  gearBoxOptions,
-  getYearList,
-  mileageList,
-  seatOptions,
-} from "../../utils/filters";
+import { carsFilters } from "../../utils/filters/cars";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getVehicleCount, getVehicleCountByBody } from "../../redux/vehicles/thunk";
@@ -36,6 +21,23 @@ import { useNavigate } from "react-router-dom";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import CountryFilter from "../../components/filters";
 import { preventMinus } from "../../utils";
+import {
+  carsBootSpaceOptions,
+  carsMileageList,
+  carsSeatOptions,
+} from "../../utils/filters/cars/options";
+import {
+  accelerationOptions,
+  co2EmmisionOptions,
+  colorsList,
+  doorOptions,
+  driverPositionsOptions,
+  engineSizeOptions,
+  fuelConsumtionOptions,
+  fuelTypeOptions,
+  gearBoxOptions,
+  getYearList,
+} from "../../utils/filters/common/options";
 
 const bodyTypeOptions = [
   { img: convertible, label: "Convertible", value: "convertible" },
@@ -43,9 +45,9 @@ const bodyTypeOptions = [
   { img: estate, label: "Estate", value: "estate" },
   { img: hatchback, label: "Hatchback", value: "hatchback" },
   { img: mpv, label: "MPV", value: "MPV" },
-  { img: pickup, label: "SUV/Pickup", value: "SUV/Pick-up" },
+  { img: pickup, label: "Pick-up", value: "Pick-up" },
   { img: saloon, label: "Saloon", value: "saloon" },
-  // { img: suv, label: "SUV", value: "SUV/Pick-up" },
+  { img: suv, label: "SUV", value: "SUV" },
 ];
 
 export default function AllFilters() {
@@ -56,7 +58,7 @@ export default function AllFilters() {
   // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
-  const [filtersList, setFiltersList] = useState(filterOptions);
+  const [filtersList, setFiltersList] = useState(carsFilters);
 
   const handleUpdateFilter = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
@@ -69,7 +71,8 @@ export default function AllFilters() {
   const handleResultCount = async () => {
     const newFilters = {};
     Object.entries(filters).forEach((filter) => {
-      newFilters[filter[0]] = filter[1].value || filter[1]._id;
+      newFilters[filter[0]] =
+        typeof filter[1] === "object" ? filter[1].value || filter[1]._id : filter[1];
     });
 
     handleApiRequest(getVehicleCount, { filters: { ...newFilters, status: "approved" } });
@@ -121,9 +124,9 @@ export default function AllFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  // console.log("filters", filters);
+  console.log("filters", filters);
   // console.log("vehiclesCount", vehiclesCount);
-  console.log("vehiclesCountByFilter", vehiclesCountByFilter);
+  // console.log("vehiclesCountByFilter", vehiclesCountByFilter);
 
   return (
     <>
@@ -201,7 +204,7 @@ export default function AllFilters() {
                 <label>Min Mileage</label>
                 <SelectBox
                   placeholder="Max Mileage"
-                  options={mileageList.slice(0, -2)}
+                  options={carsMileageList.slice(0, -2)}
                   value={filters.minMileage || ""}
                   onChange={(value) => {
                     handleUpdateFilter("minMileage", value);
@@ -212,7 +215,7 @@ export default function AllFilters() {
                 <label>Max Mileage</label>
                 <SelectBox
                   placeholder="Max Mileage"
-                  options={mileageList.slice(2)}
+                  options={carsMileageList.slice(2)}
                   value={filters.maxMileage || ""}
                   onChange={(value) => {
                     handleUpdateFilter("maxMileage", value);
@@ -307,7 +310,7 @@ export default function AllFilters() {
                     <Col lg={4} xs={6} className="d-flex align-items-center my-2">
                       <input
                         type="radio"
-                        name="fuelType"
+                        name="exteriorColor"
                         id={color.value}
                         onChange={() => handleUpdateFilter("exteriorColor", color)}
                       />
@@ -335,7 +338,7 @@ export default function AllFilters() {
                 <div className="w-100">
                   <label>Seat</label>
                   <Select
-                    options={seatOptions}
+                    options={carsSeatOptions}
                     components={{
                       IndicatorSeparator: () => null,
                     }}
@@ -350,7 +353,7 @@ export default function AllFilters() {
                 <div className="w-100">
                   <label>Boot Space</label>
                   <Select
-                    options={bootSpaceOptions}
+                    options={carsBootSpaceOptions}
                     components={{
                       IndicatorSeparator: () => null,
                     }}
@@ -370,6 +373,21 @@ export default function AllFilters() {
                     value={filters.gearBox}
                     onChange={(selected) => {
                       handleUpdateFilter("gearBox", selected);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="d-flex justify-content-between row my-2 gap-10">
+                <div className="col-6 pe-0">
+                  <label>Driver Position</label>
+                  <Select
+                    options={driverPositionsOptions}
+                    components={{
+                      IndicatorSeparator: () => null,
+                    }}
+                    value={filters.driverPosition}
+                    onChange={(selected) => {
+                      handleUpdateFilter("driverPosition", selected);
                     }}
                   />
                 </div>
@@ -410,15 +428,15 @@ export default function AllFilters() {
               <legend>Running Cost</legend>
               <div className="d-flex justify-content-between my-2 gap-10">
                 <div className="w-100">
-                  <label>Driver Position</label>
+                  <label>Fuel Consumption</label>
                   <Select
-                    options={driverPositions}
+                    options={fuelConsumtionOptions}
                     components={{
                       IndicatorSeparator: () => null,
                     }}
-                    value={filters.driverPosition}
+                    value={filters.fuelConsumtion}
                     onChange={(selected) => {
-                      handleUpdateFilter("driverPosition", selected);
+                      handleUpdateFilter("fuelConsumtion", selected);
                     }}
                   />
                 </div>

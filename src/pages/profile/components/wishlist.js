@@ -16,7 +16,7 @@ export default function Wishlist() {
     handleWishlist();
   }, []);
 
-  console.log("Wishlist", wishlist);
+  // console.log("Wishlist", wishlist);
 
   return (
     <>

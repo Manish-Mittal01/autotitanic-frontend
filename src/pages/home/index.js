@@ -5,7 +5,7 @@ import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllMake } from "../../redux/makeAndModel/thunk";
 import HeroSection from "../../components/heroSection";
 import CarsList from "./components/carsList";
-import { selectFilters } from "../../redux/filters/slice";
+import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import { useNavigate } from "react-router-dom";
 import Gallery from "../../components/gallery";
 import { isArray } from "../../utils/dataTypes";
@@ -33,6 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     handleMakeList();
+    dispatch(resetFilters());
   }, []);
 
   // console.log("allMakes", allMakes);
