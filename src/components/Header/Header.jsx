@@ -57,7 +57,13 @@ const Header = ({ sidebar, setSidebar }) => {
         onMouseOver={() => setShowMenu(i)}
         onMouseLeave={() => setShowMenu(false)}
       >
-        <p className="navLinkText">
+        <p
+          className="navLinkText"
+          onClick={() => {
+            navigate(`/${title.value}`);
+            setShowMenu(false);
+          }}
+        >
           {title.label} <DownArrow width={8} height={8} />
         </p>
         {showMenu === i && title.label !== "Rentals" && (
@@ -170,7 +176,7 @@ const Header = ({ sidebar, setSidebar }) => {
                     className="headerPostBtn border-0 text-nowrap"
                     onClick={() => {
                       if (isUserLoggedin()) {
-                        navigate("/cars/sell");
+                        navigate("postAdvert");
                       } else {
                         navigate("/login");
                       }

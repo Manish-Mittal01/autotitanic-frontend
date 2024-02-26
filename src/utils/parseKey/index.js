@@ -1,6 +1,6 @@
 export default function parseKey(key) {
   const text = key.toString() || "";
-  return text.slice(0, 1).toUpperCase() + text.slice(1);
+  return text.slice(0, 1).toUpperCase() + text.slice(1) || "";
 }
 
 export const parseCamelKey = (inputString) => {
@@ -9,5 +9,5 @@ export const parseCamelKey = (inputString) => {
 
   let outputString = splitString.charAt(0).toUpperCase() + splitString.slice(1);
 
-  return outputString;
+  return outputString || "";
 };

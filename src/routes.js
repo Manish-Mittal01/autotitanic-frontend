@@ -2,6 +2,7 @@ import SuccessScreen from "./components/successScreen";
 import Login from "./pages/AuthPage/Login/Index";
 import Register from "./pages/AuthPage/register";
 import ResetPassword from "./pages/AuthPage/resetPassword";
+import SellVehicle from "./pages/SellVehicle";
 import AllFilters from "./pages/allFIlters";
 import CompareList from "./pages/compareList";
 import ContentPage from "./pages/contentPages";
@@ -13,16 +14,12 @@ import MyItems from "./pages/profile/components/myItems";
 import MyProfile from "./pages/profile/components/profile";
 import Wishlist from "./pages/profile/components/wishlist";
 import VehicleDetails from "./pages/vehicleDetails";
-import VehiclesList from "./pages/vehiclesList";
+import * as Path from "./routePath";
 
 export const publicRoutes = [
   {
-    path: "/home",
+    path: Path.home,
     element: <Home />,
-  },
-  {
-    path: "/cars",
-    element: <VehiclesList />,
   },
   {
     path: "/page/:pageId",
@@ -46,6 +43,10 @@ export const privateRoutes = [
   {
     path: "/CompareList",
     element: <CompareList />,
+  },
+  {
+    path: "/postAdvert",
+    element: <SellVehicle />,
   },
   {
     path: "/profile",

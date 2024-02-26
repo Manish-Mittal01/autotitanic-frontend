@@ -114,8 +114,6 @@ export default function CarFilters() {
   }, [allMakes, allModels, allCountries, allCities, pathname]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  console.log("category", category);
-
   return (
     <>
       <div className="border rounded py-3">

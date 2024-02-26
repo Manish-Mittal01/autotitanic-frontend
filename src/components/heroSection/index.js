@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import africaFlag from "../../Assets/Images/africa-flag.png";
 import { isArray } from "../../utils/dataTypes";
 import { handleApiRequest } from "../../services/handleApiRequest";
@@ -12,9 +12,11 @@ import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import SelectBox from "../selectBox";
 import { preventMinus } from "../../utils";
 import { handlePopularCarsMakeList } from "../../utils/filters/cars";
+import parseKey from "../../utils/parseKey";
 // import { handlePopularMakeList } from "../../utils/filters";
 
 export default function HeroSection({ showFilterBox = true }) {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
@@ -37,7 +39,7 @@ export default function HeroSection({ showFilterBox = true }) {
   };
 
   const handleMakeList = async () => {
-    handleApiRequest(getAllMake);
+    handleApiRequest(getAllMake, { type: pathname.replace("/", "") });
   };
 
   const handleModelList = async () => {
@@ -53,6 +55,7 @@ export default function HeroSection({ showFilterBox = true }) {
       minPrice: filters.minPrice?.value,
       maxPrice: filters.maxPrice?.value,
       status: "approved",
+      type: pathname.replace("/", ""),
     };
     handleApiRequest(getVehicleCount, { filters: request });
   };
@@ -62,7 +65,7 @@ export default function HeroSection({ showFilterBox = true }) {
       handleCountryList();
       handleMakeList();
     }
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (showFilterBox) handleResultCount();
@@ -107,7 +110,9 @@ export default function HeroSection({ showFilterBox = true }) {
           className="searchBoxWrapper bg-white p-4 rounded mx-4"
           style={{ display: showFilterBox ? "" : "none" }}
         >
-          <h5 className="text-center">Find your dream Car</h5>
+          <h5 className="text-center">
+            Find your dream {parseKey(pathname.replace("/", "")?.slice(0, -1))}
+          </h5>
           <SelectBox
             isSearchable={false}
             placeholder="Select Country"
@@ -197,7 +202,8 @@ export default function HeroSection({ showFilterBox = true }) {
           </div>
           <div className="text-center my-3">
             <Button variant="danger" onClick={() => navigate("/cars")}>
-              Search {vehiclesCount.data?.totalCount?.toLocaleString()} Cars
+              Search {vehiclesCount.data?.totalCount?.toLocaleString()}{" "}
+              {parseKey(pathname.replace("/", ""))}
             </Button>
           </div>
           <div className="d-flex justify-content-between">

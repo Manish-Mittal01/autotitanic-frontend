@@ -3,8 +3,11 @@ import { useSelector } from "react-redux";
 import { getFeaturedList, getRecentList } from "../../../redux/vehicles/thunk";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import ListCrousel from "./listCrousel";
+import { useLocation } from "react-router-dom";
+import parseKey from "../../../utils/parseKey";
 
 function CarsList() {
+  const { pathname } = useLocation();
   const featuredList = useSelector((state) => state.vehicles.featuredList);
   const recentList = useSelector((state) => state.vehicles.recentList);
 
@@ -13,6 +16,7 @@ function CarsList() {
       filters: {
         isFeatured: true,
         status: "approved",
+        type: pathname.replace("/", ""),
       },
       paginationDetails: { page: 1, limit: 240 },
     };
@@ -24,6 +28,7 @@ function CarsList() {
       filters: {
         status: "approved",
         isFeatured: false,
+        type: pathname.replace("/", ""),
       },
       paginationDetails: { page: 1, limit: 180, sortBy: "createdAt", order: -1 },
     };
@@ -33,7 +38,7 @@ function CarsList() {
   useEffect(() => {
     handleRecentList();
     handleFeaturedList();
-  }, []);
+  }, [pathname]);
 
   // console.log("splitList", splitList(recentList.data?.items, 4, 5));
   // console.log("recentList", recentList);
@@ -50,7 +55,9 @@ function CarsList() {
         (980 x 120)
       </div>
 
-      <h4 className="drakColor my-2 text-center">Recently Posted Cars</h4>
+      <h4 className="drakColor my-2 text-center">
+        Recently Posted {parseKey(pathname.replace("/", ""))}
+      </h4>
       <ListCrousel dataList={recentList.data?.items || []} rowsCount={12} rowSize={20} />
     </>
   );

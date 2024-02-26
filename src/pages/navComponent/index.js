@@ -1,17 +1,19 @@
 import React from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import VehiclesList from "../vehiclesList";
-import { useSelector } from "react-redux";
-import SellVehicle from "../SellVehicle";
+import { categories } from "../../utils";
+import Home from "../home";
 
 export default function NavComponent() {
+  const { pathname } = useLocation();
   const { categoryFilter } = useParams();
-  const { loggedinUser } = useSelector((state) => state.auth);
+
+  const categoryHome = categories.find((category) => category.value === pathname?.replace("/", ""));
 
   return categoryFilter === "new" || categoryFilter === "used" || categoryFilter === "all" ? (
     <VehiclesList />
-  ) : loggedinUser?.data?.token ? (
-    <SellVehicle />
+  ) : categoryHome ? (
+    <Home />
   ) : (
     <Navigate to="/login" />
   );

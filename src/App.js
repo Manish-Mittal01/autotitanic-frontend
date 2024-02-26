@@ -57,11 +57,14 @@ function App() {
           )}
 
           {categories.map((category) => (
-            <Route
-              key={category.value}
-              path={`${category.value}/:categoryFilter`}
-              element={<NavComponent />}
-            />
+            <>
+              <Route key={category.value} path={`${category.value}`} element={<NavComponent />} />
+              <Route
+                key={category.value}
+                path={`${category.value}/:categoryFilter`}
+                element={<NavComponent />}
+              />
+            </>
           ))}
           <Route path={"*"} element={<h1>Page not found</h1>} />
         </Route>

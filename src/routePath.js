@@ -1,0 +1,15 @@
+export const home = "/home";
+export const contentPage = "/page";
+export const contactUs = "/contactus";
+export const allFilters = "/allFilters";
+export const details = "/details";
+export const CompareList = "/CompareList";
+export const postAdvert = "/postAdvert";
+export const profile = "/profile";
+export const successMsg = "/successMsg";
+export const myWishlist = "/my-wishlist";
+export const myItems = "/my-items";
+export const changePassword = "/change-password";
+export const login = "/login";
+export const register = "/register";
+export const resetPassword = "/resetPassword";
