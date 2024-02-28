@@ -27,6 +27,7 @@ import isUserLoggedin from "../../utils/isUserLoggedin";
 import ListCrousel from "../home/components/listCrousel";
 import { sellerDetails } from "../../utils/filters/common";
 import { carsDetailsList } from "../../utils/filters/cars";
+import { vansDetailsList } from "../../utils/filters/vans";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -37,6 +38,7 @@ export default function VehicleDetails() {
   const { userProfile } = useSelector((state) => state.profile);
   const detail = vehicleDetails.data;
   const [action, setAction] = useState(null);
+  const [detailsList, setDetailsList] = useState([]);
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -100,7 +102,17 @@ export default function VehicleDetails() {
     }
   }, [detail]);
 
-  //   console.log("vehicleDetails", vehicleDetails);
+  useEffect(() => {
+    if (vehicleDetails.data) {
+      if (vehicleDetails.data.type === "cars") {
+        setDetailsList(carsDetailsList);
+      } else if (vehicleDetails.data.type === "vans") {
+        setDetailsList(vansDetailsList);
+      }
+    }
+  }, [vehicleDetails]);
+
+  // console.log("vehicleDetails", vehicleDetails);
   // console.log("relatedVehicles", relatedVehicles);
 
   return (
@@ -185,7 +197,7 @@ export default function VehicleDetails() {
                 <p> Key Vehicle Details</p>
               </h6>
               <div className="p-3">
-                {carsDetailsList?.map((key) => (
+                {detailsList?.map((key) => (
                   <Row className="my-2">
                     <Col xs={5} className="darkColor small fw-bold">
                       {key.label}

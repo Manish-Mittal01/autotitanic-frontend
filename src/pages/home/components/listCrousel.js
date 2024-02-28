@@ -102,10 +102,23 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize, classNa
     return { ...settings, responsive: responsiveArray };
   };
 
+  console.log(
+    "{splitList(dataList, rowsCount / 2, rowSize * 2)",
+    splitList(dataList, rowsCount / 2, rowSize * 2)
+  );
+
   return (
     <>
       {splitList(dataList, rowsCount / 2, rowSize * 2).map((rows, i) => {
-        if ((rows.length === rowSize && i === 0) || rows.length > rowSize) {
+        {
+          console.log("rows", rows, rowSize);
+        }
+
+        if (
+          (rows.length === rowSize && i === 0) ||
+          rows.length > rowSize ||
+          rows.length < rowSize
+        ) {
           return (
             <Row
               key={i + "parent"}

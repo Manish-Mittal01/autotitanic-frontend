@@ -65,7 +65,7 @@ export default function MyProfile() {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <Button variant="danger" onClick={() => navigate("/cars/sell")}>
+        <Button variant="danger" onClick={() => navigate("/postAdvert")}>
           Post an Advert
         </Button>
         {!updatingProfile ? (

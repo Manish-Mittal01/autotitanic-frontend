@@ -13,3 +13,4 @@ export const changePassword = "/change-password";
 export const login = "/login";
 export const register = "/register";
 export const resetPassword = "/resetPassword";
+export const cars = "/cars";

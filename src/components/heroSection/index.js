@@ -201,7 +201,7 @@ export default function HeroSection({ showFilterBox = true }) {
             />
           </div>
           <div className="text-center my-3">
-            <Button variant="danger" onClick={() => navigate("/cars")}>
+            <Button variant="danger" onClick={() => navigate(`${pathname}/all`)}>
               Search {vehiclesCount.data?.totalCount?.toLocaleString()}{" "}
               {parseKey(pathname.replace("/", ""))}
             </Button>

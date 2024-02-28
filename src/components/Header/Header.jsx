@@ -137,7 +137,7 @@ const Header = ({ sidebar, setSidebar }) => {
                 </Button>
               </div>
               <div className="">
-                <Link to="/home" className="h-100">
+                <Link to="/cars" className="h-100">
                   <img src={mainLogo} alt="" className="img-fluid" style={{ height: 30 }} />
                 </Link>
               </div>

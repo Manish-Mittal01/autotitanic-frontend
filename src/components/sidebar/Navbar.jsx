@@ -77,15 +77,6 @@ const Navbar = ({ sidebar, setSidebar }) => {
                                 New {category.label}
                               </Link>
                             </li>
-                            <li className="py-1">
-                              <Link
-                                to={`${category.value}/sell`}
-                                className="d-flex align-items-center"
-                                onClick={handleSidebar}
-                              >
-                                Sell your {category.label?.slice(0, -1)}
-                              </Link>
-                            </li>
                           </>
                         ) : (
                           category.label === "Rentals" &&

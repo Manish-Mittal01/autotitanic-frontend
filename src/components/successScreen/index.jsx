@@ -10,7 +10,7 @@ export default function SuccessScreen() {
       <h5>Your post has been sent for review</h5>
       <h6>It will go live in 24 hours once approved</h6>
       <p className="mb-5">
-        <Link to="/home">Go to Home</Link>
+        <Link to={"/cars"}>Go to Home</Link>
       </p>
     </div>
   );

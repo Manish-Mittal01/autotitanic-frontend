@@ -133,6 +133,8 @@ export const PostStepOne = ({
   const { userProfile } = useSelector((state) => state.profile);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
 
+  const supportedFileTypes = ["jpg", "jpeg", "png"];
+
   const handleChange = (name, value) => {
     setPostDetails((prev) => {
       if (name === "type") {
@@ -155,6 +157,9 @@ export const PostStepOne = ({
     const files = e.target.files;
     const imageUrls = [];
     for (let file of files) {
+      if (!supportedFileTypes.includes(file.type?.split("/")?.[1]))
+        return errorMsg("Invalid file type");
+
       // console.log("file", file);
       if (file.size > 5 * 1000 * 1000) return;
       const imageUrl = URL.createObjectURL(file);
@@ -257,8 +262,11 @@ export const PostStepOne = ({
     }
   }, [postDetails.type]);
 
-  const proceedToNextStep = postDetails.country && postDetails.city && postDetails.type;
-  // &&    (localImages?.length >= 5 || localImages?.length <= 20);
+  const proceedToNextStep =
+    postDetails.country &&
+    postDetails.city &&
+    postDetails.type &&
+    (localImages?.length >= 5 || localImages?.length <= 20);
 
   //   console.log("postDetails.media", postDetails.media);
   //   console.log("proceedToNextStep", proceedToNextStep);

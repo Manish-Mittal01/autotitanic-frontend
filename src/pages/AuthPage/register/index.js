@@ -143,7 +143,7 @@ const Register = () => {
             <div className="row justify-content-center">
               <div className="col-lg-5 col-md-6 d-flex flex-column align-items-center justify-content-center">
                 <div className="d-flex justify-content-center py-4">
-                  <Link to="/home" className="logo d-flex align-items-center w-auto">
+                  <Link to="/cars" className="logo d-flex align-items-center w-auto">
                     <img src={mainLogo} alt="" style={{ maxHeight: 100 }} />
                   </Link>
                 </div>

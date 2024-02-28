@@ -164,37 +164,26 @@ export const vansFilters = [
     filterType: "normal",
   },
   {
-    label: "Engine Size",
-    name: "engineSize",
-    filterOptions: engineSizeOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Engine Power",
-    name: "enginePower",
-    filterOptions: vansEnginePowerOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Door",
-    name: "door",
-    filterOptions: doorOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Exterior Color",
-    name: "exteriorColor",
-    filterOptions: colorsList,
-    filterType: "normal",
-  },
-  { label: "Seat", name: "seat", filterOptions: vansSeatOptions, filterType: "normal" },
-  {
     label: "Driver Position",
     name: "driverPosition",
     filterOptions: driverPositionsOptions,
     filterType: "normal",
   },
 
+  {
+    label: "Door",
+    name: "door",
+    filterOptions: doorOptions,
+    filterType: "normal",
+  },
+
+  { label: "Seat", name: "seat", filterOptions: vansSeatOptions, filterType: "normal" },
+  {
+    label: "Exterior Color",
+    name: "exteriorColor",
+    filterOptions: colorsList,
+    filterType: "normal",
+  },
   {
     label: "Gear Box",
     name: "gearBox",
@@ -208,15 +197,27 @@ export const vansFilters = [
     filterType: "normal",
   },
   {
+    label: "Fuel Type",
+    name: "fuelType",
+    filterOptions: fuelTypeOptions,
+    filterType: "normal",
+  },
+  {
     label: "Acceleration",
     name: "accelration",
     filterOptions: accelerationOptions,
     filterType: "normal",
   },
   {
-    label: "Fuel Type",
-    name: "fuelType",
-    filterOptions: fuelTypeOptions,
+    label: "Engine Size",
+    name: "engineSize",
+    filterOptions: engineSizeOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Engine Power",
+    name: "enginePower",
+    filterOptions: vansEnginePowerOptions,
     filterType: "normal",
   },
   {
@@ -240,13 +241,14 @@ export const vansDetailsList = [
   { value: "driverPosition", label: "Driver Position" },
   { value: "gearBox", label: "Gear Box" },
   { value: "engineSize", label: "Engine Size" },
+  { value: "enginePower", label: "Engine Power" },
   { value: "mileage", label: "Mileage" },
   { value: "fuelType", label: "Fuel Type" },
   { value: "seat", label: "Seats" },
   { value: "door", label: "Doors" },
   { value: "exteriorColor", label: "Colour" },
-  { value: "bootSpace", label: "Boot Space" },
   { value: "accelration", label: "Acceleration" },
+  { value: "wheelBase", label: "Wheel Base" },
   { value: "co2Emission", label: "CO2 Emission" },
 ];
 

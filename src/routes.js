@@ -18,10 +18,6 @@ import * as Path from "./routePath";
 
 export const publicRoutes = [
   {
-    path: Path.home,
-    element: <Home />,
-  },
-  {
     path: "/page/:pageId",
     element: <ContentPage />,
   },
