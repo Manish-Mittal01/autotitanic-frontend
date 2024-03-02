@@ -328,12 +328,7 @@ export const PostStepOne = ({
             </span>
           }
           options={
-            allCities.data?.items
-              ? [
-                  ...allCities.data?.items,
-                  //  { _id: "other", name: "Other" }
-                ]
-              : []
+            allCities.data?.items ? [...allCities.data?.items, { _id: "other", name: "Other" }] : []
           }
           value={postDetails.city || ""}
           getOptionLabel={(option) => option.name}
@@ -346,8 +341,8 @@ export const PostStepOne = ({
             type="text"
             className="form-control my-3"
             placeholder="Enter city name"
-            value={postDetails.city?._id === "other" ? "" : postDetails.city}
-            onChange={(e) => handleChange("city", e.target.value)}
+            value={postDetails.city?._id === "other" ? postDetails.newCity : ""}
+            onChange={(e) => handleChange("newCity", e.target.value)}
           />
         )}
 
@@ -447,6 +442,10 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     if (Object.values(myErrors || {}).filter((item) => item).length > 0) {
       setErrors(myErrors);
       return;
+    }
+
+    if (request.newCity && request.city === "other") {
+      request.city = request.newCity;
     }
 
     let response = {};

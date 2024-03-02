@@ -119,7 +119,7 @@ export const bikesPostFeatures = [
   },
 ];
 
-export const carsDetailsList = [
+export const bikesDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "bodyStyle", label: "Body" },

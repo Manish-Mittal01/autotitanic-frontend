@@ -28,6 +28,7 @@ import ListCrousel from "../home/components/listCrousel";
 import { sellerDetails } from "../../utils/filters/common";
 import { carsDetailsList } from "../../utils/filters/cars";
 import { vansDetailsList } from "../../utils/filters/vans";
+import { bikesDetailsList } from "../../utils/filters/bikes";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -108,6 +109,8 @@ export default function VehicleDetails() {
         setDetailsList(carsDetailsList);
       } else if (vehicleDetails.data.type === "vans") {
         setDetailsList(vansDetailsList);
+      } else if (vehicleDetails.data.type === "bikes") {
+        setDetailsList(bikesDetailsList);
       }
     }
   }, [vehicleDetails]);
