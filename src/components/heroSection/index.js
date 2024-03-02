@@ -97,12 +97,6 @@ export default function HeroSection({ showFilterBox = true }) {
     </div>
   );
 
-  // console.log("filters", filters);
-  //   console.log("allCountries", allCountries);
-  // console.log("allMakes", allMakes);
-  //   console.log("allModels", allModels);
-  // console.log("vehiclesCount", vehiclesCount);
-
   return (
     <div className="mx-0 mx-lg-2">
       <section className="heroSectionWrapper" style={{ minHeight: !showFilterBox ? 250 : "" }}>
@@ -210,7 +204,8 @@ export default function HeroSection({ showFilterBox = true }) {
             <u className="text-primary pointer" onClick={() => handleResetFilters()}>
               Reset Filters
             </u>
-            <u className="text-primary pointer" onClick={() => navigate("/allFilters")}>
+
+            <u className="text-primary pointer" onClick={() => navigate(`${pathname}/allFilters`)}>
               More Options
             </u>
           </div>

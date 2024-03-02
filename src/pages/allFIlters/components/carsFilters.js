@@ -38,6 +38,7 @@ import {
   gearBoxOptions,
   getYearList,
 } from "../../../utils/filters/common/options";
+import { getAllMake, getAllModel } from "../../../redux/makeAndModel/thunk";
 
 const bodyTypeOptions = [
   { img: convertible, label: "Convertible", value: "convertible" },
@@ -88,13 +89,28 @@ export default function AllCarsFilters() {
     const response = await handleApiRequest(getVehicleCountByBody, request);
   };
 
+  const handleMakeList = async () => {
+    handleApiRequest(getAllMake, { type: "cars" });
+  };
+
+  const handleModelList = async () => {
+    handleApiRequest(getAllModel, { makeId: filters.make.value, type: "cars" });
+  };
+
   useEffect(() => {
     getVehicleCountByFilter();
+    handleMakeList();
   }, []);
 
   useEffect(() => {
     handleResultCount();
   }, [filters]);
+
+  useEffect(() => {
+    if (filters.make?.value) {
+      handleModelList();
+    }
+  }, [filters.make]);
 
   useEffect(() => {
     const oldFilters = [...filtersList];
@@ -152,7 +168,14 @@ export default function AllCarsFilters() {
             <div className="d-flex justify-content-between my-2 gap-10">
               <div className="w-100">
                 <label>Make</label>
-                <CountryFilter filterType={"make"} />
+                <SelectBox
+                  placeholder="Make"
+                  options={allMakes.data?.items || []}
+                  value={filters.make || ""}
+                  onChange={(selected) => {
+                    handleUpdateFilter("make", { value: selected._id, label: selected.label });
+                  }}
+                />
               </div>
               <div className="w-100">
                 <label>Model</label>

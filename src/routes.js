@@ -26,10 +26,6 @@ export const publicRoutes = [
     element: <ContactUs />,
   },
   {
-    path: "/allFilters",
-    element: <AllFilters />,
-  },
-  {
     path: "/details/:id",
     element: <VehicleDetails />,
   },

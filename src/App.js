@@ -9,6 +9,7 @@ import { categories } from "./utils";
 import NavComponent from "./pages/navComponent";
 import { authRoutes, privateRoutes, publicRoutes } from "./routes";
 import Gallery from "./components/gallery";
+import AllFilters from "./pages/allFIlters";
 
 function App() {
   const { pathname } = useLocation();
@@ -58,6 +59,11 @@ function App() {
 
           {categories.map((category) => (
             <>
+              <Route
+                key={category.value}
+                path={`${category.value}/allFilters`}
+                element={<AllFilters />}
+              />
               <Route key={category.value} path={`${category.value}`} element={<NavComponent />} />
               <Route
                 key={category.value}

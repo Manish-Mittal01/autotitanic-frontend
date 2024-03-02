@@ -12,11 +12,12 @@ import { handleApiRequest } from "../../services/handleApiRequest";
 import { getAllCity, getAllCountry } from "../../redux/countryAndCity/thunk";
 import { getAllMake, getAllModel, getAllVariant } from "../../redux/makeAndModel/thunk";
 import { addVehicle, getVehicleDetails, updateVehicle } from "../../redux/vehicles/thunk";
-import { errorMsg, successMsg } from "../../utils/toastMsg";
+import { errorMsg } from "../../utils/toastMsg";
 import { uploadFile } from "../../redux/common/thunk";
 import parseKey, { parseCamelKey } from "../../utils/parseKey";
 import { carsPostFeatures, handlePopularCarsMakeList } from "../../utils/filters/cars";
 import { vansPostFeatures } from "../../utils/filters/vans";
+import { bikesPostFeatures } from "../../utils/filters/bikes";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -259,6 +260,10 @@ export const PostStepOne = ({
       setFeaturesList(carsPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "vans") {
       setFeaturesList(vansPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "bikes") {
+      setFeaturesList(bikesPostFeatures);
+    } else {
+      setFeaturesList([]);
     }
   }, [postDetails.type]);
 
@@ -284,7 +289,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories.slice(0, 2)}
+          options={categories.slice(0, 3)}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
@@ -511,11 +516,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const myMakes = await handlePopularCarsMakeList();
     setPopularMakes(myMakes);
   }, [allMakes]);
-
-  // console.log("postDetails", postDetails);
-  // console.log("allModels", allModels);
-  // console.log("errors", errors);
-  // console.log("featuresList", featuresList);
 
   return (
     <>

@@ -1,10 +1,10 @@
 export default function parseKey(key) {
-  const text = key.toString() || "";
+  const text = key ? key?.toString() : "";
   return text.slice(0, 1).toUpperCase() + text.slice(1) || "";
 }
 
 export const parseCamelKey = (inputString) => {
-  const string = inputString?.toString() || "";
+  const string = inputString ? inputString?.toString() : "";
   let splitString = string.replace(/([a-z])([A-Z])/g, "$1 $2");
 
   let outputString = splitString.charAt(0).toUpperCase() + splitString.slice(1);

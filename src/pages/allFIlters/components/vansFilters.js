@@ -6,15 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { IoCheckmark } from "react-icons/io5";
 import coupe from "../../../Assets/Images/Coupe.png";
-import convertible from "../../../Assets/Images/Convertible.png";
-import estate from "../../../Assets/Images/Estate.png";
 import camper from "../../../Assets/Images/camper.jpg";
 import boxVan from "../../../Assets/Images/boxVan.jpg";
 import miniBus from "../../../Assets/Images/miniBus.jpg";
 import luton from "../../../Assets/Images/luton.jpg";
 import suv from "../../../Assets/Images/suv.png";
 import SelectBox from "../../../components/selectBox";
-import { carsFilters } from "../../../utils/filters/cars";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import { getVehicleCount, getVehicleCountByBody } from "../../../redux/vehicles/thunk";
@@ -39,6 +36,8 @@ import {
   vansSeatOptions,
   vansWheelBaseOptions,
 } from "../../../utils/filters/vans/options";
+import { vansFilters } from "../../../utils/filters/vans";
+import { getAllMake, getAllModel } from "../../../redux/makeAndModel/thunk";
 
 const bodyTypeOptions = [
   { img: coupe, label: "Coupe", value: "coupe" },
@@ -57,7 +56,7 @@ export default function AllVansFilters() {
   // const { allMakes, allModels, allVariants } = useSelector((state) => state.makeAndModel);
   const { allMakes, allModels } = useSelector((state) => state.makeAndModel);
   const { allCountries, allCities } = useSelector((state) => state.countryAndCity);
-  const [filtersList, setFiltersList] = useState(carsFilters);
+  const [filtersList, setFiltersList] = useState(vansFilters);
 
   const handleUpdateFilter = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
@@ -89,13 +88,28 @@ export default function AllVansFilters() {
     const response = await handleApiRequest(getVehicleCountByBody, request);
   };
 
+  const handleMakeList = async () => {
+    handleApiRequest(getAllMake, { type: "vans" });
+  };
+
+  const handleModelList = async () => {
+    handleApiRequest(getAllModel, { makeId: filters.make.value, type: "vans" });
+  };
+
   useEffect(() => {
     getVehicleCountByFilter();
+    handleMakeList();
   }, []);
 
   useEffect(() => {
     handleResultCount();
   }, [filters]);
+
+  useEffect(() => {
+    if (filters.make?.value) {
+      handleModelList();
+    }
+  }, [filters.make]);
 
   useEffect(() => {
     const oldFilters = [...filtersList];
@@ -153,7 +167,14 @@ export default function AllVansFilters() {
             <div className="d-flex justify-content-between my-2 gap-10">
               <div className="w-100">
                 <label>Make</label>
-                <CountryFilter filterType={"make"} />
+                <SelectBox
+                  placeholder="Make"
+                  options={allMakes.data?.items || []}
+                  value={filters.make || ""}
+                  onChange={(selected) => {
+                    handleUpdateFilter("make", { value: selected._id, label: selected.label });
+                  }}
+                />
               </div>
               <div className="w-100">
                 <label>Model</label>
