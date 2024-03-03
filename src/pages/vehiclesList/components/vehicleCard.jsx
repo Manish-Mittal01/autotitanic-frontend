@@ -217,7 +217,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                     className="mainDarkColor"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/cars/sell?id=${vehicle._id}`, { state: 1 });
+                      navigate(`/postAdvert?id=${vehicle._id}`);
                     }}
                   >
                     Edit

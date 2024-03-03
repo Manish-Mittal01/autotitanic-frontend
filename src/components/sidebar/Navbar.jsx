@@ -45,7 +45,14 @@ const Navbar = ({ sidebar, setSidebar }) => {
               <Accordion defaultActiveKey={1}>
                 {categories.map((category, i) => (
                   <Accordion.Item eventKey={i + 1}>
-                    <Accordion.Header>{category.label}</Accordion.Header>
+                    <Accordion.Header
+                      onClick={() => {
+                        navigate(category.value);
+                        handleSidebar();
+                      }}
+                    >
+                      {category.label}
+                    </Accordion.Header>
                     <Accordion.Body>
                       <ul className="list-unstyled  mb-0">
                         {category.label !== "Rentals" ? (

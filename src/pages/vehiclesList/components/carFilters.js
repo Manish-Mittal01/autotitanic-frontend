@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import { vansFilters } from "../../../utils/filters/vans";
 import parseKey from "../../../utils/parseKey";
 import { bikesFilters } from "../../../utils/filters/bikes";
+import { motorhomesFilters } from "../../../utils/filters/motorhomes";
 
 export default function CarFilters() {
   const { pathname } = useLocation();
@@ -85,6 +86,9 @@ export default function CarFilters() {
           break;
         case "bikes":
           oldFilters = [...bikesFilters];
+          break;
+        case "motorhomes":
+          oldFilters = [...motorhomesFilters];
           break;
         default:
           oldFilters = [...carsFilters];

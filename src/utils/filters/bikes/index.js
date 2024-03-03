@@ -1,11 +1,5 @@
 import { bikesBodyStyleOptions, bikesEnginePowerOptions, bikesFuelTypeOptions } from "./options";
-import {
-  colorsList,
-  conditionOptions,
-  fuelTypeOptions,
-  getYearList,
-  sellerOptions,
-} from "../common/options";
+import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 import { vansMileageList } from "../vans/options";
 
 export const bikesFilters = [

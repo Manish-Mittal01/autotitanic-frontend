@@ -1,10 +1,3 @@
-export const currencySymbols = {
-  USD: "$",
-  INR: "₹",
-  usd: "$",
-  inr: "₹",
-};
-
 export const categories = [
   { value: "cars", label: "Cars" },
   { value: "vans", label: "Vans" },

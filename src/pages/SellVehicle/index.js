@@ -18,6 +18,7 @@ import parseKey, { parseCamelKey } from "../../utils/parseKey";
 import { carsPostFeatures, handlePopularCarsMakeList } from "../../utils/filters/cars";
 import { vansPostFeatures } from "../../utils/filters/vans";
 import { bikesPostFeatures } from "../../utils/filters/bikes";
+import { motorhomesPostFeatures } from "../../utils/filters/motorhomes";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -262,6 +263,8 @@ export const PostStepOne = ({
       setFeaturesList(vansPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "bikes") {
       setFeaturesList(bikesPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "motorhomes") {
+      setFeaturesList(motorhomesPostFeatures);
     } else {
       setFeaturesList([]);
     }
@@ -289,7 +292,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories.slice(0, 3)}
+          options={categories.slice(0, 4)}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
