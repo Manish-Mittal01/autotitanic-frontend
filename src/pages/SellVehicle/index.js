@@ -19,6 +19,7 @@ import { carsPostFeatures, handlePopularCarsMakeList } from "../../utils/filters
 import { vansPostFeatures } from "../../utils/filters/vans";
 import { bikesPostFeatures } from "../../utils/filters/bikes";
 import { motorhomesPostFeatures } from "../../utils/filters/motorhomes";
+import { caravansPostFeatures } from "../../utils/filters/caravans";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -259,6 +260,8 @@ export const PostStepOne = ({
   useEffect(() => {
     if (postDetails.type && postDetails.type?.value === "cars") {
       setFeaturesList(carsPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "caravans") {
+      setFeaturesList(caravansPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "vans") {
       setFeaturesList(vansPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "bikes") {
@@ -292,7 +295,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories.slice(0, 4)}
+          options={categories.slice(0, 5)}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
@@ -518,6 +521,8 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const myMakes = await handlePopularCarsMakeList();
     setPopularMakes(myMakes);
   }, [allMakes]);
+
+  console.log("featuresList", featuresList);
 
   return (
     <>

@@ -1,11 +1,4 @@
-import {
-  bikesBodyStyleOptions,
-  bikesEnginePowerOptions,
-  bikesFuelTypeOptions,
-  caravansAxlesOptions,
-  caravansBirthOptions,
-  caravansMtplmOptions,
-} from "./options";
+import { caravansAxlesOptions, caravansBirthOptions, caravansMtplmOptions } from "./options";
 import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 import { vansMileageList } from "../vans/options";
 import { motorhomesLengthOptions } from "../motorhomes/options";
@@ -89,7 +82,7 @@ export const caravansFilters = [
   },
 ];
 
-export const bikesPostFeatures = [
+export const caravansPostFeatures = [
   { label: "Country", value: "country", options: [], category: ["cars"] },
   { label: "City", value: "city", options: [], category: ["cars"] },
   { label: "Make", value: "make", options: [], category: ["cars"] },
@@ -132,14 +125,9 @@ export const bikesPostFeatures = [
     value: "condition",
     options: conditionOptions,
   },
-  {
-    label: "Exterior Color",
-    value: "exteriorColor",
-    options: colorsList,
-  },
 ];
 
-export const bikesDetailsList = [
+export const caravansDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "length", label: "Length" },

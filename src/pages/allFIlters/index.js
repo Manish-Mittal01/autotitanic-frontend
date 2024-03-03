@@ -5,6 +5,7 @@ import AllVansFilters from "./components/vansFilters";
 import AllBikesFilters from "./components/bikesFilters";
 import { myArr } from "../../utils/constants";
 import AllMotorhomesFilters from "./components/motorhomesFilters";
+import AllCaravansFilters from "./components/caravansFilter";
 
 export default function AllFilters() {
   const { pathname } = useLocation();
@@ -37,6 +38,8 @@ export default function AllFilters() {
 
   return pathname.includes("cars") ? (
     <AllCarsFilters />
+  ) : pathname.includes("caravans") ? (
+    <AllCaravansFilters />
   ) : pathname.includes("vans") ? (
     <AllVansFilters />
   ) : pathname.includes("bikes") ? (
@@ -44,6 +47,6 @@ export default function AllFilters() {
   ) : pathname.includes("motorhomes") ? (
     <AllMotorhomesFilters />
   ) : (
-    <AllVansFilters />
+    <AllCarsFilters />
   );
 }

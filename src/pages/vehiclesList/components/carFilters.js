@@ -15,6 +15,7 @@ import { vansFilters } from "../../../utils/filters/vans";
 import parseKey from "../../../utils/parseKey";
 import { bikesFilters } from "../../../utils/filters/bikes";
 import { motorhomesFilters } from "../../../utils/filters/motorhomes";
+import { caravansFilters } from "../../../utils/filters/caravans";
 
 export default function CarFilters() {
   const { pathname } = useLocation();
@@ -80,6 +81,9 @@ export default function CarFilters() {
       switch (category) {
         case "cars":
           oldFilters = [...carsFilters];
+          break;
+        case "caravans":
+          oldFilters = [...caravansFilters];
           break;
         case "vans":
           oldFilters = [...vansFilters];

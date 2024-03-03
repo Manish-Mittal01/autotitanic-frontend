@@ -30,6 +30,7 @@ import { carsDetailsList } from "../../utils/filters/cars";
 import { vansDetailsList } from "../../utils/filters/vans";
 import { bikesDetailsList } from "../../utils/filters/bikes";
 import { motorhomesDetailsList } from "../../utils/filters/motorhomes";
+import { caravansDetailsList } from "../../utils/filters/caravans";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -114,6 +115,8 @@ export default function VehicleDetails() {
         setDetailsList(bikesDetailsList);
       } else if (vehicleDetails.data.type === "motorhomes") {
         setDetailsList(motorhomesDetailsList);
+      } else if (vehicleDetails.data.type === "caravans") {
+        setDetailsList(caravansDetailsList);
       }
     }
   }, [vehicleDetails]);
