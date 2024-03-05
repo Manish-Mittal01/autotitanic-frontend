@@ -3,6 +3,15 @@ export const bikesBodyStyleOptions = [
   { value: "classic", label: "Classic" },
   { value: "commuter", label: "Commuter" },
   { value: "scotter", label: "Scotter" },
+  { value: "customCruiser", label: "Custom Cruiser" },
+  { value: "enduro", label: "Enduro" },
+  { value: "moped", label: "Moped" },
+  { value: "motocrosser", label: "Motocrosser" },
+  { value: "naked", label: "Naked" },
+  { value: "threeWheeler", label: "Three Wheeler" },
+  { value: "sportsTourer", label: "Sports Tourer" },
+  { value: "superSports", label: "Super Sports" },
+  { value: "unspecified", label: "Unspecified" },
 ];
 
 export const bikesEnginePowerOptions = [

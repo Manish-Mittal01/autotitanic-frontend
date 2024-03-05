@@ -1,28 +1,11 @@
-import {
-  motorhomesBedroomLayoutOptions,
-  motorhomesBirthOptions,
-  motorhomesBodyStyleOptions,
-  motorhomesEndLayoutOptions,
-  motorhomesFuelTypeOptions,
-  motorhomesGearBoxOptions,
-  motorhomesLengthOptions,
-} from "./options";
-import {
-  colorsList,
-  conditionOptions,
-  engineSizeOptions,
-  getYearList,
-  sellerOptions,
-} from "../common/options";
-import { vansMileageList } from "../vans/options";
-import { carsSeatOptions } from "../cars/options";
+import { farmsFuelTypeOptions, farmsUsedHoursOptions } from "../farms/options";
+import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 
-export const motorhomesFilters = [
+export const plantsFilters = [
   { label: "Country", name: "country", filterOptions: [], filterType: "normal" },
   { label: "City", name: "city", filterOptions: [], filterType: "normal" },
   { label: "Make", name: "make", filterOptions: [], filterType: "normal" },
   { label: "Model", name: "model", filterOptions: [], filterType: "normal" },
-  // { label: "Variant", name: "variant", filterOptions: [], filterType: "normal" },
   {
     label: "Price",
     name: "price",
@@ -37,18 +20,7 @@ export const motorhomesFilters = [
     name: "year",
     filterOptions: {
       From: { options: getYearList(), key: "minYear" },
-      // .slice(0, -2), key: "minYear" },
       To: { options: getYearList(), key: "maxYear" },
-      // .slice(2), key: "maxYear" },
-    },
-    filterType: "range",
-  },
-  {
-    label: "Mileage",
-    name: "mileage",
-    filterOptions: {
-      Min: { options: vansMileageList.slice(0, -2), key: "minMileage" },
-      Max: { options: vansMileageList.slice(2), key: "maxMileage" },
     },
     filterType: "range",
   },
@@ -64,18 +36,7 @@ export const motorhomesFilters = [
     filterOptions: sellerOptions,
     filterType: "normal",
   },
-  {
-    label: "Engine Size",
-    name: "engineSize",
-    filterOptions: engineSizeOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Body Type",
-    name: "bodyStyle",
-    filterOptions: motorhomesBodyStyleOptions,
-    filterType: "normal",
-  },
+
   {
     label: "Exterior Color",
     name: "exteriorColor",
@@ -85,48 +46,18 @@ export const motorhomesFilters = [
   {
     label: "Fuel Type",
     name: "fuelType",
-    filterOptions: motorhomesFuelTypeOptions,
+    filterOptions: farmsFuelTypeOptions,
     filterType: "normal",
   },
   {
-    label: "Birth",
-    name: "birth",
-    filterOptions: motorhomesBirthOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Gear Box",
-    name: "gearBox",
-    filterOptions: motorhomesGearBoxOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Belted Seats",
-    name: "seat",
-    filterOptions: carsSeatOptions,
-    filterType: "normal",
-  },
-  {
-    label: "End Layout",
-    name: "endLayout",
-    filterOptions: motorhomesEndLayoutOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Bedroom Layout",
-    name: "bedroomLayout",
-    filterOptions: motorhomesBedroomLayoutOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Length",
-    name: "length",
-    filterOptions: motorhomesLengthOptions,
+    label: "Hours Used",
+    name: "farmsUsedHours",
+    filterOptions: farmsUsedHoursOptions,
     filterType: "normal",
   },
 ];
 
-export const motorhomesPostFeatures = [
+export const plantsPostFeatures = [
   { label: "Country", value: "country", options: [], category: ["cars"] },
   { label: "City", value: "city", options: [], category: ["cars"] },
   { label: "Make", value: "make", options: [], category: ["cars"] },
@@ -138,19 +69,9 @@ export const motorhomesPostFeatures = [
     options: getYearList(),
   },
   {
-    label: " body Style",
-    value: "bodyStyle",
-    options: motorhomesBodyStyleOptions,
-  },
-  {
     label: "Fuel Type",
     value: "fuelType",
-    options: motorhomesFuelTypeOptions,
-  },
-  {
-    label: "Engine Size",
-    value: "engineSize",
-    options: engineSizeOptions,
+    options: farmsFuelTypeOptions,
   },
   {
     label: "Condition",
@@ -163,49 +84,16 @@ export const motorhomesPostFeatures = [
     options: colorsList,
   },
   {
-    label: "Birth",
-    value: "birth",
-    options: motorhomesBirthOptions,
-  },
-  {
-    label: "Gear Box",
-    value: "gearBox",
-    options: motorhomesGearBoxOptions,
-  },
-  {
-    label: "Belted Seats",
-    value: "seat",
-    options: carsSeatOptions,
-  },
-  {
-    label: "End Layout",
-    value: "endLayout",
-    options: motorhomesEndLayoutOptions,
-  },
-  {
-    label: "Bedroom Layout",
-    value: "bedroomLayout",
-    options: motorhomesBedroomLayoutOptions,
-  },
-  {
-    label: "Length",
-    value: "length",
-    options: motorhomesLengthOptions,
+    label: "Hours Used",
+    value: "farmsUsedHours",
+    options: farmsUsedHoursOptions,
   },
 ];
 
-export const motorhomesDetailsList = [
+export const plantsDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
-  { value: "bodyStyle", label: "Body" },
-  { value: "engineSize", label: "Engine Size" },
-  { value: "mileage", label: "Mileage" },
   { value: "fuelType", label: "Fuel Type" },
   { value: "exteriorColor", label: "Colour" },
-  { value: "birth", label: "Birth" },
-  { value: "gearBox", label: "Gear Box" },
-  { value: "seat", label: "Belted Seat" },
-  { value: "endLayout", label: "End Layout" },
-  { value: "bedroomLayout", label: "Bedroom Layout" },
-  { value: "length", label: "Length" },
+  { value: "farmsUsedHours", label: "Used Hours" },
 ];

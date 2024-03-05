@@ -12,8 +12,13 @@ import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import SelectBox from "../selectBox";
 import { preventMinus } from "../../utils";
 import { handlePopularCarsMakeList } from "../../utils/filters/cars";
-import parseKey from "../../utils/parseKey";
+import parseKey, { parseCamelKey } from "../../utils/parseKey";
 // import { handlePopularMakeList } from "../../utils/filters";
+import heroBackground from "../../Assets/Images/caravanHome.jpg";
+import { motorhomesBirthOptions } from "../../utils/filters/motorhomes/options";
+import { getYearList } from "../../utils/filters/common/options";
+import { trucksCategoryOptions } from "../../utils/filters/trucks/options";
+import { caravansBirthOptions } from "../../utils/filters/caravans/options";
 
 export default function HeroSection({ showFilterBox = true }) {
   const { pathname } = useLocation();
@@ -25,6 +30,7 @@ export default function HeroSection({ showFilterBox = true }) {
   const { vehiclesCount } = useSelector((state) => state.vehicles);
 
   const [popularMakes, setPopularMakes] = useState([]);
+  const [heroBanner, setHeroBanner] = useState("../../Assets/Images/hero-image.png");
 
   const handleUpdateFilters = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
@@ -57,6 +63,14 @@ export default function HeroSection({ showFilterBox = true }) {
       status: "approved",
       type: pathname.replace("/", ""),
     };
+    if (pathname.includes("motorhomes")) {
+      request.minYear = filters.minYear?.value;
+      request.birth = filters.birth?.value;
+    } else if (pathname.includes("caravans")) {
+      request.birth = filters.birth?.value;
+    } else if (pathname.includes("trucks")) {
+      request.truckCategory = filters.truckCategory?.value;
+    }
     handleApiRequest(getVehicleCount, { filters: request });
   };
 
@@ -82,6 +96,26 @@ export default function HeroSection({ showFilterBox = true }) {
     setPopularMakes(myMakes);
   }, [allMakes]);
 
+  useEffect(() => {
+    if (pathname === "/cars") {
+      setHeroBanner("../../Assets/Images/hero-image.png");
+    } else if (pathname === "/caravans") {
+      setHeroBanner("../../Assets/Images/caravanHome.jpg");
+    } else if (pathname === "/vans") {
+      setHeroBanner("../../Assets/Images/vanHome.jpg");
+    } else if (pathname === "/farms") {
+      setHeroBanner("../../Assets/Images/farmHome.jpg");
+    } else if (pathname === "/motorhomes") {
+      setHeroBanner("../../Assets/Images/motorhomeHome.jpg");
+    } else if (pathname === "/partAndAccessories") {
+      setHeroBanner("../../Assets/Images/partAccessoriesHome.jpg");
+    } else if (pathname === "/trucks") {
+      setHeroBanner("../../Assets/Images/truckHome.jpg");
+    } else {
+      setHeroBanner("../../Assets/Images/hero-image.png");
+    }
+  }, [pathname]);
+
   const CountryFilterOptions = ({ data, isDisabled, innerProps, ...props }) => {
     return !isDisabled ? (
       <div {...innerProps} className="pointer p-2">
@@ -96,10 +130,16 @@ export default function HeroSection({ showFilterBox = true }) {
       <span>{data.label}</span>
     </div>
   );
-
+  // background-image: url("/public/assets/images/hero-image.png");
   return (
     <div className="mx-0 mx-lg-2">
-      <section className="heroSectionWrapper" style={{ minHeight: !showFilterBox ? 250 : "" }}>
+      <section
+        className="heroSectionWrapper"
+        style={{
+          minHeight: !showFilterBox ? 250 : "",
+          backgroundImage: `url(${heroBanner})`,
+        }}
+      >
         <div
           className="searchBoxWrapper bg-white p-4 rounded mx-4"
           style={{ display: showFilterBox ? "" : "none" }}
@@ -194,10 +234,72 @@ export default function HeroSection({ showFilterBox = true }) {
               }}
             />
           </div>
+
+          {pathname.includes("motorhomes") && (
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <SelectBox
+                classNamePrefix={"makeSelector"}
+                placeholder="Birth"
+                options={motorhomesBirthOptions}
+                value={filters.birth || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("birth", selected);
+                }}
+              />
+              <SelectBox
+                placeholder="Year"
+                options={getYearList()}
+                value={filters.minYear || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("minYear", selected);
+                }}
+              />
+            </div>
+          )}
+          {pathname.includes("caravans") && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Birth"
+              options={caravansBirthOptions}
+              value={filters.birth || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("birth", selected);
+              }}
+            />
+          )}
+          {pathname.includes("trucks") && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Category"
+              options={trucksCategoryOptions}
+              value={filters.truckCategory || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("truckCategory", selected);
+              }}
+            />
+          )}
+
+          {/* {(pathname.includes("trucks") ||
+            pathname.includes("farms") ||
+            pathname.includes("plants")) && (
+            <input
+              type="text"
+              className="form-control"
+              style={{ height: 40 }}
+              placeholder="Enter Keyword"
+              name="keyword"
+              value={filters.keyword || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                handleUpdateFilters("keyword", { value: value, label: value });
+              }}
+            />
+          )} */}
+
           <div className="text-center my-3">
             <Button variant="danger" onClick={() => navigate(`${pathname}/all`)}>
               Search {vehiclesCount.data?.totalCount?.toLocaleString()}{" "}
-              {parseKey(pathname.replace("/", ""))}
+              {parseCamelKey(pathname.replace("/", ""))}
             </Button>
           </div>
           <div className="d-flex justify-content-between">

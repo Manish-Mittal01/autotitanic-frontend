@@ -10,11 +10,17 @@ const filtersSlice = createSlice({
   initialState: initialState,
   reducers: {
     selectFilters: (state, action) => {
+      console.log("first", action.payload);
       return { ...state, filters: { ...state.filters, ...action.payload } };
     },
     resetFilters: (state, action) => {
+      console.log("second", action.payload);
       return {
-        filters: { country: { value: "", label: "Africa", flag: africaFlag }, ...action.payload },
+        ...state,
+        filters: {
+          country: { value: "", label: "Africa", flag: africaFlag },
+          ...(action.payload || {}),
+        },
       };
     },
   },

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import { Fragment, useEffect, useLayoutEffect } from "react";
 import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
 import AOS from "aos";
 import { useSelector } from "react-redux";
@@ -58,19 +58,11 @@ function App() {
           )}
 
           {categories.map((category) => (
-            <>
-              <Route
-                key={category.value}
-                path={`${category.value}/allFilters`}
-                element={<AllFilters />}
-              />
-              <Route key={category.value} path={`${category.value}`} element={<NavComponent />} />
-              <Route
-                key={category.value}
-                path={`${category.value}/:categoryFilter`}
-                element={<NavComponent />}
-              />
-            </>
+            <Fragment key={category.value}>
+              <Route path={`${category.value}/allFilters`} element={<AllFilters />} />
+              <Route path={`${category.value}`} element={<NavComponent />} />
+              <Route path={`${category.value}/:categoryFilter`} element={<NavComponent />} />
+            </Fragment>
           ))}
           <Route path={"*"} element={<h1>Page not found</h1>} />
         </Route>

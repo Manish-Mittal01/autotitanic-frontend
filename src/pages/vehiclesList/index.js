@@ -63,7 +63,7 @@ export default function VehiclesList() {
   };
 
   const handleWishlist = async () => {
-    await handleApiRequest(getWishlist);
+    await handleApiRequest(getWishlist, {}, false);
   };
 
   useEffect(() => {
@@ -74,6 +74,7 @@ export default function VehiclesList() {
 
   useEffect(() => {
     handleWishlist();
+
     return () => {
       dispatch(resetFilters());
     };
@@ -89,13 +90,14 @@ export default function VehiclesList() {
         })
       );
     } else {
+      console.log("category[1]", category[1]);
       dispatch(selectFilters({ condition: "", type: { value: category[1], label: category[1] } }));
     }
   }, [categoryFilter, pathname]);
 
   // console.log("pathname", pathname);
   // console.log("categoryFilter", categoryFilter);
-  // console.log("filters", filters);
+  console.log("filters", filters);
   // console.log("vehiclesList", vehiclesList);
 
   return (
@@ -217,8 +219,6 @@ export default function VehiclesList() {
             ) : (
               <h1 className="text-center my-5">Loading...</h1>
             )}
-
-            {console.log("vehiclesList", vehiclesList)}
 
             <MyPagination
               paginationDetails={paginationDetails}

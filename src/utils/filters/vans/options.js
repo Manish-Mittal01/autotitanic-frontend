@@ -5,6 +5,19 @@ export const vansBodyStyleOptions = [
   { value: "boxVan", label: "Box Van" },
   { value: "camper", label: "Camper" },
   { value: "coupe", label: "Coupe" },
+  { value: "carDerivedVan", label: "Car Derived Van" },
+  { value: "chassisCab", label: "Chassis Cab" },
+  { value: "combiVa", label: "Combi Va" },
+  { value: "curtainSide", label: "Curtain Side" },
+  { value: "dropside", label: "Dropside" },
+  { value: "highRoofVan", label: "High Roof Van" },
+  { value: "mpv", label: "MPV" },
+  { value: "panelVan", label: "Panel Van" },
+  { value: "pickup", label: "Pick-up" },
+  { value: "windowVan", label: "Window Van" },
+  { value: "tipper", label: "Tipper" },
+  { value: "vehicleTransport", label: "Vehicle Transport" },
+  { value: "unspecified", label: "Unspecified" },
 ];
 
 export const vansCabTypeOptions = [

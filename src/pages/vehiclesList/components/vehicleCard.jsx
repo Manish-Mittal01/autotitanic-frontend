@@ -46,6 +46,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
     const response = await handleApiRequest(addToWishlist, { id: vehicle._id });
     if (response?.status) {
       successMsg("Added to Wishlist");
+      handleWishlist();
     }
   };
 

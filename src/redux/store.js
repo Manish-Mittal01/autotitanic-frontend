@@ -16,8 +16,6 @@ const rootReducer = (state, action) => {
   const promiseStatus = split[split?.length - 1];
   const promiseTypes = ["pending", "fulfilled", "rejected"];
   var newState = null;
-  // console.log("my action", action);
-  // console.log("my state", state);
   if (
     split?.length > 2 &&
     promiseTypes?.includes(promiseStatus) &&

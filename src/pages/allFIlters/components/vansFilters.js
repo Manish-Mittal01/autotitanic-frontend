@@ -46,6 +46,18 @@ const bodyTypeOptions = [
   { img: miniBus, label: "Mini Bus", value: "miniBus" },
   { img: luton, label: "Luton", value: "luton" },
   { img: suv, label: "SUV", value: "SUV" },
+  { img: suv, value: "carDerivedVan", label: "Car Derived Van" },
+  { img: suv, value: "chassisCab", label: "Chassis Cab" },
+  { img: suv, value: "combiVa", label: "Combi Va" },
+  { img: suv, value: "curtainSide", label: "Curtain Side" },
+  { img: suv, value: "dropside", label: "Dropside" },
+  { img: suv, value: "highRoofVan", label: "High Roof Van" },
+  { img: suv, value: "mpv", label: "MPV" },
+  { img: suv, value: "panelVan", label: "Panel Van" },
+  { img: suv, value: "pickup", label: "Pick-up" },
+  { img: suv, value: "windowVan", label: "Window Van" },
+  { img: suv, value: "tipper", label: "Tipper" },
+  { img: suv, value: "vehicleTransport", label: "Vehicle Transport" },
 ];
 
 export default function AllVansFilters() {

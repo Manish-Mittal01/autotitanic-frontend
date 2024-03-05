@@ -1,23 +1,17 @@
 import {
-  motorhomesBedroomLayoutOptions,
-  motorhomesBirthOptions,
-  motorhomesBodyStyleOptions,
-  motorhomesEndLayoutOptions,
-  motorhomesFuelTypeOptions,
-  motorhomesGearBoxOptions,
-  motorhomesLengthOptions,
+  trucksAxleOptions,
+  trucksBodyStyleOptions,
+  trucksCabOptions,
+  trucksCategoryOptions,
+  trucksEnginePowerOptions,
+  trucksFuelTypeOptions,
+  trucksGtwOptions,
+  trucksGvwOptions,
 } from "./options";
-import {
-  colorsList,
-  conditionOptions,
-  engineSizeOptions,
-  getYearList,
-  sellerOptions,
-} from "../common/options";
+import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 import { vansMileageList } from "../vans/options";
-import { carsSeatOptions } from "../cars/options";
 
-export const motorhomesFilters = [
+export const trucksFilters = [
   { label: "Country", name: "country", filterOptions: [], filterType: "normal" },
   { label: "City", name: "city", filterOptions: [], filterType: "normal" },
   { label: "Make", name: "make", filterOptions: [], filterType: "normal" },
@@ -65,15 +59,51 @@ export const motorhomesFilters = [
     filterType: "normal",
   },
   {
-    label: "Engine Size",
-    name: "engineSize",
-    filterOptions: engineSizeOptions,
+    label: "Fuel Type",
+    name: "fuelType",
+    filterOptions: trucksFuelTypeOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Engine Power",
+    name: "enginePower",
+    filterOptions: trucksEnginePowerOptions,
     filterType: "normal",
   },
   {
     label: "Body Type",
     name: "bodyStyle",
-    filterOptions: motorhomesBodyStyleOptions,
+    filterOptions: trucksBodyStyleOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Category",
+    name: "truckCategory",
+    filterOptions: trucksCategoryOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Axle",
+    name: "axle",
+    filterOptions: trucksAxleOptions,
+    filterType: "normal",
+  },
+  {
+    label: "GVW",
+    name: "gvw",
+    filterOptions: trucksGvwOptions,
+    filterType: "normal",
+  },
+  {
+    label: "GTW",
+    name: "gtw",
+    filterOptions: trucksGtwOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Cab Type",
+    name: "cabType",
+    filterOptions: trucksCabOptions,
     filterType: "normal",
   },
   {
@@ -82,51 +112,9 @@ export const motorhomesFilters = [
     filterOptions: colorsList,
     filterType: "normal",
   },
-  {
-    label: "Fuel Type",
-    name: "fuelType",
-    filterOptions: motorhomesFuelTypeOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Birth",
-    name: "birth",
-    filterOptions: motorhomesBirthOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Gear Box",
-    name: "gearBox",
-    filterOptions: motorhomesGearBoxOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Belted Seats",
-    name: "seat",
-    filterOptions: carsSeatOptions,
-    filterType: "normal",
-  },
-  {
-    label: "End Layout",
-    name: "endLayout",
-    filterOptions: motorhomesEndLayoutOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Bedroom Layout",
-    name: "bedroomLayout",
-    filterOptions: motorhomesBedroomLayoutOptions,
-    filterType: "normal",
-  },
-  {
-    label: "Length",
-    name: "length",
-    filterOptions: motorhomesLengthOptions,
-    filterType: "normal",
-  },
 ];
 
-export const motorhomesPostFeatures = [
+export const trucksPostFeatures = [
   { label: "Country", value: "country", options: [], category: ["cars"] },
   { label: "City", value: "city", options: [], category: ["cars"] },
   { label: "Make", value: "make", options: [], category: ["cars"] },
@@ -138,74 +126,69 @@ export const motorhomesPostFeatures = [
     options: getYearList(),
   },
   {
-    label: " body Style",
-    value: "bodyStyle",
-    options: motorhomesBodyStyleOptions,
+    label: "Condition",
+    value: "condition",
+    options: conditionOptions,
   },
   {
     label: "Fuel Type",
     value: "fuelType",
-    options: motorhomesFuelTypeOptions,
+    options: trucksFuelTypeOptions,
   },
   {
-    label: "Engine Size",
-    value: "engineSize",
-    options: engineSizeOptions,
+    label: "Engine Power",
+    value: "enginePower",
+    options: trucksEnginePowerOptions,
   },
   {
-    label: "Condition",
-    value: "condition",
-    options: conditionOptions,
+    label: "Body Type",
+    value: "bodyStyle",
+    options: trucksBodyStyleOptions,
+  },
+  {
+    label: "Category",
+    value: "truckCategory",
+    options: trucksCategoryOptions,
+  },
+  {
+    label: "Axle",
+    value: "axle",
+    options: trucksAxleOptions,
+  },
+  {
+    label: "GVW",
+    value: "gvw",
+    options: trucksGvwOptions,
+  },
+  {
+    label: "GTW",
+    value: "gtw",
+    options: trucksGtwOptions,
+  },
+  {
+    label: "Cab Type",
+    value: "cabType",
+    options: trucksCabOptions,
   },
   {
     label: "Exterior Color",
     value: "exteriorColor",
     options: colorsList,
   },
-  {
-    label: "Birth",
-    value: "birth",
-    options: motorhomesBirthOptions,
-  },
-  {
-    label: "Gear Box",
-    value: "gearBox",
-    options: motorhomesGearBoxOptions,
-  },
-  {
-    label: "Belted Seats",
-    value: "seat",
-    options: carsSeatOptions,
-  },
-  {
-    label: "End Layout",
-    value: "endLayout",
-    options: motorhomesEndLayoutOptions,
-  },
-  {
-    label: "Bedroom Layout",
-    value: "bedroomLayout",
-    options: motorhomesBedroomLayoutOptions,
-  },
-  {
-    label: "Length",
-    value: "length",
-    options: motorhomesLengthOptions,
-  },
 ];
 
-export const motorhomesDetailsList = [
+export const trucksDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "bodyStyle", label: "Body" },
-  { value: "engineSize", label: "Engine Size" },
   { value: "mileage", label: "Mileage" },
-  { value: "fuelType", label: "Fuel Type" },
   { value: "exteriorColor", label: "Colour" },
-  { value: "birth", label: "Birth" },
-  { value: "gearBox", label: "Gear Box" },
-  { value: "seat", label: "Belted Seat" },
-  { value: "endLayout", label: "End Layout" },
-  { value: "bedroomLayout", label: "Bedroom Layout" },
-  { value: "length", label: "Length" },
+  { label: "Fuel Type", value: "fuelType" },
+  { label: "Engine Power", value: "enginePower" },
+  { label: "Body Type", value: "bodyStyle" },
+  { label: "Category", value: "truckCategory" },
+  { label: "Axle", value: "axle" },
+  { label: "GVW", value: "gvw" },
+  { label: "GTW", value: "gtw" },
+  { label: "Cab Type", value: "cabType" },
 ];

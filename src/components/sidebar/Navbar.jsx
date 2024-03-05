@@ -46,10 +46,10 @@ const Navbar = ({ sidebar, setSidebar }) => {
                 {categories.map((category, i) => (
                   <Accordion.Item eventKey={i + 1}>
                     <Accordion.Header
-                      onClick={() => {
-                        navigate(category.value);
-                        handleSidebar();
-                      }}
+                    // onClick={() => {
+                    //   navigate(category.value);
+                    //   handleSidebar();
+                    // }}
                     >
                       {category.label}
                     </Accordion.Header>

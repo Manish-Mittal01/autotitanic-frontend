@@ -11,7 +11,7 @@ import { categories } from "../../utils";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getUserProfile } from "../../redux/profile/thunk";
-import { selectFilters } from "../../redux/filters/slice";
+import { resetFilters } from "../../redux/filters/slice";
 import { logoutUser } from "../../redux/auth/slice";
 
 const Header = ({ sidebar, setSidebar }) => {
@@ -29,15 +29,6 @@ const Header = ({ sidebar, setSidebar }) => {
 
   const handleUserProfile = async () => {
     await handleApiRequest(getUserProfile, {}, false);
-  };
-
-  const handleFilters = async (type, condition) => {
-    dispatch(
-      selectFilters({
-        type: { value: type, label: type },
-        condition: { value: condition, label: condition },
-      })
-    );
   };
 
   const handleLogout = () => {
@@ -72,6 +63,7 @@ const Header = ({ sidebar, setSidebar }) => {
               onClick={() => {
                 navigate(`/${title.value}/all`);
                 setShowMenu(false);
+                dispatch(resetFilters());
               }}
             >
               All {title.label}
@@ -80,6 +72,7 @@ const Header = ({ sidebar, setSidebar }) => {
               onClick={() => {
                 navigate(`/${title.value}/used`);
                 setShowMenu(false);
+                dispatch(resetFilters());
               }}
             >
               Used {title.label}
@@ -88,17 +81,11 @@ const Header = ({ sidebar, setSidebar }) => {
               onClick={() => {
                 navigate(`/${title.value}/new`);
                 setShowMenu(false);
+                dispatch(resetFilters());
               }}
             >
               New {title.label}
             </li>
-            {/* <li
-              onClick={() => {
-                navigate(`/${title.value}/sell`);
-              }}
-            >
-              Sell your {title.label?.slice(0, -1)}
-            </li> */}
           </ul>
         )}
         {showMenu === i && title.label === "Rentals" && (

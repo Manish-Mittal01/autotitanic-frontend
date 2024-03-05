@@ -30,6 +30,14 @@ const bodyTypeOptions = [
   { img: commuter, label: "Commuter", value: "commuter" },
   { img: classic, label: "Classic", value: "classic" },
   { img: adventure, label: "Adventure", value: "adventure" },
+  { img: adventure, value: "customCruiser", label: "Custom Cruiser" },
+  { img: adventure, value: "enduro", label: "Enduro" },
+  { img: adventure, value: "moped", label: "Moped" },
+  { img: adventure, value: "motocrosser", label: "Motocrosser" },
+  { img: adventure, value: "naked", label: "Naked" },
+  { img: adventure, value: "threeWheeler", label: "Three Wheeler" },
+  { img: adventure, value: "sportsTourer", label: "Sports Tourer" },
+  { img: adventure, value: "superSports", label: "Super Sports" },
 ];
 
 export default function AllBikesFilters() {

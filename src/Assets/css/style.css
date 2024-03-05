@@ -1689,7 +1689,7 @@ posts-card-wrp .card-cstm .content p {
 
 
 .heroSectionWrapper {
-  background-image: url("/public/assets/images/hero-image.png");
+  /* background-image: url("/public/assets/images/hero-image.png"); */
   background-repeat: no-repeat;
   /* height: 300px; */
   padding-block: 1.5rem;
@@ -2823,6 +2823,7 @@ input:read-only {
   padding: 4px 14px;
   background-color: #4e4eff;
   color: #fff;
+  font-size: 10px;
 }
 
 .selectedThum {

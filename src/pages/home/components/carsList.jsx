@@ -4,7 +4,7 @@ import { getFeaturedList, getRecentList } from "../../../redux/vehicles/thunk";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import ListCrousel from "./listCrousel";
 import { useLocation } from "react-router-dom";
-import parseKey from "../../../utils/parseKey";
+import parseKey, { parseCamelKey } from "../../../utils/parseKey";
 
 function CarsList() {
   const { pathname } = useLocation();
@@ -56,7 +56,7 @@ function CarsList() {
       </div>
 
       <h4 className="drakColor my-2 text-center">
-        Recently Posted {parseKey(pathname.replace("/", ""))}
+        Recently Posted {parseCamelKey(pathname.replace("/", ""))}
       </h4>
       <ListCrousel dataList={recentList.data?.items || []} rowsCount={12} rowSize={20} />
     </>

@@ -20,6 +20,9 @@ import { vansPostFeatures } from "../../utils/filters/vans";
 import { bikesPostFeatures } from "../../utils/filters/bikes";
 import { motorhomesPostFeatures } from "../../utils/filters/motorhomes";
 import { caravansPostFeatures } from "../../utils/filters/caravans";
+import { trucksPostFeatures } from "../../utils/filters/trucks";
+import { farmsPostFeatures } from "../../utils/filters/farms";
+import { plantsPostFeatures } from "../../utils/filters/plants";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -31,7 +34,7 @@ export default function SellVehicle() {
   const [postUploadStep, setPostUploadStep] = useState(state || 1);
   const [postDetails, setPostDetails] = useState({ media: [] });
   const [localImages, setLocalImages] = useState([...postDetails.media]);
-  const [featuresList, setFeaturesList] = useState();
+  const [featuresList, setFeaturesList] = useState([]);
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -81,6 +84,7 @@ export default function SellVehicle() {
   // console.log("postDetails", postDetails);
   // console.log("featuresList", featuresList);
   // console.log("vehicleDetails", vehicleDetails);
+  // console.log("postUploadStep", postUploadStep);
 
   return (
     <>
@@ -268,8 +272,14 @@ export const PostStepOne = ({
       setFeaturesList(bikesPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "motorhomes") {
       setFeaturesList(motorhomesPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "trucks") {
+      setFeaturesList(trucksPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "farms") {
+      setFeaturesList(farmsPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "plants") {
+      setFeaturesList(plantsPostFeatures);
     } else {
-      setFeaturesList([]);
+      setFeaturesList(carsPostFeatures);
     }
   }, [postDetails.type]);
 
@@ -295,7 +305,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories.slice(0, 5)}
+          options={categories.slice(0, 8)}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
