@@ -23,6 +23,7 @@ import { caravansPostFeatures } from "../../utils/filters/caravans";
 import { trucksPostFeatures } from "../../utils/filters/trucks";
 import { farmsPostFeatures } from "../../utils/filters/farms";
 import { plantsPostFeatures } from "../../utils/filters/plants";
+import { partsPostFeatures } from "../../utils/filters/partsAndAccessories";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -278,6 +279,8 @@ export const PostStepOne = ({
       setFeaturesList(farmsPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "plants") {
       setFeaturesList(plantsPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "partAndAccessories") {
+      setFeaturesList(partsPostFeatures);
     } else {
       setFeaturesList(carsPostFeatures);
     }
@@ -305,7 +308,7 @@ export const PostStepOne = ({
               Category<span className="text-danger">*</span>
             </span>
           }
-          options={categories.slice(0, 8)}
+          options={categories}
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
@@ -520,9 +523,15 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     if (postDetails.make && allModels.data) {
       oldFeatures[modelIndex].options = allModels.data.items;
     }
-    // if (postDetails.model && allVariants.data) {
-    //   oldFilters[variantIndex].options = allVariants.data.items;
-    // }
+
+    if (postDetails.partCategory?.value) {
+      const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "partSubCategory");
+      const options = partsSubCategoryOptions.filter(
+        (item) => item.category === postDetails.partCategory.value
+      );
+
+      oldFilters[subCategoryIndex].options = options;
+    }
 
     setFeaturesList(oldFeatures);
   }, [allMakes, allModels, popularMakes]);
@@ -532,7 +541,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     setPopularMakes(myMakes);
   }, [allMakes]);
 
-  console.log("featuresList", featuresList);
+  // console.log("featuresList", featuresList);
 
   return (
     <>
@@ -590,30 +599,33 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               </Col>
             )
         )}
-        <Col md={6} className="my-2">
-          <label htmlFor="" className="form-label mb-0">
-            Mileage (per mile)
-            <Asterik />
-          </label>
-          <div className="input-group has-validation">
-            <input
-              type="number"
-              className={`form-control ${errors.mileage ? "border-danger" : ""}`}
-              style={{ height: 40 }}
-              placeholder="Enter Mileage"
-              name="mileage"
-              value={postDetails.mileage?.value || ""}
-              min={0}
-              onKeyDown={preventMinus}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value.length > 6) return;
-                handleChange("mileage", { value: value, label: value });
-              }}
-            />
-          </div>
-          {errors.mileage && <p className="m-0 text-danger">{errors.mileage}</p>}
-        </Col>
+        {(postDetails.type?.value !== "partAndAccessories" ||
+          postDetails.type !== "partAndAccessories") && (
+          <Col md={6} className="my-2">
+            <label htmlFor="" className="form-label mb-0">
+              Mileage (per mile)
+              <Asterik />
+            </label>
+            <div className="input-group has-validation">
+              <input
+                type="number"
+                className={`form-control ${errors.mileage ? "border-danger" : ""}`}
+                style={{ height: 40 }}
+                placeholder="Enter Mileage"
+                name="mileage"
+                value={postDetails.mileage?.value || ""}
+                min={0}
+                onKeyDown={preventMinus}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length > 6) return;
+                  handleChange("mileage", { value: value, label: value });
+                }}
+              />
+            </div>
+            {errors.mileage && <p className="m-0 text-danger">{errors.mileage}</p>}
+          </Col>
+        )}
         <Col md={6} className="my-2">
           <label htmlFor="" className="form-label mb-0">
             Price

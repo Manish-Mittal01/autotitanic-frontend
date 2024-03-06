@@ -14,7 +14,6 @@ import { preventMinus } from "../../utils";
 import { handlePopularCarsMakeList } from "../../utils/filters/cars";
 import parseKey, { parseCamelKey } from "../../utils/parseKey";
 // import { handlePopularMakeList } from "../../utils/filters";
-import heroBackground from "../../Assets/Images/caravanHome.jpg";
 import { motorhomesBirthOptions } from "../../utils/filters/motorhomes/options";
 import { getYearList } from "../../utils/filters/common/options";
 import { trucksCategoryOptions } from "../../utils/filters/trucks/options";
@@ -98,21 +97,21 @@ export default function HeroSection({ showFilterBox = true }) {
 
   useEffect(() => {
     if (pathname === "/cars") {
-      setHeroBanner("../../Assets/Images/hero-image.png");
+      setHeroBanner("./assets/images/hero-image.png");
     } else if (pathname === "/caravans") {
-      setHeroBanner("../../Assets/Images/caravanHome.jpg");
+      setHeroBanner("./assets/images/caravanHome.jpg");
     } else if (pathname === "/vans") {
-      setHeroBanner("../../Assets/Images/vanHome.jpg");
+      setHeroBanner("./assets/images/vanHome.jpg");
     } else if (pathname === "/farms") {
-      setHeroBanner("../../Assets/Images/farmHome.jpg");
+      setHeroBanner("./assets/images/farmHome.jpg");
     } else if (pathname === "/motorhomes") {
-      setHeroBanner("../../Assets/Images/motorhomeHome.jpg");
+      setHeroBanner("./assets/images/motorhomeHome.jpg");
     } else if (pathname === "/partAndAccessories") {
-      setHeroBanner("../../Assets/Images/partAccessoriesHome.jpg");
+      setHeroBanner("./assets/images/partAccessoriesHome.jpg");
     } else if (pathname === "/trucks") {
-      setHeroBanner("../../Assets/Images/truckHome.jpg");
+      setHeroBanner("./assets/images/truckHome.jpg");
     } else {
-      setHeroBanner("../../Assets/Images/hero-image.png");
+      setHeroBanner("./assets/images/hero-image.png");
     }
   }, [pathname]);
 
