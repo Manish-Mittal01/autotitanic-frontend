@@ -12,14 +12,17 @@ import { preventMinus } from "../../../utils";
 import { carsFilters } from "../../../utils/filters/cars";
 import { useLocation } from "react-router-dom";
 import { vansFilters } from "../../../utils/filters/vans";
-import parseKey from "../../../utils/parseKey";
+import parseKey, { parseCamelKey } from "../../../utils/parseKey";
 import { bikesFilters } from "../../../utils/filters/bikes";
 import { motorhomesFilters } from "../../../utils/filters/motorhomes";
 import { caravansFilters } from "../../../utils/filters/caravans";
 import { trucksFilters } from "../../../utils/filters/trucks";
+import { partsFilters } from "../../../utils/filters/partsAndAccessories";
+import { partsSubCategoryOptions } from "../../../utils/filters/partsAndAccessories/options";
 
 export default function CarFilters() {
   const { pathname } = useLocation();
+  const category = pathname?.split("/")[1];
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { vehiclesList } = useSelector((state) => state.vehicles);
@@ -29,8 +32,6 @@ export default function CarFilters() {
 
   const [showFilterOptions, setShowFilterOptions] = useState(null);
   const [filtersList, setFiltersList] = useState([]);
-
-  const category = pathname?.split("/")[1];
 
   const handleSelectFilter = (name, value, label) => {
     if (name === "make")
@@ -98,21 +99,36 @@ export default function CarFilters() {
         case "trucks":
           oldFilters = [...trucksFilters];
           break;
+        case "partAndAccessories":
+          oldFilters = [...partsFilters];
+          break;
         default:
           oldFilters = [...carsFilters];
           break;
       }
+
       const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
       const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
       // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
       const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
       const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
+      const subCategoryIndex = oldFilters.findIndex((elem) => elem.name === "partSubCategory");
+      const mySubCategory = partsSubCategoryOptions.filter(
+        (elem) => elem.category === filters.partCategory?.value
+      );
 
-      if (allMakes.data) {
-        oldFilters[makeIndex].filterOptions = allMakes.data?.items;
+      if (category !== "partAndAccessories") {
+        if (allMakes.data) {
+          oldFilters[makeIndex].filterOptions = allMakes.data?.items;
+        }
+
+        if (filters.make && allModels.data) {
+          oldFilters[modelIndex].filterOptions = allModels.data.items;
+        }
       }
-      if (filters.make && allModels.data) {
-        oldFilters[modelIndex].filterOptions = allModels.data.items;
+
+      if (partsSubCategoryOptions) {
+        oldFilters[subCategoryIndex].filterOptions = mySubCategory;
       }
       // if (filters.model && allVariants.data) {
       //   oldFilters[variantIndex].filterOptions = allVariants.data.items;
@@ -127,14 +143,15 @@ export default function CarFilters() {
 
       setFiltersList(oldFilters);
     }
-  }, [allMakes, allModels, allCountries, allCities, pathname]);
-  // }, [allMakes, allModels, allVariants, allCountries, allCities]);
+  }, [allMakes, allModels, allCountries, allCities, pathname, filters.partCategory]);
+
+  console.log("filters", filters);
 
   return (
     <>
       <div className="border rounded py-3">
         <h4 className="text-center">
-          {vehiclesList.data?.totalCount} {parseKey(category)} found
+          {vehiclesList.data?.totalCount} {parseCamelKey(category)} found
         </h4>
         <div className="text-center">
           <Button variant="" className="drakColor" onClick={handleResetFilters}>
@@ -160,6 +177,7 @@ export default function CarFilters() {
                     ? "Continent"
                     : filter.label}
                 </span>
+
                 {filter.filterType === "normal" && filter?.filterOptions?.length > 0 ? (
                   <Tooltip
                     text={filters[filter.name]?.label ? `${filters[filter.name]?.label}>` : "Any >"}

@@ -34,7 +34,7 @@ export const partsFilters = [
   {
     label: "Sub Category",
     name: "partSubCategory",
-    filterOptions: partsSubCategoryOptions,
+    filterOptions: [],
     filterType: "normal",
   },
 ];

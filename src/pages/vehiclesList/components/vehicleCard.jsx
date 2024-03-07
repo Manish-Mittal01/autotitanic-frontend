@@ -174,12 +174,22 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   </Button>
                 )}
               </h6>
-              <p className="m-0">{vehicle.make?.label + " " + vehicle.model?.label}</p>
+              <p className="m-0">
+                {vehicle.make?.label ? vehicle.make?.label + " " + vehicle.model?.label : ""}
+              </p>
               <p className={`fw-bold text-danger`}>{vehicle?.title}</p>
               <p className="vehicleCardVehicleDetails mb-3 fw-bold">
-                {vehicle.year} Reg | {parseCamelKey(vehicle.bodyStyle)} | {vehicle.mileage} Miles |{" "}
-                {vehicle.engineSize} | {parseCamelKey(vehicle.gearBox)} |{" "}
-                {parseCamelKey(vehicle.fuelType)}
+                {vehicle.year ? `${vehicle.year} Reg | ` : ""}
+                {vehicle.bodyStyle ? `${parseCamelKey(vehicle.bodyStyle)} | ` : ""}
+                {vehicle.mileage ? `${vehicle.mileage} Miles | ` : ""}
+                {vehicle.engineSize ? `${vehicle.engineSize} | ` : ""}
+                {vehicle.gearBox ? `${parseCamelKey(vehicle.gearBox)} | ` : ""}
+                {vehicle.fuelType ? `${parseCamelKey(vehicle.fuelType)} | ` : ""}
+                {vehicle.type === "partAndAccessories"
+                  ? `${parseCamelKey(vehicle.partCategory)} | ${parseCamelKey(
+                      vehicle.partSubCategory
+                    )}`
+                  : ""}
               </p>
               <div style={{ flex: 1 }} />
               <div className="d-flex align-items-end justify-content-between">

@@ -24,6 +24,7 @@ import { trucksPostFeatures } from "../../utils/filters/trucks";
 import { farmsPostFeatures } from "../../utils/filters/farms";
 import { plantsPostFeatures } from "../../utils/filters/plants";
 import { partsPostFeatures } from "../../utils/filters/partsAndAccessories";
+import { partsSubCategoryOptions } from "../../utils/filters/partsAndAccessories/options";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -444,7 +445,14 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     };
 
     const allKeys = featuresList.map((elem) => elem.value);
-    allKeys.push("price", "mileage", "description", "currency", "title", "type");
+    allKeys.push("price", "description", "currency", "title", "type");
+
+    if (
+      postDetails.type.value !== "partAndAccessories" &&
+      postDetails.type !== "partAndAccessories"
+    ) {
+      allKeys.push("mileage");
+    }
 
     let myErrors = {};
 
@@ -458,13 +466,22 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
       }
     }
 
+    console.log("2222222222222", myErrors);
+
     if (Object.values(myErrors || {}).filter((item) => item).length > 0) {
-      setErrors(myErrors);
-      return;
+      return setErrors(myErrors);
+    } else {
+      setErrors({});
     }
 
     if (request.newCity && request.city === "other") {
       request.city = request.newCity;
+    }
+
+    for (let field of Object.entries(request || {})) {
+      if (!field[1]) {
+        delete request[field[0]];
+      }
     }
 
     let response = {};
@@ -514,34 +531,50 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const modelIndex = oldFeatures.findIndex((elem) => elem.label === "Model");
     // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
 
-    if (allMakes.data && popularMakes) {
+    if (
+      allMakes.data &&
+      popularMakes &&
+      postDetails.type?.value !== "partAndAccessories" &&
+      postDetails.type !== "partAndAccessories"
+    ) {
       oldFeatures[makeIndex].options = [
         { label: "most searched for", options: popularMakes },
         { label: "All makes", options: allMakes.data?.items },
       ];
     }
+
     if (postDetails.make && allModels.data) {
       oldFeatures[modelIndex].options = allModels.data.items;
     }
 
-    if (postDetails.partCategory?.value) {
+    setFeaturesList(oldFeatures);
+  }, [allMakes, allModels, popularMakes]);
+
+  useEffect(() => {
+    const oldFeatures = [...featuresList];
+
+    if (
+      (postDetails.type?.value === "partAndAccessories" ||
+        postDetails.type === "partAndAccessories") &&
+      (postDetails.partCategory?.value || typeof postDetails.partCategory === "string")
+    ) {
       const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "partSubCategory");
       const options = partsSubCategoryOptions.filter(
         (item) => item.category === postDetails.partCategory.value
       );
 
-      oldFilters[subCategoryIndex].options = options;
+      oldFeatures[subCategoryIndex].options = options;
     }
 
     setFeaturesList(oldFeatures);
-  }, [allMakes, allModels, popularMakes]);
+  }, [postDetails.partCategory]);
 
   useEffect(async () => {
     const myMakes = await handlePopularCarsMakeList();
     setPopularMakes(myMakes);
   }, [allMakes]);
 
-  // console.log("featuresList", featuresList);
+  // console.log("errors", errors);
 
   return (
     <>
@@ -599,33 +632,33 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               </Col>
             )
         )}
-        {(postDetails.type?.value !== "partAndAccessories" ||
-          postDetails.type !== "partAndAccessories") && (
-          <Col md={6} className="my-2">
-            <label htmlFor="" className="form-label mb-0">
-              Mileage (per mile)
-              <Asterik />
-            </label>
-            <div className="input-group has-validation">
-              <input
-                type="number"
-                className={`form-control ${errors.mileage ? "border-danger" : ""}`}
-                style={{ height: 40 }}
-                placeholder="Enter Mileage"
-                name="mileage"
-                value={postDetails.mileage?.value || ""}
-                min={0}
-                onKeyDown={preventMinus}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length > 6) return;
-                  handleChange("mileage", { value: value, label: value });
-                }}
-              />
-            </div>
-            {errors.mileage && <p className="m-0 text-danger">{errors.mileage}</p>}
-          </Col>
-        )}
+        {postDetails.type?.value !== "partAndAccessories" &&
+          postDetails.type !== "partAndAccessories" && (
+            <Col md={6} className="my-2">
+              <label htmlFor="" className="form-label mb-0">
+                Mileage (per mile)
+                <Asterik />
+              </label>
+              <div className="input-group has-validation">
+                <input
+                  type="number"
+                  className={`form-control ${errors.mileage ? "border-danger" : ""}`}
+                  style={{ height: 40 }}
+                  placeholder="Enter Mileage"
+                  name="mileage"
+                  value={postDetails.mileage?.value || ""}
+                  min={0}
+                  onKeyDown={preventMinus}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 6) return;
+                    handleChange("mileage", { value: value, label: value });
+                  }}
+                />
+              </div>
+              {errors.mileage && <p className="m-0 text-danger">{errors.mileage}</p>}
+            </Col>
+          )}
         <Col md={6} className="my-2">
           <label htmlFor="" className="form-label mb-0">
             Price
@@ -683,6 +716,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
           </div>
           {errors.description && <p className="m-0 text-danger">{errors.description}</p>}
         </Col>
+
         <Col className="my-2">
           <Button variant="danger" onClick={() => handleCreatePost("pending")}>
             Post Advert

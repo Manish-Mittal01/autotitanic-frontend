@@ -3081,3 +3081,29 @@ legend {
 .makeSelector__group-heading {
   padding: 0 !important;
 }
+
+.filterValue {
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: 12px !important;
+  text-overflow: ellipsis;
+  max-width: 70px;
+}
+
+@media (min-width:1200px) {
+  .filterValue {
+    max-width: 100px;
+  }
+}
+
+@media (min-width:1400px) {
+  .filterValue {
+    max-width: 130px;
+  }
+}
+
+@media (min-width:1600px) {
+  .filterValue {
+    max-width: 150px;
+  }
+}
