@@ -126,9 +126,10 @@ export default function CarFilters() {
           oldFilters[modelIndex].filterOptions = allModels.data.items;
         }
       }
-
-      if (partsSubCategoryOptions) {
-        oldFilters[subCategoryIndex].filterOptions = mySubCategory;
+      if (category === "partAndAccessories") {
+        if (partsSubCategoryOptions) {
+          oldFilters[subCategoryIndex].filterOptions = mySubCategory;
+        }
       }
       // if (filters.model && allVariants.data) {
       //   oldFilters[variantIndex].filterOptions = allVariants.data.items;

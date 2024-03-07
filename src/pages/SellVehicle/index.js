@@ -466,8 +466,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
       }
     }
 
-    console.log("2222222222222", myErrors);
-
     if (Object.values(myErrors || {}).filter((item) => item).length > 0) {
       return setErrors(myErrors);
     } else {
