@@ -93,8 +93,8 @@ const Header = ({ sidebar, setSidebar }) => {
             {categories.map(
               (category, i) =>
                 category.label !== "Rentals" && (
-                  <li onClick={() => navigate(`/${category.label}/rent`)}>
-                    Rent a {category.label.slice(0, -1)}
+                  <li onClick={() => navigate(`/${category.value}/rent`)}>
+                    {category.label.slice(0, -1)} Rentals
                   </li>
                 )
             )}

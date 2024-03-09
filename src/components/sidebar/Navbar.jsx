@@ -44,14 +44,16 @@ const Navbar = ({ sidebar, setSidebar }) => {
             <li>
               <Accordion defaultActiveKey={1}>
                 {categories.map((category, i) => (
-                  <Accordion.Item eventKey={i + 1}>
-                    <Accordion.Header
-                    // onClick={() => {
-                    //   navigate(category.value);
-                    //   handleSidebar();
-                    // }}
-                    >
-                      {category.label}
+                  <Accordion.Item eventKey={i + 1} key={category.value}>
+                    <Accordion.Header>
+                      <span
+                        onClick={() => {
+                          navigate(category.value);
+                          handleSidebar();
+                        }}
+                      >
+                        {category.label}
+                      </span>
                     </Accordion.Header>
                     <Accordion.Body>
                       <ul className="list-unstyled  mb-0">

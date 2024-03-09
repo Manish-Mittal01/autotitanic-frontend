@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Col, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-import { handleApiRequest } from "../../services/handleApiRequest";
-import { getAllMake } from "../../redux/makeAndModel/thunk";
 import HeroSection from "../../components/heroSection";
 import CarsList from "./components/carsList";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";

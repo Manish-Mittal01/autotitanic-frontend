@@ -62,6 +62,7 @@ function App() {
               <Route path={`${category.value}/allFilters`} element={<AllFilters />} />
               <Route path={`${category.value}`} element={<NavComponent />} />
               <Route path={`${category.value}/:categoryFilter`} element={<NavComponent />} />
+              <Route path={`${category.value}/rent`} element={<NavComponent />} />
             </Fragment>
           ))}
           <Route path={"*"} element={<h1>Page not found</h1>} />

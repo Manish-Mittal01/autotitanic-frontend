@@ -7,8 +7,16 @@ import { IoSearch } from "react-icons/io5";
 import { IoCheckmark } from "react-icons/io5";
 import scooter from "../../../Assets/Images/scooterBike.png";
 import commuter from "../../../Assets/Images/commuterBike.png";
-import classic from "../../../Assets/Images/classicBike.png";
+import classic from "../../../Assets/Images/classicBike.jpg";
 import adventure from "../../../Assets/Images/adventureBike.jpg";
+import customCruiser from "../../../Assets/Images/crusierBke.jpg";
+import enduro from "../../../Assets/Images/enduroBike.jpg";
+import moped from "../../../Assets/Images/mopedBike.webp";
+import motocrosser from "../../../Assets/Images/motoCrossBike.webp";
+import naked from "../../../Assets/Images/nakedBike.jpg";
+import threeWheeler from "../../../Assets/Images/threeWheelerBike.jpg";
+import sportsTourer from "../../../Assets/Images/sportTouringBike.webp";
+import superSports from "../../../Assets/Images/superSports.jpg";
 import SelectBox from "../../../components/selectBox";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";
 import { handleApiRequest } from "../../../services/handleApiRequest";
@@ -30,14 +38,14 @@ const bodyTypeOptions = [
   { img: commuter, label: "Commuter", value: "commuter" },
   { img: classic, label: "Classic", value: "classic" },
   { img: adventure, label: "Adventure", value: "adventure" },
-  { img: adventure, value: "customCruiser", label: "Custom Cruiser" },
-  { img: adventure, value: "enduro", label: "Enduro" },
-  { img: adventure, value: "moped", label: "Moped" },
-  { img: adventure, value: "motocrosser", label: "Motocrosser" },
-  { img: adventure, value: "naked", label: "Naked" },
-  { img: adventure, value: "threeWheeler", label: "Three Wheeler" },
-  { img: adventure, value: "sportsTourer", label: "Sports Tourer" },
-  { img: adventure, value: "superSports", label: "Super Sports" },
+  { img: customCruiser, value: "customCruiser", label: "Custom Cruiser" },
+  { img: enduro, value: "enduro", label: "Enduro" },
+  { img: moped, value: "moped", label: "Moped" },
+  { img: motocrosser, value: "motocrosser", label: "Motocrosser" },
+  { img: naked, value: "naked", label: "Naked" },
+  { img: threeWheeler, value: "threeWheeler", label: "Three Wheeler" },
+  { img: sportsTourer, value: "sportsTourer", label: "Sports Tourer" },
+  { img: superSports, value: "superSports", label: "Super Sports" },
 ];
 
 export default function AllBikesFilters() {
@@ -284,7 +292,7 @@ export default function AllBikesFilters() {
                     {filters.bodyStyle?.value === bodyType.value && (
                       <IoCheckmark className="checkIcon" />
                     )}
-                    <img src={bodyType.img} />
+                    <img src={bodyType.img} style={{ aspectRatio: "3/2" }} />
                     <p className="m-0">{bodyType.label}</p>
                     <p>
                       (

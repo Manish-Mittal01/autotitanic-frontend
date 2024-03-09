@@ -25,6 +25,7 @@ import { farmsPostFeatures } from "../../utils/filters/farms";
 import { plantsPostFeatures } from "../../utils/filters/plants";
 import { partsPostFeatures } from "../../utils/filters/partsAndAccessories";
 import { partsSubCategoryOptions } from "../../utils/filters/partsAndAccessories/options";
+import { rentalsPostFeatures } from "../../utils/filters/rental";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -82,11 +83,6 @@ export default function SellVehicle() {
       setLocalImages(postDetails.media);
     }
   }, [postDetails.media]);
-
-  // console.log("postDetails", postDetails);
-  // console.log("featuresList", featuresList);
-  // console.log("vehicleDetails", vehicleDetails);
-  // console.log("postUploadStep", postUploadStep);
 
   return (
     <>
@@ -169,7 +165,6 @@ export const PostStepOne = ({
       if (!supportedFileTypes.includes(file.type?.split("/")?.[1]))
         return errorMsg("Invalid file type");
 
-      // console.log("file", file);
       if (file.size > 5 * 1000 * 1000) return;
       const imageUrl = URL.createObjectURL(file);
       imageUrls.push({ url: imageUrl, type: "image", file: file });
@@ -211,7 +206,6 @@ export const PostStepOne = ({
     let myPosts = [...localImages];
     if (allLocalImages.length > 0) {
       const response = await handleApiRequest(uploadFile, formData);
-      console.log("response.data", response.data);
       if (response.status) {
         myPosts = [...allLiveImages, ...response.data];
       }
@@ -282,23 +276,29 @@ export const PostStepOne = ({
       setFeaturesList(plantsPostFeatures);
     } else if (postDetails.type && postDetails.type?.value === "partAndAccessories") {
       setFeaturesList(partsPostFeatures);
+    } else if (postDetails.type && postDetails.type?.value === "rentals") {
+      setFeaturesList(rentalsPostFeatures);
     } else {
       setFeaturesList(carsPostFeatures);
     }
   }, [postDetails.type]);
 
-  const proceedToNextStep =
+  let proceedToNextStep = false;
+  if (
     postDetails.country &&
     postDetails.city &&
     postDetails.type &&
-    (localImages?.length >= 5 || localImages?.length <= 20);
-
-  //   console.log("postDetails.media", postDetails.media);
-  //   console.log("proceedToNextStep", proceedToNextStep);
-  // console.log("postDetails", postDetails);
-  // console.log("localImages", localImages);
-  // console.log("userProfile", userProfile);
-
+    (localImages?.length >= 5 || localImages?.length <= 20)
+  ) {
+    if (
+      (postDetails.type?.value === "rentals" || postDetails.type === "rentals") &&
+      postDetails?.rentalType
+    ) {
+      proceedToNextStep = true;
+    } else if (postDetails.type?.value !== "rentals" && postDetails.type !== "rentals") {
+      proceedToNextStep = true;
+    }
+  }
   return (
     <>
       <Col md={6} className="sellFeatureBoxWrapper">
@@ -313,6 +313,21 @@ export const PostStepOne = ({
           value={postDetails.type}
           onChange={(selected) => handleChange("type", selected)}
         />
+
+        {postDetails.type?.value === "rentals" && (
+          <SelectBox
+            className="my-3"
+            placeholder={
+              <span>
+                Rental Category<span className="text-danger">*</span>
+              </span>
+            }
+            options={categories.filter((elem) => elem.value !== "rentals")}
+            value={postDetails.rentalType}
+            onChange={(selected) => handleChange("rentalType", selected)}
+          />
+        )}
+
         <SelectBox
           isDisabled
           className="sellFeatureBox my-3"
@@ -475,6 +490,10 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     if (request.newCity && request.city === "other") {
       request.city = request.newCity;
     }
+    if (request.type === "rentals") {
+      request.type = request.rentalType?.value;
+      request.sellOrRent = "rent";
+    }
 
     for (let field of Object.entries(request || {})) {
       if (!field[1]) {
@@ -500,13 +519,21 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
   };
 
   const handleMakeList = async () => {
-    handleApiRequest(getAllMake, { type: postDetails.type?.value || postDetails.type });
+    handleApiRequest(getAllMake, {
+      type:
+        postDetails.type?.value === "rentals" || postDetails.type === "rentals"
+          ? postDetails.rentalType?.value
+          : postDetails.type?.value || postDetails.type,
+    });
   };
 
   const handleModelList = async () => {
     handleApiRequest(getAllModel, {
       makeId: postDetails.make?.value || postDetails.make?._id,
-      type: postDetails.type?.value || postDetails.type,
+      type:
+        postDetails.type?.value === "rentals" || postDetails.type === "rentals"
+          ? postDetails.rentalType?.value
+          : postDetails.type?.value || postDetails.type,
     });
   };
 
@@ -527,6 +554,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const oldFeatures = [...featuresList];
     const makeIndex = oldFeatures.findIndex((elem) => elem.label === "Make");
     const modelIndex = oldFeatures.findIndex((elem) => elem.label === "Model");
+    const fuelTypeIndex = oldFeatures.findIndex((elem) => elem.value === "fuelType");
     // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
 
     if (
@@ -572,8 +600,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     setPopularMakes(myMakes);
   }, [allMakes]);
 
-  // console.log("errors", errors);
-
   return (
     <>
       <Row style={{ maxWidth: 800 }}>
@@ -597,6 +623,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
           </div>
           {errors.title && <p className="m-0 text-danger">{errors.title}</p>}
         </Col>
+
         {featuresList.map(
           (filter, i) =>
             i > 1 &&
@@ -630,6 +657,7 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
               </Col>
             )
         )}
+
         {postDetails.type?.value !== "partAndAccessories" &&
           postDetails.type !== "partAndAccessories" && (
             <Col md={6} className="my-2">
@@ -700,7 +728,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
                   //   .getData()
                   //   .replace(/<[^>]*>/g, "")
                   //   .replace(/\n/g, "").length;
-                  // console.log("length", e.editor.getData().replace(/<[^>]*>/g, ""), textCount);
 
                   setPostDetails((prev) => {
                     return {

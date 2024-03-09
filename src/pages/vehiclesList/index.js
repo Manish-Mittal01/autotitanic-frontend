@@ -97,7 +97,7 @@ export default function VehiclesList() {
 
   // console.log("pathname", pathname);
   // console.log("categoryFilter", categoryFilter);
-  console.log("filters", filters);
+  // console.log("filters", filters);
   // console.log("vehiclesList", vehiclesList);
 
   return (

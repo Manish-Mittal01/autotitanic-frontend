@@ -100,7 +100,7 @@ export default function PostCard({ post }) {
               {parseKey(post?.year)} Reg | {parseKey(post?.gearBox)} | {parseKey(post?.mileage)}{" "}
               Miles
             </p>
-            <p className="m-0 text-danger fw-bold">
+            <p className="m-0 text-danger fw-bold postCardMake">
               {post?.make?.label + " " + post?.model?.label}
             </p>
             <button className="border rounded-pill my-1">Private</button>

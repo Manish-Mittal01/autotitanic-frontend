@@ -19,6 +19,8 @@ import { caravansFilters } from "../../../utils/filters/caravans";
 import { trucksFilters } from "../../../utils/filters/trucks";
 import { partsFilters } from "../../../utils/filters/partsAndAccessories";
 import { partsSubCategoryOptions } from "../../../utils/filters/partsAndAccessories/options";
+import { farmsFilters } from "../../../utils/filters/farms";
+import { plantsFilters } from "../../../utils/filters/plants";
 
 export default function CarFilters() {
   const { pathname } = useLocation();
@@ -102,6 +104,12 @@ export default function CarFilters() {
         case "partAndAccessories":
           oldFilters = [...partsFilters];
           break;
+        case "farms":
+          oldFilters = [...farmsFilters];
+          break;
+        case "plants":
+          oldFilters = [...plantsFilters];
+          break;
         default:
           oldFilters = [...carsFilters];
           break;
@@ -146,7 +154,7 @@ export default function CarFilters() {
     }
   }, [allMakes, allModels, allCountries, allCities, pathname, filters.partCategory]);
 
-  console.log("filters", filters);
+  // console.log("filters", filters);
 
   return (
     <>

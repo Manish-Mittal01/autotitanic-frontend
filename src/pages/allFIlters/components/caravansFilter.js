@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import scooter from "../../../Assets/Images/scooterBike.png";
 import commuter from "../../../Assets/Images/commuterBike.png";
-import classic from "../../../Assets/Images/classicBike.png";
+import classic from "../../../Assets/Images/classicBike.jpg";
 import adventure from "../../../Assets/Images/adventureBike.jpg";
 import SelectBox from "../../../components/selectBox";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";

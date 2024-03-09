@@ -11,6 +11,18 @@ import boxVan from "../../../Assets/Images/boxVan.jpg";
 import miniBus from "../../../Assets/Images/miniBus.jpg";
 import luton from "../../../Assets/Images/luton.jpg";
 import suv from "../../../Assets/Images/suv.png";
+import carDerivedVan from "../../../Assets/Images/carDerivedVan.jpg";
+import chassisCab from "../../../Assets/Images/chassisCab.jpg";
+import combiVa from "../../../Assets/Images/combiVan.jpg";
+import curtainSide from "../../../Assets/Images/curtainSide.jpg";
+import dropside from "../../../Assets/Images/dropSide.jpg";
+import highRoofVan from "../../../Assets/Images/highRoofVan.jpg";
+import mpv from "../../../Assets/Images/mpvVan.jpg";
+import panelVan from "../../../Assets/Images/panelVan.jpg";
+import pickup from "../../../Assets/Images/Pickup.png";
+import windowVan from "../../../Assets/Images/windowVan.jpg";
+import tipper from "../../../Assets/Images/tripperVan.jpg";
+import vehicleTransport from "../../../Assets/Images/vehicleTranspost.jpg";
 import SelectBox from "../../../components/selectBox";
 import { resetFilters, selectFilters } from "../../../redux/filters/slice";
 import { handleApiRequest } from "../../../services/handleApiRequest";
@@ -46,18 +58,18 @@ const bodyTypeOptions = [
   { img: miniBus, label: "Mini Bus", value: "miniBus" },
   { img: luton, label: "Luton", value: "luton" },
   { img: suv, label: "SUV", value: "SUV" },
-  { img: suv, value: "carDerivedVan", label: "Car Derived Van" },
-  { img: suv, value: "chassisCab", label: "Chassis Cab" },
-  { img: suv, value: "combiVa", label: "Combi Va" },
-  { img: suv, value: "curtainSide", label: "Curtain Side" },
-  { img: suv, value: "dropside", label: "Dropside" },
-  { img: suv, value: "highRoofVan", label: "High Roof Van" },
-  { img: suv, value: "mpv", label: "MPV" },
-  { img: suv, value: "panelVan", label: "Panel Van" },
-  { img: suv, value: "pickup", label: "Pick-up" },
-  { img: suv, value: "windowVan", label: "Window Van" },
-  { img: suv, value: "tipper", label: "Tipper" },
-  { img: suv, value: "vehicleTransport", label: "Vehicle Transport" },
+  { img: carDerivedVan, value: "carDerivedVan", label: "Car Derived Van" },
+  { img: chassisCab, value: "chassisCab", label: "Chassis Cab" },
+  { img: combiVa, value: "combiVa", label: "Combi Va" },
+  { img: curtainSide, value: "curtainSide", label: "Curtain Side" },
+  { img: dropside, value: "dropside", label: "Dropside" },
+  { img: highRoofVan, value: "highRoofVan", label: "High Roof Van" },
+  { img: mpv, value: "mpv", label: "MPV" },
+  { img: panelVan, value: "panelVan", label: "Panel Van" },
+  { img: pickup, value: "pickup", label: "Pick-up" },
+  { img: windowVan, value: "windowVan", label: "Window Van" },
+  { img: tipper, value: "tipper", label: "Tipper" },
+  { img: vehicleTransport, value: "vehicleTransport", label: "Vehicle Transport" },
 ];
 
 export default function AllVansFilters() {

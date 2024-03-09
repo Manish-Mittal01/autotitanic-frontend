@@ -3107,3 +3107,9 @@ legend {
     max-width: 150px;
   }
 }
+
+.postCardMake {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

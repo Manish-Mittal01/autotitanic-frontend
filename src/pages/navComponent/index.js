@@ -8,7 +8,7 @@ export default function NavComponent() {
   const { pathname } = useLocation();
   const { categoryFilter } = useParams();
 
-  const categoryHome = categories.find((category) => category.value === pathname?.replace("/", ""));
+  const categoryHome = categories.find((category) => pathname.includes(category.value));
 
   return categoryFilter === "new" || categoryFilter === "used" || categoryFilter === "all" ? (
     <VehiclesList />

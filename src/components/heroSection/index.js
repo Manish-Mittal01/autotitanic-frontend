@@ -18,6 +18,7 @@ import { motorhomesBirthOptions } from "../../utils/filters/motorhomes/options";
 import { getYearList } from "../../utils/filters/common/options";
 import { trucksCategoryOptions } from "../../utils/filters/trucks/options";
 import { caravansBirthOptions } from "../../utils/filters/caravans/options";
+import { vansBodyStyleOptions } from "../../utils/filters/vans/options";
 
 export default function HeroSection({ showFilterBox = true }) {
   const { pathname } = useLocation();
@@ -54,14 +55,22 @@ export default function HeroSection({ showFilterBox = true }) {
   const handleResultCount = async () => {
     const request = {
       ...filters,
-      country: filters.country?.value || "",
-      make: filters.make?.value || "",
-      model: filters.model?.value || "",
-      minPrice: filters.minPrice?.value,
-      maxPrice: filters.maxPrice?.value,
+      // country: filters.country?.value || "",
+      // make: filters.make?.value || "",
+      // model: filters.model?.value || "",
+      // minPrice: filters.minPrice?.value,
+      // maxPrice: filters.maxPrice?.value,
       status: "approved",
-      type: pathname.replace("/", ""),
+      type: pathname.split("/")[1],
+      sellOrRent: "rent",
     };
+
+    for (let key of Object.keys(filters || {})) {
+      if ("value" in filters[key] && "label" in filters[key]) {
+        request[key] = filters[key].value;
+      }
+    }
+
     if (pathname.includes("motorhomes")) {
       request.minYear = filters.minYear?.value;
       request.birth = filters.birth?.value;
@@ -96,22 +105,33 @@ export default function HeroSection({ showFilterBox = true }) {
   }, [allMakes]);
 
   useEffect(() => {
-    if (pathname === "/cars") {
-      setHeroBanner("./assets/images/hero-image.png");
-    } else if (pathname === "/caravans") {
-      setHeroBanner("./assets/images/caravanHome.jpg");
-    } else if (pathname === "/vans") {
-      setHeroBanner("./assets/images/vanHome.jpg");
-    } else if (pathname === "/farms") {
-      setHeroBanner("./assets/images/farmHome.jpg");
-    } else if (pathname === "/motorhomes") {
-      setHeroBanner("./assets/images/motorhomeHome.jpg");
-    } else if (pathname === "/partAndAccessories") {
-      setHeroBanner("./assets/images/partAccessoriesHome.jpg");
-    } else if (pathname === "/trucks") {
-      setHeroBanner("./assets/images/truckHome.jpg");
-    } else {
-      setHeroBanner("./assets/images/hero-image.png");
+    const category = pathname.split("/")[1];
+    switch (category) {
+      case "cars":
+        setHeroBanner("/assets/images/hero-image.png");
+        break;
+      case "caravans":
+        setHeroBanner("/assets/images/caravanHome.jpg");
+        break;
+      case "vans":
+        setHeroBanner("/assets/images/vanHome.jpg");
+        break;
+      case "motorhomes":
+        setHeroBanner("/assets/images/motorhomeHome.jpg");
+        break;
+      case "farms":
+        setHeroBanner("/assets/images/farmHome.jpg");
+        break;
+      case "partAndAccessories":
+        setHeroBanner("/assets/images/partAccessoriesHome.jpg");
+        break;
+      case "trucks":
+        setHeroBanner("/assets/images/truckHome.jpg");
+        break;
+
+      default:
+        setHeroBanner("/assets/images/hero-image.png");
+        break;
     }
   }, [pathname]);
 
@@ -129,7 +149,7 @@ export default function HeroSection({ showFilterBox = true }) {
       <span>{data.label}</span>
     </div>
   );
-  // background-image: url("/public/assets/images/hero-image.png");
+
   return (
     <div className="mx-0 mx-lg-2">
       <section
@@ -144,7 +164,7 @@ export default function HeroSection({ showFilterBox = true }) {
           style={{ display: showFilterBox ? "" : "none" }}
         >
           <h5 className="text-center">
-            Find your dream {parseKey(pathname.replace("/", "")?.slice(0, -1))}
+            Find your dream {parseCamelKey(pathname.split("/")[1]?.slice(0, -1))}
           </h5>
           <SelectBox
             isSearchable={false}
@@ -201,6 +221,64 @@ export default function HeroSection({ showFilterBox = true }) {
             />
           </div>
 
+          {pathname === "/vans" && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Body type"
+              options={vansBodyStyleOptions}
+              value={filters.bodyStyle || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("bodyStyle", selected);
+              }}
+            />
+          )}
+
+          {pathname === "/motorhomes" && (
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <SelectBox
+                classNamePrefix={"makeSelector"}
+                placeholder="Birth"
+                options={motorhomesBirthOptions}
+                value={filters.birth || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("birth", selected);
+                }}
+              />
+              <SelectBox
+                placeholder="Year"
+                options={getYearList()}
+                value={filters.minYear || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("minYear", selected);
+                }}
+              />
+            </div>
+          )}
+
+          {pathname === "/caravans" && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Birth"
+              options={caravansBirthOptions}
+              value={filters.birth || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("birth", selected);
+              }}
+            />
+          )}
+
+          {pathname === "/trucks" && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Category"
+              options={trucksCategoryOptions}
+              value={filters.truckCategory || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("truckCategory", selected);
+              }}
+            />
+          )}
+
           <div className="d-flex justify-content-between my-2 gap-10">
             <input
               type="number"
@@ -234,50 +312,6 @@ export default function HeroSection({ showFilterBox = true }) {
             />
           </div>
 
-          {pathname.includes("motorhomes") && (
-            <div className="d-flex justify-content-between my-2 gap-10">
-              <SelectBox
-                classNamePrefix={"makeSelector"}
-                placeholder="Birth"
-                options={motorhomesBirthOptions}
-                value={filters.birth || ""}
-                onChange={(selected) => {
-                  handleUpdateFilters("birth", selected);
-                }}
-              />
-              <SelectBox
-                placeholder="Year"
-                options={getYearList()}
-                value={filters.minYear || ""}
-                onChange={(selected) => {
-                  handleUpdateFilters("minYear", selected);
-                }}
-              />
-            </div>
-          )}
-          {pathname.includes("caravans") && (
-            <SelectBox
-              classNamePrefix={"makeSelector"}
-              placeholder="Birth"
-              options={caravansBirthOptions}
-              value={filters.birth || ""}
-              onChange={(selected) => {
-                handleUpdateFilters("birth", selected);
-              }}
-            />
-          )}
-          {pathname.includes("trucks") && (
-            <SelectBox
-              classNamePrefix={"makeSelector"}
-              placeholder="Category"
-              options={trucksCategoryOptions}
-              value={filters.truckCategory || ""}
-              onChange={(selected) => {
-                handleUpdateFilters("truckCategory", selected);
-              }}
-            />
-          )}
-
           {/* {(pathname.includes("trucks") ||
             pathname.includes("farms") ||
             pathname.includes("plants")) && (
@@ -297,8 +331,11 @@ export default function HeroSection({ showFilterBox = true }) {
 
           <div className="text-center my-3">
             <Button variant="danger" onClick={() => navigate(`${pathname}/all`)}>
-              Search {vehiclesCount.data?.totalCount?.toLocaleString()}{" "}
-              {parseCamelKey(pathname.replace("/", ""))}
+              {pathname.includes("rent")
+                ? `Search ${vehiclesCount.data?.totalCount?.toLocaleString()} rental
+                ${parseCamelKey(pathname.split("/")[1])}`
+                : `Search ${vehiclesCount.data?.totalCount?.toLocaleString()} 
+              ${parseCamelKey(pathname.replace("/", ""))}`}
             </Button>
           </div>
           <div className="d-flex justify-content-between">
