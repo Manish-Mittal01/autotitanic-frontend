@@ -16,7 +16,7 @@ function CarsList() {
       filters: {
         isFeatured: true,
         status: "approved",
-        type: pathname.replace("/", ""),
+        type: pathname === "/rentals" ? "" : pathname.split("/")[1],
         sellOrRent: pathname.includes("rent") ? "rent" : "sell",
       },
       paginationDetails: { page: 1, limit: 240 },
@@ -29,7 +29,7 @@ function CarsList() {
       filters: {
         status: "approved",
         isFeatured: false,
-        type: pathname.split("/")[1],
+        type: pathname === "/rentals" ? "" : pathname.split("/")[1],
         sellOrRent: pathname.includes("rent") ? "rent" : "sell",
       },
       paginationDetails: { page: 1, limit: 180, sortBy: "createdAt", order: -1 },
@@ -58,7 +58,7 @@ function CarsList() {
       </div>
 
       <h4 className="drakColor my-2 text-center">
-        {pathname.includes("rent")
+        {pathname.includes("rent") && pathname !== "/rentals"
           ? `Recently Posted ${parseCamelKey(pathname.split("/")[1])} rentals`
           : `Recently Posted ${parseCamelKey(pathname.split("/")[1])}`}
       </h4>

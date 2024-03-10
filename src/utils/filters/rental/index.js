@@ -114,5 +114,4 @@ export const rentalsDetailsList = [
   { value: "fuelType", label: "Fuel Type" },
   { value: "mileage", label: "Mileage" },
   { value: "exteriorColor", label: "Colour" },
-  { value: "priceType", label: "Price type" },
 ];

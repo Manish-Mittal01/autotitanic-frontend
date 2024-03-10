@@ -92,7 +92,8 @@ const Header = ({ sidebar, setSidebar }) => {
           <ul className="dropOtions list-unstyled position-absolute">
             {categories.map(
               (category, i) =>
-                category.label !== "Rentals" && (
+                category.value !== "partAndAccessories" &&
+                category.value !== "rentals" && (
                   <li onClick={() => navigate(`/${category.value}/rent`)}>
                     {category.label.slice(0, -1)} Rentals
                   </li>

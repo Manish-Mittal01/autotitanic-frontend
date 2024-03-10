@@ -4,27 +4,36 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { IoCheckmark } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
-import coupe from "../../../Assets/Images/Coupe.png";
-import convertible from "../../../Assets/Images/Convertible.png";
-import estate from "../../../Assets/Images/Estate.png";
-import hatchback from "../../../Assets/Images/Hatchback.png";
-import mpv from "../../../Assets/Images/Mpv.png";
-import pickup from "../../../Assets/Images/Pickup.png";
-import saloon from "../../../Assets/Images/Saloon.png";
-import suv from "../../../Assets/Images/suv.png";
+import beavertail from "../../../Assets/Images/beaverTailtruck.png";
+import box from "../../../Assets/Images/boxTruck.jpg";
+import bus from "../../../Assets/Images/bus.jpg";
+import catering from "../../../Assets/Images/cateringTruck.jpg";
+import chassisCab from "../../../Assets/Images/chassisTruck.jpg";
+import coach from "../../../Assets/Images/coach.jpg";
+import concreteMix from "../../../Assets/Images/concreteMixerTruck.jpg";
+import craneMounted from "../../../Assets/Images/craneMountedTruck.jpg";
+import curtainSide from "../../../Assets/Images/curtainSideTruck.jpg";
+import dropside from "../../../Assets/Images/dropSideTruck.jpg";
+import flatbed from "../../../Assets/Images/flatbedTruck.jpg";
+import gritterTruck from "../../../Assets/Images/gritterTruck.jpg";
+import hookLoader from "../../../Assets/Images/hookLoadertruck.webp";
+import livestock from "../../../Assets/Images/livestockTruck.jpg";
+import lowLoader from "../../../Assets/Images/lowLoaderTruck.jpg";
+import municipal from "../../../Assets/Images/municipalTruck.webp";
+import pantechnican from "../../../Assets/Images/pentechoniconTruck.jpg";
+import roadSweeper from "../../../Assets/Images/roadSweeperTruck.webp";
+import scaffordBody from "../../../Assets/Images/scaffold.jpg";
+import skeletal from "../../../Assets/Images/skeletoltruck.jpg";
+import skipLoader from "../../../Assets/Images/skipLoaderTruck.jpg";
+import specialistVehicle from "../../../Assets/Images/specialistVehicleTruck.jpg";
+import tanker from "../../../Assets/Images/tankerTruck.jpg";
+import temperatureControlled from "../../../Assets/Images/temperatureControlledTruck.jpg";
+import tipper from "../../../Assets/Images/tipperTruck.png";
+import tipperGrab from "../../../Assets/Images/tipperGrab.jpg";
+import tractorUnit from "../../../Assets/Images/tractorUnitTruck.jpg";
+import vehicleTransporter from "../../../Assets/Images/vehicleTransportTruck.png";
 import { selectFilters } from "../../../redux/filters/slice";
-import {
-  accelerationOptions,
-  co2EmmisionOptions,
-  colorsList,
-  doorOptions,
-  driverPositionsOptions,
-  engineSizeOptions,
-  fuelConsumtionOptions,
-  fuelTypeOptions,
-  gearBoxOptions,
-} from "../../../utils/filters/common/options";
-import { carsBootSpaceOptions, carsSeatOptions } from "../../../utils/filters/cars/options";
+import { colorsList, driverPositionsOptions } from "../../../utils/filters/common/options";
 import { useNavigate } from "react-router-dom";
 import {
   trucksAxleOptions,
@@ -39,35 +48,34 @@ import { getVehicleCountByBody } from "../../../redux/vehicles/thunk";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 
 export const bodyTypeOptions = [
-  { img: suv, value: "beavertail", label: "Beavertail" },
-  { img: suv, value: "box", label: "Box" },
-  { img: suv, value: "bus", label: "Bus" },
-  { img: suv, value: "catering", label: "Catering" },
-  { img: suv, value: "chassisCab", label: "Chassis Cab" },
-  { img: suv, value: "coach", label: "Coach" },
-  { img: suv, value: "concreteMix", label: "Concrete Mix" },
-  { img: suv, value: "craneMounted", label: "Crane Mounted" },
-  { img: suv, value: "curtainSide", label: "Curtain Side" },
-  { img: suv, value: "dropside", label: "Dropside" },
-  { img: suv, value: "flatbed", label: "Flatbed" },
-  { img: suv, value: "gritterTruck", label: "Gritter Truck" },
-  { img: suv, value: "hookLoader", label: "Hook Loader" },
-  { img: suv, value: "livestock", label: "Livestock" },
-  { img: suv, value: "lowLoader", label: "Low Loader" },
-  { img: suv, value: "municipal", label: "Municipal" },
-  { img: suv, value: "pantechnican", label: "Pantechnican" },
-  { img: suv, value: "roadSweeper", label: "Road Sweeper" },
-  { img: suv, value: "scaffordBody", label: "Scafford Body" },
-  { img: suv, value: "skeletal", label: "Skeletal" },
-  { img: suv, value: "skipLoader", label: "Skip Loader" },
-  { img: suv, value: "specialistVehicle", label: "Specialist Vehicle" },
-  { img: suv, value: "tanker", label: "Tanker" },
-  { img: suv, value: "temperatureControlled", label: "Temperature Controlled" },
-  { img: suv, value: "tipper", label: "Tipper" },
-  { img: suv, value: "tipperGrab", label: "Tipper Grab" },
-  { img: suv, value: "tractorUnit", label: "Tractor Unit" },
-  { img: suv, value: "vehicleTransporter", label: "Vehicle Transporter" },
-  { img: suv, value: "unlisted", label: "Unlisted" },
+  { img: beavertail, value: "beavertail", label: "Beavertail" },
+  { img: box, value: "box", label: "Box" },
+  { img: bus, value: "bus", label: "Bus" },
+  { img: catering, value: "catering", label: "Catering" },
+  { img: chassisCab, value: "chassisCab", label: "Chassis Cab" },
+  { img: coach, value: "coach", label: "Coach" },
+  { img: concreteMix, value: "concreteMix", label: "Concrete Mix" },
+  { img: craneMounted, value: "craneMounted", label: "Crane Mounted" },
+  { img: curtainSide, value: "curtainSide", label: "Curtain Side" },
+  { img: dropside, value: "dropside", label: "Dropside" },
+  { img: flatbed, value: "flatbed", label: "Flatbed" },
+  { img: gritterTruck, value: "gritterTruck", label: "Gritter Truck" },
+  { img: hookLoader, value: "hookLoader", label: "Hook Loader" },
+  { img: livestock, value: "livestock", label: "Livestock" },
+  { img: lowLoader, value: "lowLoader", label: "Low Loader" },
+  { img: municipal, value: "municipal", label: "Municipal" },
+  { img: pantechnican, value: "pantechnican", label: "Pantechnican" },
+  { img: roadSweeper, value: "roadSweeper", label: "Road Sweeper" },
+  { img: scaffordBody, value: "scaffordBody", label: "Scafford Body" },
+  { img: skeletal, value: "skeletal", label: "Skeletal" },
+  { img: skipLoader, value: "skipLoader", label: "Skip Loader" },
+  { img: specialistVehicle, value: "specialistVehicle", label: "Specialist Vehicle" },
+  { img: tanker, value: "tanker", label: "Tanker" },
+  { img: temperatureControlled, value: "temperatureControlled", label: "Temperature Controlled" },
+  { img: tipper, value: "tipper", label: "Tipper" },
+  { img: tipperGrab, value: "tipperGrab", label: "Tipper Grab" },
+  { img: tractorUnit, value: "tractorUnit", label: "Tractor Unit" },
+  { img: vehicleTransporter, value: "vehicleTransporter", label: "Vehicle Transporter" },
 ];
 
 export default function TruckFilters() {
@@ -125,7 +133,7 @@ export default function TruckFilters() {
                 {filters.bodyStyle?.value === bodyType.value && (
                   <IoCheckmark className="checkIcon" />
                 )}
-                <img src={bodyType.img} />
+                <img src={bodyType.img} style={{ aspectRatio: "3/2" }} />
                 <p className="m-0">{bodyType.label}</p>
                 <p>
                   (

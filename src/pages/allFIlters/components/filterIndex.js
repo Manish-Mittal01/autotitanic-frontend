@@ -112,9 +112,7 @@ export default function MoreFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  // console.log("pathname", pathname);
-  // console.log("vehiclesCount", vehiclesCount);
-  // console.log("vehiclesCountByFilter", vehiclesCountByFilter);
+  console.log("category", category);
 
   return (
     <>
@@ -248,6 +246,8 @@ export default function MoreFilters() {
 
           {category === "trucks" ? (
             <TruckFilters />
+          ) : category === "farms" ? (
+            <FarmFilters />
           ) : category === "farms" ? (
             <FarmFilters />
           ) : (

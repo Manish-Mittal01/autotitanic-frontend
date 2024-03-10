@@ -322,7 +322,9 @@ export const PostStepOne = ({
                 Rental Category<span className="text-danger">*</span>
               </span>
             }
-            options={categories.filter((elem) => elem.value !== "rentals")}
+            options={categories.filter(
+              (elem) => elem.value !== "rentals" && elem.value !== "partAndAccessories"
+            )}
             value={postDetails.rentalType}
             onChange={(selected) => handleChange("rentalType", selected)}
           />

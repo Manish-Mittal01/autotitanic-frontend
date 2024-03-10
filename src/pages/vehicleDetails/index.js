@@ -33,6 +33,9 @@ import { motorhomesDetailsList } from "../../utils/filters/motorhomes";
 import { caravansDetailsList } from "../../utils/filters/caravans";
 import { trucksDetailsList } from "../../utils/filters/trucks";
 import { partsDetailsList } from "../../utils/filters/partsAndAccessories";
+import { farmsDetailsList } from "../../utils/filters/farms";
+import { plantsDetailsList } from "../../utils/filters/plants";
+import { rentalsDetailsList } from "../../utils/filters/rental";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -109,7 +112,9 @@ export default function VehicleDetails() {
 
   useEffect(() => {
     if (vehicleDetails.data) {
-      if (vehicleDetails.data.type === "cars") {
+      if (vehicleDetails.data.sellOrRent === "rent") {
+        setDetailsList(rentalsDetailsList);
+      } else if (vehicleDetails.data.type === "cars") {
         setDetailsList(carsDetailsList);
       } else if (vehicleDetails.data.type === "vans") {
         setDetailsList(vansDetailsList);
@@ -123,6 +128,12 @@ export default function VehicleDetails() {
         setDetailsList(trucksDetailsList);
       } else if (vehicleDetails.data.type === "partAndAccessories") {
         setDetailsList(partsDetailsList);
+      } else if (vehicleDetails.data.type === "farms") {
+        setDetailsList(farmsDetailsList);
+      } else if (vehicleDetails.data.type === "plants") {
+        setDetailsList(plantsDetailsList);
+      } else {
+        setDetailsList(carsDetailsList);
       }
     }
   }, [vehicleDetails]);
@@ -202,6 +213,7 @@ export default function VehicleDetails() {
             <div className="d-flex align-items-center text-danger gap-1">
               <h6 className="m-0 fw-bold">{detail?.currency} </h6>
               <h6 className="m-0 fw-bold"> {detail?.price?.toLocaleString() || "--"}</h6>
+              <small className="text-dark">({detail?.priceType})</small>
             </div>
             <div>
               {detail?.city?.name + ", " + detail?.country?.name}
