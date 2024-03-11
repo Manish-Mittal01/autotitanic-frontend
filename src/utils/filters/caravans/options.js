@@ -48,3 +48,8 @@ export const caravansMtplmOptions = [
   { value: 2000, label: "2000kg" },
   { value: 2500, label: "2500kg" },
 ];
+
+export const caravansCategoryOptions = [
+  { value: "staticCaravan", label: "Static Caravan" },
+  { value: "touringCaravan", label: "Touring Caravan" },
+];

@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as CompareIcon } from "../../../Assets/icons/compare.svg";
@@ -21,6 +22,7 @@ import { errorMsg, successMsg } from "../../../utils/toastMsg";
 import { getUserProfile } from "../../../redux/profile/thunk";
 import { useSelector } from "react-redux";
 import isUserLoggedin from "../../../utils/isUserLoggedin";
+import moment from "moment";
 
 export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   const navigate = useNavigate();
@@ -186,9 +188,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                 {vehicle.gearBox ? `${parseCamelKey(vehicle.gearBox)} | ` : ""}
                 {vehicle.fuelType ? `${parseCamelKey(vehicle.fuelType)} | ` : ""}
                 {vehicle.type === "partAndAccessories"
-                  ? `${parseCamelKey(vehicle.partCategory)} | ${parseCamelKey(
-                      vehicle.partSubCategory
-                    )}`
+                  ? `${parseCamelKey(vehicle.category)} | ${parseCamelKey(vehicle.subCategory)}`
                   : ""}
               </p>
               <div style={{ flex: 1 }} />
@@ -205,6 +205,10 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                     <LocationIcon />
                     {vehicle.city?.name}, {vehicle.country?.name}
                     <img src={vehicle?.country?.flag} className="mx-1" style={{ width: 18 }} />
+                  </p>
+                  <p className="darkColor mb-2">
+                    <FaRegClock className="me-1" />
+                    Posted on {moment(vehicle.createdAt).format("DD MMM, YYYY")}
                   </p>
                 </div>
                 {vehicle?.user?.userType === "dealer" && (

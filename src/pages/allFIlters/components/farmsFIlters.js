@@ -2,46 +2,18 @@ import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import { IoCheckmark } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
-import coupe from "../../../Assets/Images/Coupe.png";
-import convertible from "../../../Assets/Images/Convertible.png";
-import estate from "../../../Assets/Images/Estate.png";
-import hatchback from "../../../Assets/Images/Hatchback.png";
-import mpv from "../../../Assets/Images/Mpv.png";
-import pickup from "../../../Assets/Images/Pickup.png";
-import saloon from "../../../Assets/Images/Saloon.png";
-import suv from "../../../Assets/Images/suv.png";
 import { selectFilters } from "../../../redux/filters/slice";
-import { colorsList, driverPositionsOptions } from "../../../utils/filters/common/options";
+import { colorsList } from "../../../utils/filters/common/options";
 import { useNavigate } from "react-router-dom";
-import {
-  trucksAxleOptions,
-  trucksCabOptions,
-  trucksCategoryOptions,
-  trucksEnginePowerOptions,
-  trucksFuelTypeOptions,
-  trucksGtwOptions,
-  trucksGvwOptions,
-} from "../../../utils/filters/trucks/options";
+import { trucksCategoryOptions } from "../../../utils/filters/trucks/options";
 import { farmsFuelTypeOptions } from "../../../utils/filters/farms/options";
-
-const bodyTypeOptions = [
-  { img: convertible, label: "Convertible", value: "convertible" },
-  { img: coupe, label: "Coupe", value: "coupe" },
-  { img: estate, label: "Estate", value: "estate" },
-  { img: hatchback, label: "Hatchback", value: "hatchback" },
-  { img: mpv, label: "MPV", value: "MPV" },
-  { img: pickup, label: "Pick-up", value: "Pick-up" },
-  { img: saloon, label: "Saloon", value: "saloon" },
-  { img: suv, label: "SUV", value: "SUV" },
-];
 
 export default function FarmFilters() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
-  const { vehiclesCount, vehiclesCountByFilter } = useSelector((state) => state.vehicles);
+  const { vehiclesCount } = useSelector((state) => state.vehicles);
 
   const handleUpdateFilter = (name, value) => {
     dispatch(selectFilters({ [name]: value }));
@@ -100,9 +72,9 @@ export default function FarmFilters() {
                 components={{
                   IndicatorSeparator: () => null,
                 }}
-                value={filters.truckCategory}
+                value={filters.category}
                 onChange={(selected) => {
-                  handleUpdateFilter("truckCategory", selected);
+                  handleUpdateFilter("category", selected);
                 }}
               />
             </div>
@@ -151,7 +123,7 @@ export default function FarmFilters() {
           variant="danger"
           className="w-50 mt-3 mx-auto d-flex align-items-center justify-content-center"
           onClick={() => {
-            navigate("/cars/all");
+            navigate("/farms/all");
           }}
         >
           <IoSearch className="searchIcon" />

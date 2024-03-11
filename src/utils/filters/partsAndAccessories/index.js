@@ -27,13 +27,13 @@ export const partsFilters = [
   },
   {
     label: "Category",
-    name: "partCategory",
+    name: "category",
     filterOptions: partsCategoryOptions,
     filterType: "normal",
   },
   {
     label: "Sub Category",
-    name: "partSubCategory",
+    name: "subCategory",
     filterOptions: [],
     filterType: "normal",
   },
@@ -50,18 +50,18 @@ export const partsPostFeatures = [
   },
   {
     label: "Category",
-    value: "partCategory",
+    value: "category",
     options: partsCategoryOptions,
   },
   {
     label: "Sub Category",
-    value: "partSubCategory",
+    value: "subCategory",
     options: [],
   },
 ];
 
 export const partsDetailsList = [
   { value: "condition", label: "Condition" },
-  { value: "partCategory", label: "Category" },
-  { value: "partSubCategory", label: "Sub Category" },
+  { value: "category", label: "Category" },
+  { value: "subCategory", label: "Sub Category" },
 ];

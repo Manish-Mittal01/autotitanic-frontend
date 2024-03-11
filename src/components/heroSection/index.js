@@ -17,7 +17,10 @@ import parseKey, { parseCamelKey } from "../../utils/parseKey";
 import { motorhomesBirthOptions } from "../../utils/filters/motorhomes/options";
 import { getYearList } from "../../utils/filters/common/options";
 import { trucksCategoryOptions } from "../../utils/filters/trucks/options";
-import { caravansBirthOptions } from "../../utils/filters/caravans/options";
+import {
+  caravansBirthOptions,
+  caravansCategoryOptions,
+} from "../../utils/filters/caravans/options";
 import { vansBodyStyleOptions } from "../../utils/filters/vans/options";
 
 export default function HeroSection({ showFilterBox = true }) {
@@ -61,8 +64,8 @@ export default function HeroSection({ showFilterBox = true }) {
       // minPrice: filters.minPrice?.value,
       // maxPrice: filters.maxPrice?.value,
       status: "approved",
-      type: pathname.split("/")[1],
-      sellOrRent: "rent",
+      type: pathname === "/rentals" ? "" : pathname.split("/")[1],
+      sellOrRent: pathname.includes("rent") ? "rent" : "sell",
     };
 
     for (let key of Object.keys(filters || {})) {
@@ -77,7 +80,7 @@ export default function HeroSection({ showFilterBox = true }) {
     } else if (pathname.includes("caravans")) {
       request.birth = filters.birth?.value;
     } else if (pathname.includes("trucks")) {
-      request.truckCategory = filters.truckCategory?.value;
+      request.category = filters.category?.value;
     }
     handleApiRequest(getVehicleCount, { filters: request });
   };
@@ -105,10 +108,13 @@ export default function HeroSection({ showFilterBox = true }) {
   }, [allMakes]);
 
   useEffect(() => {
-    const category = pathname.split("/")[1];
+    const category = pathname.includes("rent") ? pathname.split("/")[1] : pathname.split("/")[1];
     switch (category) {
       case "cars":
-        setHeroBanner("/assets/images/hero-image.png");
+        setHeroBanner("/assets/images/carHome.jpg");
+        break;
+      case "bikes":
+        setHeroBanner("/assets/images/bikeHome.jpg");
         break;
       case "caravans":
         setHeroBanner("/assets/images/caravanHome.jpg");
@@ -122,13 +128,15 @@ export default function HeroSection({ showFilterBox = true }) {
       case "farms":
         setHeroBanner("/assets/images/farmHome.jpg");
         break;
+      case "plants":
+        setHeroBanner("/assets/images/plantHome.jpg");
+        break;
       case "partAndAccessories":
         setHeroBanner("/assets/images/partAccessoriesHome.jpg");
         break;
       case "trucks":
         setHeroBanner("/assets/images/truckHome.jpg");
         break;
-
       default:
         setHeroBanner("/assets/images/hero-image.png");
         break;
@@ -164,7 +172,16 @@ export default function HeroSection({ showFilterBox = true }) {
           style={{ display: showFilterBox ? "" : "none" }}
         >
           <h5 className="text-center">
-            Find your dream {parseCamelKey(pathname.split("/")[1]?.slice(0, -1))}
+            {pathname.includes("rent")
+              ? "Find the perfect Vehicle to Rent"
+              : ["cars", "motorhomes", "caravans"].includes(pathname.split("/")[1])
+              ? `Find your dream ${parseCamelKey(pathname.split("/")[1]?.slice(0, -1))}`
+              : pathname.split("/")[1] === "partAndAccessories"
+              ? "Find the correct Parts & Accessories"
+              : pathname.split("/")[1] === "farms"
+              ? "Find your perfect Farm Machinery"
+              : `Find your perfect ${parseCamelKey(pathname.split("/")[1]?.slice(0, -1))}`}
+            {/* Find your dream {parseCamelKey(pathname.split("/")[1]?.slice(0, -1))} */}
           </h5>
           <SelectBox
             isSearchable={false}
@@ -237,7 +254,7 @@ export default function HeroSection({ showFilterBox = true }) {
             <div className="d-flex justify-content-between my-2 gap-10">
               <SelectBox
                 classNamePrefix={"makeSelector"}
-                placeholder="Birth"
+                placeholder="Berth"
                 options={motorhomesBirthOptions}
                 value={filters.birth || ""}
                 onChange={(selected) => {
@@ -256,15 +273,25 @@ export default function HeroSection({ showFilterBox = true }) {
           )}
 
           {pathname === "/caravans" && (
-            <SelectBox
-              classNamePrefix={"makeSelector"}
-              placeholder="Birth"
-              options={caravansBirthOptions}
-              value={filters.birth || ""}
-              onChange={(selected) => {
-                handleUpdateFilters("birth", selected);
-              }}
-            />
+            <div className="d-flex justify-content-between my-2 gap-10">
+              <SelectBox
+                classNamePrefix={"makeSelector"}
+                placeholder="Berth"
+                options={caravansBirthOptions}
+                value={filters.birth || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("birth", selected);
+                }}
+              />
+              <SelectBox
+                placeholder="Category"
+                options={caravansCategoryOptions}
+                value={filters.category}
+                onChange={(selected) => {
+                  handleUpdateFilters("category", selected);
+                }}
+              />
+            </div>
           )}
 
           {pathname === "/trucks" && (
@@ -272,9 +299,9 @@ export default function HeroSection({ showFilterBox = true }) {
               classNamePrefix={"makeSelector"}
               placeholder="Category"
               options={trucksCategoryOptions}
-              value={filters.truckCategory || ""}
+              value={filters.category || ""}
               onChange={(selected) => {
-                handleUpdateFilters("truckCategory", selected);
+                handleUpdateFilters("category", selected);
               }}
             />
           )}

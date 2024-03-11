@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Button, Col, Row } from "react-bootstrap";
 import CKEditor from "react-ckeditor-component";
-import { FaArrowLeftLong } from "react-icons/fa6";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import HeroAdd from "../../components/heroSection/heroAdd";
 import SelectBox from "../../components/selectBox";
 import Asterik from "../../components/common/asterik";
@@ -95,8 +95,8 @@ export default function SellVehicle() {
             // style={{ maxWidth: 800 }}
           >
             {postUploadStep === 2 && (
-              <h5 className="pointer  m-0" onClick={() => setPostUploadStep(1)}>
-                <FaArrowLeftLong className="me-1" />
+              <h5 className="primaryColor pointer m-0" onClick={() => setPostUploadStep(1)}>
+                <MdOutlineArrowBackIosNew className="me-1" />
                 Back
               </h5>
             )}
@@ -584,18 +584,18 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     if (
       (postDetails.type?.value === "partAndAccessories" ||
         postDetails.type === "partAndAccessories") &&
-      (postDetails.partCategory?.value || typeof postDetails.partCategory === "string")
+      (postDetails.category?.value || typeof postDetails.category === "string")
     ) {
-      const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "partSubCategory");
+      const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "subCategory");
       const options = partsSubCategoryOptions.filter(
-        (item) => item.category === postDetails.partCategory.value
+        (item) => item.category === postDetails.category.value
       );
 
       oldFeatures[subCategoryIndex].options = options;
     }
 
     setFeaturesList(oldFeatures);
-  }, [postDetails.partCategory]);
+  }, [postDetails.category]);
 
   useEffect(async () => {
     const myMakes = await handlePopularCarsMakeList();

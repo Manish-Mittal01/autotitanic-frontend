@@ -26,7 +26,10 @@ ReactDOM.render(
       <PersistGate loading={null} persistor={persistor}>
         <App />
         <ScrollToTop />
-        <ToastContainer />
+        <ToastContainer
+          theme="colored"
+          // hideProgressBar
+        />
       </PersistGate>
     </Provider>
   </BrowserRouter>,

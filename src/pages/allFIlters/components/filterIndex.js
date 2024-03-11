@@ -23,6 +23,8 @@ import { getYearList } from "../../../utils/filters/common/options";
 import { getAllMake, getAllModel } from "../../../redux/makeAndModel/thunk";
 import TruckFilters from "./truckFilters";
 import FarmFilters from "./farmsFIlters";
+import AllPartsFilters from "./partAndAccessoriesFilters";
+import PlantFilters from "./plantFilters";
 
 const bodyTypeOptions = [
   { img: convertible, label: "Convertible", value: "convertible" },
@@ -250,8 +252,10 @@ export default function MoreFilters() {
             <FarmFilters />
           ) : category === "farms" ? (
             <FarmFilters />
+          ) : category === "plants" ? (
+            <PlantFilters />
           ) : (
-            category === "plants" && <FarmFilters />
+            ""
           )}
         </Row>
       </section>

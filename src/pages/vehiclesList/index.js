@@ -16,11 +16,13 @@ import FilterBar from "../../components/sidebar/Filterbar";
 import { handleFilterBar } from "../../redux/common/slice";
 import MyPagination from "../../components/pagination";
 import { sortingOptions } from "../../utils/filters/common";
+import { categories } from "../../utils";
 
 export default function VehiclesList() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { categoryFilter } = useParams();
+  const params = useParams();
+  const { categoryFilter } = params;
   const dispatch = useDispatch();
   const { filters } = useSelector((state) => state.filters);
   const { showFilterBar } = useSelector((state) => state.common);
@@ -67,7 +69,8 @@ export default function VehiclesList() {
   };
 
   useEffect(() => {
-    if (filters.type) {
+    console.log("filters", filters);
+    if (filters.type || filters.sellOrRent) {
       handleVehicleList();
     }
   }, [filters, paginationDetails]);
@@ -82,19 +85,41 @@ export default function VehiclesList() {
 
   useEffect(() => {
     const category = pathname.split("/");
-    if (categoryFilter === "used" || categoryFilter === "new") {
+    if (pathname.includes("rent")) {
+      let isRentalCategoryFound = false;
+      for (let myCategory of categories) {
+        if (category[1] === myCategory.value) {
+          isRentalCategoryFound = true;
+        }
+      }
+
+      dispatch(
+        selectFilters({
+          condition: "",
+          type: isRentalCategoryFound ? { value: category[1], label: category[1] } : "",
+          sellOrRent: { value: "rent", label: "rent" },
+        })
+      );
+    } else if (categoryFilter === "used" || categoryFilter === "new") {
       dispatch(
         selectFilters({
           condition: { value: categoryFilter, label: categoryFilter },
           type: { value: category[1], label: category[1] },
+          sellOrRent: { value: "sell", label: "sell" },
         })
       );
     } else {
-      console.log("category[1]", category[1]);
-      dispatch(selectFilters({ condition: "", type: { value: category[1], label: category[1] } }));
+      dispatch(
+        selectFilters({
+          condition: "",
+          type: pathname.includes("rent") ? "" : { value: category[1], label: category[1] },
+          sellOrRent: { value: "sell", label: "sell" },
+        })
+      );
     }
   }, [categoryFilter, pathname]);
 
+  console.log("params", params);
   // console.log("pathname", pathname);
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);

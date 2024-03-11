@@ -8,7 +8,6 @@ import MyLayout from "./layout/myLayout";
 import { categories } from "./utils";
 import NavComponent from "./pages/navComponent";
 import { authRoutes, privateRoutes, publicRoutes } from "./routes";
-import Gallery from "./components/gallery";
 import AllFilters from "./pages/allFIlters";
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
   const adminId = loggedinUser?.data?.id;
 
   useLayoutEffect(() => {
-    runAxiosSetup({ token, adminId });
+    runAxiosSetup({ token, adminId, navigate });
   }, [token, adminId]);
 
   useEffect(() => {
@@ -63,6 +62,7 @@ function App() {
               <Route path={`${category.value}`} element={<NavComponent />} />
               <Route path={`${category.value}/:categoryFilter`} element={<NavComponent />} />
               <Route path={`${category.value}/rent`} element={<NavComponent />} />
+              <Route path={`${category.value}/rent/:categoryFilter`} element={<NavComponent />} />
             </Fragment>
           ))}
           <Route path={"*"} element={<h1>Page not found</h1>} />

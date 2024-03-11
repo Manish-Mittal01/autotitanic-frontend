@@ -21,6 +21,7 @@ import { partsFilters } from "../../../utils/filters/partsAndAccessories";
 import { partsSubCategoryOptions } from "../../../utils/filters/partsAndAccessories/options";
 import { farmsFilters } from "../../../utils/filters/farms";
 import { plantsFilters } from "../../../utils/filters/plants";
+import { rentalsFilters } from "../../../utils/filters/rental";
 
 export default function CarFilters() {
   const { pathname } = useLocation();
@@ -115,14 +116,18 @@ export default function CarFilters() {
           break;
       }
 
+      if (pathname.includes("rent")) {
+        oldFilters = [...rentalsFilters];
+      }
+
       const makeIndex = oldFilters.findIndex((elem) => elem.label === "Make");
       const modelIndex = oldFilters.findIndex((elem) => elem.label === "Model");
       // const variantIndex = oldFilters.findIndex((elem) => elem.label === "Variant");
       const countryIndex = oldFilters.findIndex((elem) => elem.label === "Country");
       const cityIndex = oldFilters.findIndex((elem) => elem.label === "City");
-      const subCategoryIndex = oldFilters.findIndex((elem) => elem.name === "partSubCategory");
+      const subCategoryIndex = oldFilters.findIndex((elem) => elem.name === "subCategory");
       const mySubCategory = partsSubCategoryOptions.filter(
-        (elem) => elem.category === filters.partCategory?.value
+        (elem) => elem.category === filters.category?.value
       );
 
       if (category !== "partAndAccessories") {
@@ -152,7 +157,7 @@ export default function CarFilters() {
 
       setFiltersList(oldFilters);
     }
-  }, [allMakes, allModels, allCountries, allCities, pathname, filters.partCategory]);
+  }, [allMakes, allModels, allCountries, allCities, pathname, filters.category]);
 
   // console.log("filters", filters);
 
@@ -196,7 +201,7 @@ export default function CarFilters() {
                       className="tooltiptext"
                       style={showFilterOptions === i ? { visibility: "visible", opacity: 1 } : {}}
                     >
-                      <div className="d-flex justify-content-between align-items-center border-bottom">
+                      <div className="closeFilterBtn d-flex justify-content-between align-items-center border-bottom">
                         <h5 className="filterModelHeading">Select {filter.label}</h5>
                         <Button
                           variant="link"
@@ -241,7 +246,7 @@ export default function CarFilters() {
                         </tbody>
                       </table>
 
-                      <div className="text-start my-2">
+                      <div className="clearFilterBtn text-start my-2">
                         <Button
                           variant="outline-primary"
                           onClick={() => {

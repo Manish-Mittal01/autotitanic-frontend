@@ -1851,7 +1851,7 @@ posts-card-wrp .card-cstm .content p {
   font-size: 12px;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 10px;
+  padding: 0px 10px;
   position: absolute;
   z-index: 1;
   top: -10px;
@@ -1861,6 +1861,24 @@ posts-card-wrp .card-cstm .content p {
   /* max-width: 800px; */
   /* width: 500px; */
   margin-left: 12px;
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.clearFilterBtn {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  margin: 0 !important;
+  padding-block: 5px;
+}
+
+.closeFilterBtn {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  margin: 0 !important;
+  padding-block: 5px;
 }
 
 .filterModelHeading {

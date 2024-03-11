@@ -358,7 +358,7 @@ export default function AllCaravansFilters() {
               variant="danger"
               className="w-50 mt-3 mx-auto d-flex align-items-center justify-content-center"
               onClick={() => {
-                navigate("/cars/all");
+                navigate("/caravans/all");
               }}
             >
               <IoSearch className="searchIcon" />

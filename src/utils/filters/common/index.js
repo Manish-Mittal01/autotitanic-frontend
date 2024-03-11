@@ -18,7 +18,7 @@ export const compareListDetails = {
     { value: "bootSpace", label: "Boot Space" },
     { value: "accelration", label: "Acceleration" },
     { value: "co2Emission", label: "Co2 Emission" },
-    { value: "reviews", label: "Reviews" },
+    // { value: "reviews", label: "Reviews" },
   ],
 };
 

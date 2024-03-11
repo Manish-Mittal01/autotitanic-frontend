@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Navbar, Nav, Dropdown } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as GridFilledIcon } from "../../Assets/icons/grid-filled.svg";
@@ -15,6 +15,7 @@ import { resetFilters } from "../../redux/filters/slice";
 import { logoutUser } from "../../redux/auth/slice";
 
 const Header = ({ sidebar, setSidebar }) => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loggedinUser } = useSelector((state) => state.auth);
@@ -49,7 +50,13 @@ const Header = ({ sidebar, setSidebar }) => {
         onMouseLeave={() => setShowMenu(false)}
       >
         <p
-          className="navLinkText"
+          className={`navLinkText ${
+            pathname.includes("rent") && title.value === "rentals"
+              ? "text-danger"
+              : !pathname.includes("rent") && pathname?.split("/")[1] === title.value
+              ? "text-danger"
+              : ""
+          }`}
           onClick={() => {
             navigate(`/${title.value}`);
             setShowMenu(false);
@@ -223,7 +230,9 @@ const Header = ({ sidebar, setSidebar }) => {
                             <ProfileHolder />
                           )}
                         </p>
-                        <p className="userName">{userProfile.data?.name || "Sign In"}</p>
+                        <p className="userName">
+                          {userProfile.data?.name?.split(" ")[0] || "Sign In"}
+                        </p>
                       </Button>
                     </Dropdown.Toggle>
 

@@ -1,4 +1,9 @@
-import { caravansAxlesOptions, caravansBirthOptions, caravansMtplmOptions } from "./options";
+import {
+  caravansAxlesOptions,
+  caravansBirthOptions,
+  caravansCategoryOptions,
+  caravansMtplmOptions,
+} from "./options";
 import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 import { vansMileageList } from "../vans/options";
 import { motorhomesLengthOptions } from "../motorhomes/options";
@@ -51,6 +56,12 @@ export const caravansFilters = [
     filterType: "normal",
   },
   {
+    label: "Category",
+    name: "category",
+    filterOptions: caravansCategoryOptions,
+    filterType: "normal",
+  },
+  {
     label: "Birth",
     name: "birth",
     filterOptions: caravansBirthOptions,
@@ -93,7 +104,11 @@ export const caravansPostFeatures = [
     value: "year",
     options: getYearList(),
   },
-
+  {
+    label: "Category",
+    value: "category",
+    options: caravansCategoryOptions,
+  },
   {
     label: "Birth",
     value: "birth",
@@ -131,6 +146,7 @@ export const caravansDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "length", label: "Length" },
+  { value: "category", label: "Category" },
   { value: "birth", label: "Birth" },
   { value: "axle", label: "Axle" },
   { value: "mtplm", label: "MTPLM" },

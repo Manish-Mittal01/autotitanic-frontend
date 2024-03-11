@@ -78,7 +78,7 @@ export const trucksFilters = [
   },
   {
     label: "Category",
-    name: "truckCategory",
+    name: "category",
     filterOptions: trucksCategoryOptions,
     filterType: "normal",
   },
@@ -147,7 +147,7 @@ export const trucksPostFeatures = [
   },
   {
     label: "Category",
-    value: "truckCategory",
+    value: "category",
     options: trucksCategoryOptions,
   },
   {
@@ -186,7 +186,7 @@ export const trucksDetailsList = [
   { label: "Fuel Type", value: "fuelType" },
   { label: "Engine Power", value: "enginePower" },
   { label: "Body Type", value: "bodyStyle" },
-  { label: "Category", value: "truckCategory" },
+  { label: "Category", value: "category" },
   { label: "Axle", value: "axle" },
   { label: "GVW", value: "gvw" },
   { label: "GTW", value: "gtw" },
