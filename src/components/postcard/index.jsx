@@ -75,9 +75,6 @@ export default function PostCard({ post }) {
     );
   };
 
-  // console.log("showImageModel", showImageModel);
-  // console.log("post", post);
-
   return (
     <div
       className="postcardWrapper pointer position-relative mx-auto"

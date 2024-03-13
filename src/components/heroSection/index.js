@@ -22,6 +22,8 @@ import {
   caravansCategoryOptions,
 } from "../../utils/filters/caravans/options";
 import { vansBodyStyleOptions } from "../../utils/filters/vans/options";
+import { farmsCategoryOptions } from "../../utils/filters/farms/options";
+import { plantsCategoryOptions } from "../../utils/filters/plants/options";
 
 export default function HeroSection({ showFilterBox = true }) {
   const { pathname } = useLocation();
@@ -58,11 +60,6 @@ export default function HeroSection({ showFilterBox = true }) {
   const handleResultCount = async () => {
     const request = {
       ...filters,
-      // country: filters.country?.value || "",
-      // make: filters.make?.value || "",
-      // model: filters.model?.value || "",
-      // minPrice: filters.minPrice?.value,
-      // maxPrice: filters.maxPrice?.value,
       status: "approved",
       type: pathname === "/rentals" ? "" : pathname.split("/")[1],
       sellOrRent: pathname.includes("rent") ? "rent" : "sell",
@@ -108,34 +105,57 @@ export default function HeroSection({ showFilterBox = true }) {
   }, [allMakes]);
 
   useEffect(() => {
-    const category = pathname.includes("rent") ? pathname.split("/")[1] : pathname.split("/")[1];
-    switch (category) {
-      case "cars":
+    switch (pathname) {
+      case "/cars":
         setHeroBanner("/assets/images/carHome.jpg");
         break;
-      case "bikes":
+      case "/bikes":
         setHeroBanner("/assets/images/bikeHome.jpg");
         break;
-      case "caravans":
+      case "/caravans":
         setHeroBanner("/assets/images/caravanHome.jpg");
         break;
-      case "vans":
+      case "/vans":
         setHeroBanner("/assets/images/vanHome.jpg");
         break;
-      case "motorhomes":
+      case "/motorhomes":
         setHeroBanner("/assets/images/motorhomeHome.jpg");
         break;
-      case "farms":
+      case "/farms":
         setHeroBanner("/assets/images/farmHome.jpg");
         break;
-      case "plants":
+      case "/plants":
         setHeroBanner("/assets/images/plantHome.jpg");
         break;
-      case "partAndAccessories":
+      case "/partAndAccessories":
         setHeroBanner("/assets/images/partAccessoriesHome.jpg");
         break;
-      case "trucks":
+      case "/trucks":
         setHeroBanner("/assets/images/truckHome.jpg");
+        break;
+      case "/cars/rent":
+        setHeroBanner("/assets/images/Rental_Cars.jpg");
+        break;
+      case "/bikes/rent":
+        setHeroBanner("/assets/images/Rental_Bikes.jpg");
+        break;
+      case "/vans/rent":
+        setHeroBanner("/assets/images/Rental_Vans.jpg");
+        break;
+      case "/caravans/rent":
+        setHeroBanner("/assets/images/Rental_Caravan.jpg");
+        break;
+      case "/motorhomes/rent":
+        setHeroBanner("/assets/images/Rental_Motorhomes.jpg");
+        break;
+      case "/trucks/rent":
+        setHeroBanner("/assets/images/Rental_Trucks.jpg");
+        break;
+      case "/farms/rent":
+        setHeroBanner("/assets/images/Rental_Farm.jpg");
+        break;
+      case "/plants/rent":
+        setHeroBanner("/assets/images/Rental_Plant.jpg");
         break;
       default:
         setHeroBanner("/assets/images/hero-image.png");
@@ -292,6 +312,18 @@ export default function HeroSection({ showFilterBox = true }) {
                 }}
               />
             </div>
+          )}
+
+          {(pathname === "/farms" || pathname === "/plants") && (
+            <SelectBox
+              classNamePrefix={"makeSelector"}
+              placeholder="Category"
+              options={pathname === "/farms" ? farmsCategoryOptions : plantsCategoryOptions}
+              value={filters.category || ""}
+              onChange={(selected) => {
+                handleUpdateFilters("category", selected);
+              }}
+            />
           )}
 
           {pathname === "/trucks" && (

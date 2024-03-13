@@ -69,9 +69,6 @@ export default function CountryFilter({ filterType }) {
     }
   }, [filters.country, filterType]);
 
-  //   console.log("filters", filters);
-  //   console.log("allCountries", allCountries);
-
   return filterType === "country" ? (
     <SelectBox
       isSearchable={false}

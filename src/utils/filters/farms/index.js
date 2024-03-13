@@ -1,4 +1,4 @@
-import { farmsFuelTypeOptions, farmsUsedHoursOptions } from "./options";
+import { farmsCategoryOptions, farmsFuelTypeOptions, farmsUsedHoursOptions } from "./options";
 import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
 
 export const farmsFilters = [
@@ -44,6 +44,18 @@ export const farmsFilters = [
     filterType: "normal",
   },
   {
+    label: "Category",
+    name: "category",
+    filterOptions: farmsCategoryOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Sub Category",
+    name: "subCategory",
+    filterOptions: [],
+    filterType: "normal",
+  },
+  {
     label: "Fuel Type",
     name: "fuelType",
     filterOptions: farmsFuelTypeOptions,
@@ -84,6 +96,16 @@ export const farmsPostFeatures = [
     options: colorsList,
   },
   {
+    label: "Category",
+    value: "category",
+    options: farmsCategoryOptions,
+  },
+  {
+    label: "Sub Category",
+    value: "subCategory",
+    options: [],
+  },
+  {
     label: "Hours Used",
     value: "farmsUsedHours",
     options: farmsUsedHoursOptions,
@@ -94,6 +116,8 @@ export const farmsDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "fuelType", label: "Fuel Type" },
+  { value: "category", label: "Category" },
+  { value: "subCategory", label: "Sub Category" },
   { value: "exteriorColor", label: "Colour" },
   { value: "farmsUsedHours", label: "Used Hours" },
 ];

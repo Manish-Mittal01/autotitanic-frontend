@@ -112,10 +112,6 @@ const Header = ({ sidebar, setSidebar }) => {
     );
   };
 
-  // console.log("userProfile", userProfile);
-  // console.log("admin", admin);
-  // console.log("admin.image", admin.image);
-
   return (
     <>
       <header className="px-2 header">

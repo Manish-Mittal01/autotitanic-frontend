@@ -130,11 +130,6 @@ const Register = () => {
     }
   }, [userCreds.mobile, userCreds.whatsapp]);
 
-  // console.log("userCreds", userCreds);
-  // console.log("rememberedUser", rememberedUser);
-  //   console.log("allCountries", allCountries);
-  // console.log("selectedCountry", selectedCountry);
-
   return (
     <>
       <div className="container">

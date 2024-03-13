@@ -21,8 +21,6 @@ const Footer = () => {
     hanldePageList();
   }, []);
 
-  // console.log("contentPageList", contentPageList);
-
   return (
     <>
       <footer className="mainWrapper bg-white">

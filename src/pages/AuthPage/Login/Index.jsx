@@ -29,7 +29,6 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     const response = await handleApiRequest(login, userCreds);
-    console.log("response", response);
     if (response.status) {
       if (state) {
         navigate(state, { state: "afterLogin" });
@@ -55,9 +54,6 @@ const Login = () => {
       setUserCreds({ ...rememberedUser, remember: false });
     }
   }, [rememberedUser]);
-
-  // console.log("userCreds", userCreds);
-  // console.log("rememberedUser", rememberedUser);
 
   return (
     <>

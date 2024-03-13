@@ -32,7 +32,6 @@ const SetNewUserPassword = () => {
       token: searchParams.get("auth"),
     };
     const response = await handleApiRequest(setNewPassword, request);
-    console.log("new password response", response);
     if (response.isSuccess) {
       successMsg("Password updated successfully");
       navigate("/login");
@@ -49,7 +48,6 @@ const SetNewUserPassword = () => {
     handleSetPassword();
   };
 
-  console.log("userCreds", userCreds);
   // console.log("rememberedUser", rememberedUser);
 
   return (

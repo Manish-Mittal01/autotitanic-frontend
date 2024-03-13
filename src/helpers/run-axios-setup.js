@@ -50,8 +50,8 @@ export default function runAxiosSetup({ token, adminId, headers = {}, navigate =
         errorObject.type = error.response.status;
         errorObject.data = error.response.data;
 
-        store.dispatch(logoutUser({}));
-        navigate("/login");
+        // store.dispatch(logoutUser({}));
+        // navigate("/login");
       } else if (error.response) {
         errorObject.message = error.response.data.message || "Server Error!!!";
         errorObject.code = error.response.data.code || "X_SERVER_ERROR";

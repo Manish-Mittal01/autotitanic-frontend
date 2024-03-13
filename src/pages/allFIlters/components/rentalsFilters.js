@@ -96,9 +96,6 @@ export default function AllRentalsFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  // console.log("vehiclesCount", vehiclesCount);
-  // console.log("vehiclesCountByFilter", vehiclesCountByFilter);
-
   return (
     <>
       <HeroAdd />

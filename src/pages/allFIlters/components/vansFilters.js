@@ -163,10 +163,6 @@ export default function AllVansFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  //   console.log("filters", filters);
-  // console.log("vehiclesCount", vehiclesCount);
-  // console.log("vehiclesCountByFilter", vehiclesCountByFilter);
-
   return (
     <>
       <HeroAdd />

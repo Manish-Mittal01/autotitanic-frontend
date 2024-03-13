@@ -91,7 +91,6 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
       _id: userAction.id,
       status: "deleted",
     });
-    console.log("response", response);
     if (response.status) {
       handleVehicleList();
     }
@@ -144,7 +143,7 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                       {isVehicleWishlisted ? (
                         <FaHeart className="text-danger" />
                       ) : (
-                        <HeartIcon className="redIcon" />
+                        <HeartIcon className="redIcon" style={{ width: 20 }} />
                       )}
                     </Button>
                     <Button

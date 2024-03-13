@@ -32,7 +32,6 @@ function App() {
     }
   }, [loggedinUser]);
 
-  // console.log("loggedinUser", loggedinUser);
   return (
     <>
       <LoadIndicator />
@@ -59,6 +58,7 @@ function App() {
           {categories.map((category) => (
             <Fragment key={category.value}>
               <Route path={`${category.value}/allFilters`} element={<AllFilters />} />
+              <Route path={`${category.value}/rent/allFilters`} element={<AllFilters />} />
               <Route path={`${category.value}`} element={<NavComponent />} />
               <Route path={`${category.value}/:categoryFilter`} element={<NavComponent />} />
               <Route path={`${category.value}/rent`} element={<NavComponent />} />

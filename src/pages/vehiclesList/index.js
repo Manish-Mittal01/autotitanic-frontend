@@ -69,7 +69,6 @@ export default function VehiclesList() {
   };
 
   useEffect(() => {
-    console.log("filters", filters);
     if (filters.type || filters.sellOrRent) {
       handleVehicleList();
     }
@@ -119,7 +118,6 @@ export default function VehiclesList() {
     }
   }, [categoryFilter, pathname]);
 
-  console.log("params", params);
   // console.log("pathname", pathname);
   // console.log("categoryFilter", categoryFilter);
   // console.log("filters", filters);

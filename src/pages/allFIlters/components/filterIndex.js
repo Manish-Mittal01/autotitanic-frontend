@@ -114,8 +114,6 @@ export default function MoreFilters() {
   }, [allMakes, allModels, allCountries, allCities]);
   // }, [allMakes, allModels, allVariants, allCountries, allCities]);
 
-  console.log("category", category);
-
   return (
     <>
       <HeroAdd />

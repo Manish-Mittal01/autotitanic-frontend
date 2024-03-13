@@ -36,10 +36,11 @@ export default function AllFilters() {
   //     });
   //   });
 
-  //   console.log("first", mmObj);
   // }, []);
 
-  return pathname.includes("cars") ? (
+  return pathname.includes("rent") ? (
+    <AllRentalsFilters />
+  ) : pathname.includes("cars") ? (
     <AllCarsFilters />
   ) : pathname.includes("caravans") ? (
     <AllCaravansFilters />
@@ -51,8 +52,6 @@ export default function AllFilters() {
     <AllMotorhomesFilters />
   ) : pathname.includes("trucks") || pathname.includes("farms") || pathname.includes("plants") ? (
     <MoreFilters />
-  ) : pathname.includes("rent") ? (
-    <AllRentalsFilters />
   ) : pathname.includes("partAndAccessories") ? (
     <AllPartsFilters />
   ) : (

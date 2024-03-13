@@ -1,5 +1,6 @@
 import { farmsFuelTypeOptions, farmsUsedHoursOptions } from "../farms/options";
 import { colorsList, conditionOptions, getYearList, sellerOptions } from "../common/options";
+import { plantsCategoryOptions } from "./options";
 
 export const plantsFilters = [
   { label: "Country", name: "country", filterOptions: [], filterType: "normal" },
@@ -36,7 +37,18 @@ export const plantsFilters = [
     filterOptions: sellerOptions,
     filterType: "normal",
   },
-
+  {
+    label: "Category",
+    name: "category",
+    filterOptions: plantsCategoryOptions,
+    filterType: "normal",
+  },
+  {
+    label: "Sub Category",
+    name: "subCategory",
+    filterOptions: [],
+    filterType: "normal",
+  },
   {
     label: "Exterior Color",
     name: "exteriorColor",
@@ -79,6 +91,16 @@ export const plantsPostFeatures = [
     options: conditionOptions,
   },
   {
+    label: "Category",
+    value: "category",
+    options: plantsCategoryOptions,
+  },
+  {
+    label: "Sub Category",
+    value: "subCategory",
+    options: [],
+  },
+  {
     label: "Exterior Color",
     value: "exteriorColor",
     options: colorsList,
@@ -94,6 +116,8 @@ export const plantsDetailsList = [
   { value: "condition", label: "Condition" },
   { value: "year", label: "Year" },
   { value: "fuelType", label: "Fuel Type" },
+  { value: "category", label: "Category" },
+  { value: "subCategory", label: "Sub Category" },
   { value: "exteriorColor", label: "Colour" },
   { value: "farmsUsedHours", label: "Used Hours" },
 ];

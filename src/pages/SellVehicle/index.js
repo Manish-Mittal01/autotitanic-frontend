@@ -26,6 +26,8 @@ import { plantsPostFeatures } from "../../utils/filters/plants";
 import { partsPostFeatures } from "../../utils/filters/partsAndAccessories";
 import { partsSubCategoryOptions } from "../../utils/filters/partsAndAccessories/options";
 import { rentalsPostFeatures } from "../../utils/filters/rental";
+import { farmsSubCategoryOptions } from "../../utils/filters/farms/options";
+import { plantsSubCategoryOptions } from "../../utils/filters/plants/options";
 
 export default function SellVehicle() {
   const { state } = useLocation();
@@ -582,12 +584,34 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     const oldFeatures = [...featuresList];
 
     if (
+      (postDetails.type?.value === "plants" || postDetails.type === "plants") &&
+      (postDetails.category?.value || typeof postDetails.category === "string")
+    ) {
+      const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "subCategory");
+      const options = plantsSubCategoryOptions.filter(
+        (item) => item.category === postDetails.category.value
+      );
+
+      oldFeatures[subCategoryIndex].options = options;
+    }
+    if (
       (postDetails.type?.value === "partAndAccessories" ||
         postDetails.type === "partAndAccessories") &&
       (postDetails.category?.value || typeof postDetails.category === "string")
     ) {
       const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "subCategory");
       const options = partsSubCategoryOptions.filter(
+        (item) => item.category === postDetails.category.value
+      );
+
+      oldFeatures[subCategoryIndex].options = options;
+    }
+    if (
+      (postDetails.type?.value === "farms" || postDetails.type === "farms") &&
+      (postDetails.category?.value || typeof postDetails.category === "string")
+    ) {
+      const subCategoryIndex = oldFeatures.findIndex((elem) => elem.value === "subCategory");
+      const options = farmsSubCategoryOptions.filter(
         (item) => item.category === postDetails.category.value
       );
 
