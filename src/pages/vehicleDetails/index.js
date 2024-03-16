@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
+import { TiInfoLarge } from "react-icons/ti";
+import { FaRegStar } from "react-icons/fa";
+import { FaStarHalfAlt } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
@@ -37,6 +40,9 @@ import { farmsDetailsList } from "../../utils/filters/farms";
 import { plantsDetailsList } from "../../utils/filters/plants";
 import { rentalsDetailsList } from "../../utils/filters/rental";
 import moment from "moment";
+import ReviewPop from "./components/reviewPop";
+import { MyTooltip } from "../../components/myTooltip/myTooltip";
+import ReviewList from "./components/reviewsList";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -48,6 +54,7 @@ export default function VehicleDetails() {
   const detail = vehicleDetails.data;
   const [action, setAction] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
+  const [rating, setRating] = useState({ rating: 0, review: "" });
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -255,74 +262,130 @@ export default function VehicleDetails() {
               </h6>
               <div className="p-3">
                 {isUserLoggedin() ? (
-                  sellerDetails.map((key, i) => {
-                    const myKey =
-                      key.label === "Seller's Name" &&
-                      detail?.user?.[sellerDetails[i - 1]?.value] === "dealer"
-                        ? "Business Name"
-                        : key.label;
+                  <>
+                    {sellerDetails.map((key, i) => {
+                      const myKey =
+                        key.label === "Seller's Name" &&
+                        detail?.user?.[sellerDetails[i - 1]?.value] === "dealer"
+                          ? "Business Name"
+                          : key.label;
 
-                    return (
-                      detail?.user?.[key.value] && (
-                        <Row className="my-2 align-items-center">
-                          <Col xs={5} className="darkColor small fw-bold">
-                            {myKey}
-                          </Col>
-                          <Col
-                            xs={7}
-                            className="small primaryColor"
-                            style={{ wordWrap: "break-word" }}
-                          >
-                            {key.value === "whatsapp" ? (
-                              <a
-                                href={
-                                  key.value === "whatsapp"
-                                    ? `https://wa.me/${detail?.user?.[key.value]}`
-                                    : `mailto:${detail?.user?.[key.value]}`
-                                }
-                                target="_blank"
-                              >
-                                <p
-                                  className="whatsappSeller mainDarkColor m-0 rounded-pill small"
-                                  ref={whatsappBoxref}
+                      return (
+                        detail?.user && (
+                          <Row className="my-2 align-items-center">
+                            <Col xs={5} className="darkColor small fw-bold">
+                              {myKey}
+                            </Col>
+                            <Col
+                              xs={7}
+                              className="small primaryColor"
+                              style={{ wordWrap: "break-word" }}
+                            >
+                              {key.value === "whatsapp" ? (
+                                <a
+                                  href={
+                                    key.value === "whatsapp"
+                                      ? `https://wa.me/${detail?.user?.[key.value]}`
+                                      : `mailto:${detail?.user?.[key.value]}`
+                                  }
+                                  target="_blank"
                                 >
-                                  <WhatsappIcon className="me-1" width={20} />
-                                  WhatsApp Seller
-                                </p>
-                              </a>
-                            ) : key.value === "email" ? (
-                              <a href={`mailto:${detail?.user?.[key.value]}`} target="_blank">
+                                  <p
+                                    className="whatsappSeller mainDarkColor m-0 rounded-pill small"
+                                    ref={whatsappBoxref}
+                                  >
+                                    <WhatsappIcon className="me-1" width={20} />
+                                    WhatsApp Seller
+                                  </p>
+                                </a>
+                              ) : key.value === "email" ? (
                                 <p
                                   className="whatsappSeller mainDarkColor m-0 rounded-pill small"
                                   style={{ minWidth: whatsappBoxref.current?.offsetWidth }}
                                 >
-                                  <MdOutlineEmail className="emailIcon me-1" />
-                                  Email Seller
+                                  <a
+                                    href={`mailto:${detail?.user?.[key.value]}`}
+                                    target="_blank"
+                                    className="text-white"
+                                  >
+                                    <MdOutlineEmail className="emailIcon me-1" />
+                                    Email Seller
+                                  </a>
                                 </p>
-                              </a>
-                            ) : key.value === "mobile" ? (
-                              <a
-                                href={`mailto:${detail?.user?.[key.value]}`}
-                                target="_blank"
-                                className="primaryColor d-flex align-items-center"
-                              >
-                                <img
-                                  src={detail?.user.country?.flag}
-                                  width={15}
-                                  className=" me-1"
-                                />
-                                {parseKey(detail?.user?.[key.value])}
-                              </a>
-                            ) : key.value === "name" && detail.user?.userType === "private" ? (
-                              parseKey(detail?.user?.[key.value].split(" ")[0])
-                            ) : (
-                              parseKey(detail?.user?.[key.value])
-                            )}
-                          </Col>
-                        </Row>
-                      )
-                    );
-                  })
+                              ) : key.value === "mobile" ? (
+                                <a
+                                  href={`mailto:${detail?.user?.[key.value]}`}
+                                  target="_blank"
+                                  className="primaryColor d-flex align-items-center"
+                                >
+                                  <img
+                                    src={detail?.user.country?.flag}
+                                    width={15}
+                                    className=" me-1"
+                                  />
+                                  {parseKey(detail?.user?.[key.value])}
+                                </a>
+                              ) : key.value === "name" && detail.user?.userType === "private" ? (
+                                parseKey(detail?.user?.[key.value].split(" ")[0])
+                              ) : key.value === "rating" ? (
+                                <>
+                                  <p className="m-0">
+                                    {`${parseKey(detail?.rating)}`}
+                                    <span className="mx-1">
+                                      {Array.from({ length: 5 }).map((_, i) => {
+                                        return detail?.rating > i && detail?.rating < i + 1 ? (
+                                          <FaStarHalfAlt className="text-secondary" />
+                                        ) : detail?.rating <= i ? (
+                                          <FaRegStar className="text-secondary" />
+                                        ) : (
+                                          <FaStar className="text-secondary" />
+                                        );
+                                      })}
+                                    </span>
+                                  </p>
+                                  <p className="m-0">
+                                    <span
+                                      className="pointer"
+                                      onClick={() =>
+                                        setAction({ type: "listReview", seller: detail?.user })
+                                      }
+                                    >
+                                      {`( ${detail?.reviewsCount || 0} reviews )`}
+                                    </span>
+                                    <MyTooltip
+                                      text="Reviews are not verified by Autotitanic. However we remove fake reviews by verifying them."
+                                      placement="auto"
+                                    >
+                                      <TiInfoLarge className="infoIcon mainDarkColor" />
+                                    </MyTooltip>
+                                  </p>
+                                </>
+                              ) : (
+                                parseKey(detail?.user?.[key.value])
+                              )}
+                            </Col>
+                          </Row>
+                        )
+                      );
+                    })}
+                    <Row>
+                      <Col xs={12} className="d-flex justify-content-center">
+                        <p
+                          className="whatsappSeller mainDarkColor pointer m-0 rounded-pill small"
+                          onClick={() => setAction({ type: "addReview", seller: detail?.user })}
+                        >
+                          Write a review for Seller
+                        </p>
+                      </Col>
+                      {/* <Button
+                        variant=""
+                        className="primaryColor"
+                        onClick={() => setAction({ type: "listReview", seller: detail?.user })}
+                      >
+                        View All reviews
+                      </Button> */}
+                    </Row>
+                  </>
                 ) : (
                   <div className="loginTOViewDetails d-flex justify-content-center">
                     <p
@@ -407,6 +470,8 @@ export default function VehicleDetails() {
 
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}
       {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
+      {action?.type === "addReview" && <ReviewPop action={action} setAction={setAction} />}
+      {action?.type === "listReview" && <ReviewList action={action} setAction={setAction} />}
     </>
   );
 }

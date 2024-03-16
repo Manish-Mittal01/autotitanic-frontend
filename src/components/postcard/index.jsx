@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { ReactComponent as HeartIcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as ExpandIcon } from "../../Assets/icons/expand.svg";
 import { ReactComponent as LinkIcon } from "../../Assets/icons/link.svg";
@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 import { OverlayTrigger } from "react-bootstrap";
 import MyTooltip from "../common/tooltip";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { addToCompare, addToWishlist } from "../../redux/vehicles/thunk";
 import { successMsg } from "../../utils/toastMsg";
@@ -16,9 +16,9 @@ import { manageGallery } from "../../redux/common/slice";
 import parseKey from "../../utils/parseKey";
 
 export default function PostCard({ post }) {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const postImageRef = useRef();
 
   const showGallery = (e, media) => {
     e.stopPropagation();
@@ -84,7 +84,6 @@ export default function PostCard({ post }) {
         <div className="card-cstm bg-white h-10 top">
           <div className="img-wrp position-relative postImage">
             <img
-              ref={postImageRef}
               src={post?.media[0].url}
               loading="lazy"
               alt=""
@@ -94,12 +93,31 @@ export default function PostCard({ post }) {
           </div>
           <div className="content">
             <p className="head postCardDetails pb-1 mt-2 mb-0 font-middle">
-              {parseKey(post?.year)} Reg | {parseKey(post?.gearBox)} | {parseKey(post?.mileage)}{" "}
-              Miles
+              {["/cars", "/vans", "/motorhomes"].includes(pathname)
+                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.category)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`
+                : pathname === "/bikes" || pathname === "/rentals" || pathname.includes("rent")
+                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.condition)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`
+                : ["/caravans", "/trucks", "/farms", "/plants"].includes(pathname)
+                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.category)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`
+                : pathname === "/partAndAccessories"
+                ? `${parseKey(post?.category)} | ${parseKey(post?.subCategory)} | ${parseKey(
+                    post?.condition
+                  )}`
+                : `${parseKey(post?.year)} Reg | ${parseKey(post?.gearBox)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`}
             </p>
-            <p className="m-0 text-danger fw-bold postCardMake">
-              {post?.make?.label + " " + post?.model?.label}
-            </p>
+            {pathname !== "/partAndAccessories" && (
+              <p className="m-0 text-danger fw-bold postCardMake">
+                {post?.make?.label + " " + post?.model?.label}
+              </p>
+            )}
             <button className="border rounded-pill my-1">Private</button>
             <div className=" postcardFooter text-white d-flex align-items-center justify-content-between p-2">
               <div className="d-flex align-items-center me-3 gap-1">

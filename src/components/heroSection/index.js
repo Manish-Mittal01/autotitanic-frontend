@@ -54,7 +54,7 @@ export default function HeroSection({ showFilterBox = true }) {
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, { makeId: filters.make.value });
+    handleApiRequest(getAllModel, { makeId: filters.make.value, type: pathname.replace("/", "") });
   };
 
   const handleResultCount = async () => {
@@ -177,6 +177,8 @@ export default function HeroSection({ showFilterBox = true }) {
       <span>{data.label}</span>
     </div>
   );
+
+  console.log("allModels", allModels);
 
   return (
     <div className="mx-0 mx-lg-2">
@@ -326,14 +328,21 @@ export default function HeroSection({ showFilterBox = true }) {
             />
           )}
 
-          {pathname === "/trucks" && (
-            <SelectBox
-              classNamePrefix={"makeSelector"}
-              placeholder="Category"
-              options={trucksCategoryOptions}
-              value={filters.category || ""}
-              onChange={(selected) => {
-                handleUpdateFilters("category", selected);
+          {(pathname === "/trucks" ||
+            pathname === "/farms" ||
+            pathname === "/plants" ||
+            pathname === "/partAndAccessories") && (
+            <input
+              type="text"
+              className="form-control my-2"
+              style={{ height: 40 }}
+              placeholder="Keywords"
+              name="keyword"
+              value={filters.keyword?.value || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length > 10) return;
+                handleUpdateFilters("keyword", { value: value, label: value });
               }}
             />
           )}

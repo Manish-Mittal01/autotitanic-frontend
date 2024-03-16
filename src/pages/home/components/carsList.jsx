@@ -4,7 +4,7 @@ import { getFeaturedList, getRecentList } from "../../../redux/vehicles/thunk";
 import { handleApiRequest } from "../../../services/handleApiRequest";
 import ListCrousel from "./listCrousel";
 import { useLocation } from "react-router-dom";
-import parseKey, { parseCamelKey } from "../../../utils/parseKey";
+import { parseCamelKey } from "../../../utils/parseKey";
 
 function CarsList() {
   const { pathname } = useLocation();
@@ -45,6 +45,7 @@ function CarsList() {
   // console.log("splitList", splitList(recentList.data?.items, 4, 5));
   // console.log("recentList", recentList);
   // console.log("featuredList", featuredList);
+  // console.log("filters", filters);
 
   return (
     <>

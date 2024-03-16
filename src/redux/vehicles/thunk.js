@@ -171,3 +171,21 @@ export const makeOffer = createAsyncThunk("vehicles/makeOffer", async (details, 
     return Thunk.rejectWithValue(error);
   }
 });
+
+export const submitReview = createAsyncThunk("vehicles/addReview", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`addReview`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const getReviews = createAsyncThunk("vehicles/getReviews", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`getReviews`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});

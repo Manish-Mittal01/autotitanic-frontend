@@ -29,7 +29,6 @@ export default function Home() {
     dispatch(resetFilters());
   }, [pathname]);
 
-  // console.log("allMakes", allMakes);
   // console.log("vehiclesList", vehiclesList);
 
   return (
