@@ -120,10 +120,11 @@ const Register = () => {
 
       setSelectedCountry((prev) => ({ ...prev, mobile: selectedCountry }));
     }
+
     if (userCreds.whatsapp) {
       const mobileCode = userCreds.whatsapp.split(" ")[0].slice(1);
       const selectedCountry = allCountries.data?.items.find((country) =>
-        country.countryCode.startsWith(mobileCode)
+        mobileCode.startsWith(country.countryCode)
       );
 
       setSelectedCountry((prev) => ({ ...prev, whatsapp: selectedCountry }));

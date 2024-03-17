@@ -353,7 +353,7 @@ export default function VehicleDetails() {
                                       {`( ${detail?.reviewsCount || 0} reviews )`}
                                     </span>
                                     <MyTooltip
-                                      text="Reviews are not verified by Autotitanic. However we remove fake reviews by verifying them."
+                                      text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
                                       placement="auto"
                                     >
                                       <TiInfoLarge className="infoIcon mainDarkColor" />

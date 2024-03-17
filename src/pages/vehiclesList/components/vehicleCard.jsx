@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
+import { TiInfoLarge } from "react-icons/ti";
 import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as CompareIcon } from "../../../Assets/icons/compare.svg";
@@ -23,6 +24,7 @@ import { getUserProfile } from "../../../redux/profile/thunk";
 import { useSelector } from "react-redux";
 import isUserLoggedin from "../../../utils/isUserLoggedin";
 import moment from "moment";
+import { MyTooltip } from "../../../components/myTooltip/myTooltip";
 
 export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   const navigate = useNavigate();
@@ -33,6 +35,9 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
   // const [isVehicleWishlisted, setIsVehicleWishlisted] = useState(false);
 
   const isVehicleWishlisted = myWishlist.data?.find((item) => vehicle._id === item.vehicle._id);
+  const rating =
+    vehicle?.sellerReviews.reduce((a, b) => a + Number(b.rating), 0) /
+    vehicle?.sellerReviews?.length;
 
   const handleWishlist = async () => {
     await handleApiRequest(getWishlist);
@@ -198,7 +203,13 @@ export default function VehicleCard({ vehicle, wishlist, myVehicle }) {
                   )}
                   <p className="">
                     <StarRegular />
-                    {vehicle.rating || "No Rating yet"} ({vehicle.reviews?.length} reviews)
+                    {rating || "No Rating yet"} ({vehicle?.sellerReviews?.length} reviews)
+                    <MyTooltip
+                      text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
+                      placement="auto"
+                    >
+                      <TiInfoLarge className="infoIcon mainDarkColor" />
+                    </MyTooltip>
                   </p>
                   <p className="darkColor mb-2 fw-bold">
                     <LocationIcon />

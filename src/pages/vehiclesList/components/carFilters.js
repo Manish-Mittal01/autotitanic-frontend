@@ -339,6 +339,35 @@ export default function CarFilters() {
               )}
             </Fragment>
           ))}
+          <li className="d-flex justify-content-between align-items-center px-3 py-2 ">
+            <Row className="w-100 align-items-center">
+              <Col xs={4} className="">
+                <span className="darkColor fw-bold">Keyword</span>
+              </Col>
+              <Col xs={8} className="p-0">
+                <input
+                  type="text"
+                  className="filterInput form-control"
+                  style={{ height: 40 }}
+                  placeholder={"Enter Keyword"}
+                  name={"keyword"}
+                  value={filters.keyword?.value || filters.keyword || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 10) return;
+                    dispatch(
+                      selectFilters({
+                        keyword: {
+                          value: value,
+                          label: value,
+                        },
+                      })
+                    );
+                  }}
+                />
+              </Col>
+            </Row>
+          </li>
         </ul>
       </div>
       <div className="fullSizeAddContainer d-none d-lg-flex" style={{ width: 200, height: 200 }}>

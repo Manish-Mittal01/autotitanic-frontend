@@ -48,7 +48,7 @@ export default function ReviewList({ action, setAction }) {
         <Modal.Header closeButton>
           Read about&nbsp;<b>{action?.seller?.name}</b>
           <MyTooltip
-            text="Reviews are not verified by Autotitanic. However we remove fake reviews by verifying them."
+            text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
             placement="bottom"
           >
             <TiInfoLarge className="infoIcon mainDarkColor" />
