@@ -1,4 +1,3 @@
-export const home = "/home";
 export const contentPage = "/page";
 export const contactUs = "/contactus";
 export const allFilters = "/allFilters";

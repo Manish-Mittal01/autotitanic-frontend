@@ -21,13 +21,13 @@ import { categories } from "../../utils";
 export default function VehiclesList() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const params = useParams();
-  const { categoryFilter } = params;
+  const { categoryFilter } = useParams();
   const dispatch = useDispatch();
+
   const { filters } = useSelector((state) => state.filters);
   const { showFilterBar } = useSelector((state) => state.common);
-  // const { vehiclesList } = useSelector((state) => state.vehicles);
-  const [vehiclesList, setVehiclesList] = useState([]);
+
+  const [vehiclesList, setVehiclesList] = useState({});
   const [paginationDetails, setPaginationDetails] = useState({
     page: 1,
     limit: 25,
@@ -64,10 +64,6 @@ export default function VehiclesList() {
     }
   };
 
-  const handleWishlist = async () => {
-    await handleApiRequest(getWishlist, {}, false);
-  };
-
   useEffect(() => {
     if (filters.type || filters.sellOrRent) {
       handleVehicleList();
@@ -75,8 +71,6 @@ export default function VehiclesList() {
   }, [filters, paginationDetails]);
 
   useEffect(() => {
-    handleWishlist();
-
     return () => {
       dispatch(resetFilters());
     };
@@ -119,9 +113,6 @@ export default function VehiclesList() {
   }, [categoryFilter, pathname]);
 
   // console.log("pathname", pathname);
-  // console.log("categoryFilter", categoryFilter);
-  // console.log("filters", filters);
-  // console.log("vehiclesList", vehiclesList);
 
   return (
     <>
@@ -224,7 +215,12 @@ export default function VehiclesList() {
             {vehiclesList?.items?.length > 0 ? (
               isArray(vehiclesList?.items).map((vehicle, i) => (
                 <Fragment key={vehicle._id}>
-                  <VehicleCard vehicle={vehicle} />
+                  <VehicleCard
+                    vehicle={vehicle}
+                    setVehiclesList={setVehiclesList}
+                    i={i}
+                    paginationDetails={paginationDetails}
+                  />
                   {i % 10 === 0 && (
                     <div
                       className="fullSizeAddContainer vehicleListAdd d-none d-lg-flex "

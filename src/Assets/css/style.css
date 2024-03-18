@@ -13,7 +13,7 @@
 :root {
   scroll-behavior: smooth;
   --red-color: #ec3235;
-
+  --navyBlue-color: #2c3054
 }
 
 .text-danger {
@@ -326,7 +326,7 @@ table .TableBtnWrp svg {
 }
 
 .text-primary {
-  color: #ac38fa !important;
+  color: #4e4eff !important;
 }
 
 .border-primary {
@@ -3138,7 +3138,6 @@ legend {
   overflow: hidden;
 }
 
-
 .infoIcon {
   border-radius: 50%;
   width: 17px;
@@ -3146,4 +3145,62 @@ legend {
   margin-left: 8px;
   font-size: 37px;
   padding: 3px;
+}
+
+.outlineBtn {
+  color: var(--navyBlue-color);
+  border: 1px solid var(--navyBlue-color);
+}
+
+.outlineBtn:hover {
+  color: var(--navyBlue-color);
+  border: 1px solid var(--navyBlue-color) !important;
+}
+
+.checkMark {
+  color: green;
+}
+
+.myDrawer {
+  max-width: 650px;
+  width: 100% !important;
+}
+
+.drawerCloseIcon {
+  background-color: grey;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+
+.rating {
+  background: red;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #fff;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.extraSmall {
+  font-size: 11px;
+}
+
+.outlineBtn {
+  border: 1px solid red !important;
+  color: red !important;
+}
+
+.loadReplyBtn {
+  background-color: #d5d1d154;
+  border-radius: 2px;
+}
+
+.ratingStar {
+  width: 15px;
+  margin-inline: 1px;
 }

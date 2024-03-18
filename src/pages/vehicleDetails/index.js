@@ -232,8 +232,8 @@ export default function VehicleDetails() {
               {detail?.city?.name + ", " + detail?.country?.name}
               <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
             </div>
-            <p className="mb-0 mt-3 text-end">
-              Posted on {moment(detail?.createdAt).format("DD MMM, YYYY")}
+            <p className="primaryColor mb-0 mt-3">
+              Posted on {moment(detail?.createdAt).format("DD MMM. YYYY")}
             </p>
             <div className="detailsWrapper">
               <h6 className="detailsHeading mainDarkColor mb-0 pb-1">
@@ -368,23 +368,6 @@ export default function VehicleDetails() {
                         )
                       );
                     })}
-                    <Row>
-                      <Col xs={12} className="d-flex justify-content-center">
-                        <p
-                          className="whatsappSeller mainDarkColor pointer m-0 rounded-pill small"
-                          onClick={() => setAction({ type: "addReview", seller: detail?.user })}
-                        >
-                          Write a review for Seller
-                        </p>
-                      </Col>
-                      {/* <Button
-                        variant=""
-                        className="primaryColor"
-                        onClick={() => setAction({ type: "listReview", seller: detail?.user })}
-                      >
-                        View All reviews
-                      </Button> */}
-                    </Row>
                   </>
                 ) : (
                   <div className="loginTOViewDetails d-flex justify-content-center">
@@ -474,4 +457,17 @@ export default function VehicleDetails() {
       {action?.type === "listReview" && <ReviewList action={action} setAction={setAction} />}
     </>
   );
+}
+
+{
+  /* <Row>
+<Col xs={12} className="d-flex justify-content-center">
+  <p
+    className="whatsappSeller mainDarkColor pointer m-0 rounded-pill small"
+    onClick={() => setAction({ type: "addReview", seller: detail?.user })}
+  >
+    Write a review for Seller
+  </p>
+</Col>
+</Row> */
 }

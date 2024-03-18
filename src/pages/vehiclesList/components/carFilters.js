@@ -165,10 +165,11 @@ export default function CarFilters() {
     <>
       <div className="border rounded py-3">
         <h4 className="text-center">
-          {vehiclesList.data?.totalCount} {parseCamelKey(category)} found
+          {parseCamelKey(category)} found
+          <br />({vehiclesList.data?.totalCount})
         </h4>
         <div className="text-center">
-          <Button variant="" className="drakColor" onClick={handleResetFilters}>
+          <Button variant="" className="text-primary" onClick={handleResetFilters}>
             <h6>Reset Filters</h6>
           </Button>
         </div>

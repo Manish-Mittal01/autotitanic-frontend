@@ -69,7 +69,7 @@ export default function ListCrousel({ dataList = [], rowsCount, rowSize, classNa
       const myList = [...list];
       const newList = [];
 
-      for (let i = 1; i <= numberOfRows; i++) {
+      for (let i = 1; i <= Math.ceil(numberOfRows); i++) {
         const limitCount = i * rowSize;
         if (list.length <= limitCount && list.length > 0) {
           for (let ind = 1; ind <= i; ind++) {

@@ -39,5 +39,5 @@ export const sellerDetails = [
   { value: "mobile", label: "Mobile No." },
   { value: "whatsapp", label: "WhatsApp" },
   { value: "email", label: "Email" },
-  { value: "rating", label: "Rating" },
+  { value: "rating", label: "Seller Rating" },
 ];

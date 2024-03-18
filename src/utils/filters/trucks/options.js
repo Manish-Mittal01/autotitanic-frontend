@@ -5,8 +5,8 @@ export const trucksFuelTypeOptions = [
   { value: "electric", label: "Electric" },
   { value: "lpg", label: "LPG" },
   { value: "petrol", label: "Petrol" },
-  { value: "hybridElectricasoline", label: "Hybrid (Electric/Gasoline)" },
-  { value: "hybridElectricDiesel", label: "Hybrid (Electric/Diesel)" },
+  { value: "hybrid(Electric/Gasoline)", label: "Hybrid (Electric/Gasoline)" },
+  { value: "hybrid(Electric/Diesel)", label: "Hybrid (Electric/Diesel)" },
   { value: "hydrogen", label: "Hydrogen" },
   { value: "other", label: "Other" },
 ];
