@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useParams } from "react-router-dom";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { handleApiRequest } from "../../../services/handleApiRequest";
-import { submitReview } from "../../../redux/vehicles/thunk";
+import { getReviews, submitReview } from "../../../redux/vehicles/thunk";
 import { successMsg } from "../../../utils/toastMsg";
 
-export default function ReviewPop({ action, setAction }) {
+export default function ReviewPop({ action, setAction, setReviews }) {
   const [reviewDetails, setReviewDetails] = useState({ rating: 1, review: "" });
   const [error, setError] = useState("");
 
@@ -17,6 +16,14 @@ export default function ReviewPop({ action, setAction }) {
 
   const handleChange = (e) => {
     setReviewDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleReviewList = async () => {
+    const response = await handleApiRequest(getReviews, { seller: action?.seller?._id });
+
+    if (response.status) {
+      setReviews(response.data);
+    }
   };
 
   const handleSubmitReview = async () => {
@@ -35,6 +42,7 @@ export default function ReviewPop({ action, setAction }) {
     if (response.status) {
       successMsg("Review added for seller");
       handleClosePop();
+      handleReviewList();
     }
   };
 

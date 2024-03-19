@@ -42,7 +42,6 @@ import { rentalsDetailsList } from "../../utils/filters/rental";
 import moment from "moment";
 import ReviewPop from "./components/reviewPop";
 import { MyTooltip } from "../../components/myTooltip/myTooltip";
-import ReviewList from "./components/reviewsList";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -454,20 +453,6 @@ export default function VehicleDetails() {
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}
       {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
       {action?.type === "addReview" && <ReviewPop action={action} setAction={setAction} />}
-      {action?.type === "listReview" && <ReviewList action={action} setAction={setAction} />}
     </>
   );
-}
-
-{
-  /* <Row>
-<Col xs={12} className="d-flex justify-content-center">
-  <p
-    className="whatsappSeller mainDarkColor pointer m-0 rounded-pill small"
-    onClick={() => setAction({ type: "addReview", seller: detail?.user })}
-  >
-    Write a review for Seller
-  </p>
-</Col>
-</Row> */
 }

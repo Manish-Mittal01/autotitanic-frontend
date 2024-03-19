@@ -178,7 +178,7 @@ export default function HeroSection({ showFilterBox = true }) {
     </div>
   );
 
-  console.log("allModels", allModels);
+  // console.log("allModels", allModels);
 
   return (
     <div className="mx-0 mx-lg-2">

@@ -3179,11 +3179,15 @@ legend {
 
 .rating {
   background: red;
-  padding: 4px 10px;
   border-radius: 4px;
   color: #fff;
   margin-bottom: 0;
   text-align: center;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .extraSmall {
@@ -3191,6 +3195,11 @@ legend {
 }
 
 .outlineBtn {
+  border: 1px solid red !important;
+  color: red !important;
+}
+
+.outlineBtn:hover {
   border: 1px solid red !important;
   color: red !important;
 }

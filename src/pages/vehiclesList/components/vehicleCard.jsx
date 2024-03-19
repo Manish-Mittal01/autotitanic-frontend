@@ -5,7 +5,6 @@ import { FaHeart } from "react-icons/fa";
 import { FaRegClock } from "react-icons/fa";
 import { TiInfoLarge } from "react-icons/ti";
 import star1 from "../../../Assets/Images/star-filled.jpeg";
-import { ReactComponent as StarRegular } from "../../../Assets/icons/star-regular.svg";
 import { GiCheckMark } from "react-icons/gi";
 import { ReactComponent as LocationIcon } from "../../../Assets/icons/location.svg";
 import { ReactComponent as CompareIcon } from "../../../Assets/icons/compare.svg";
@@ -29,7 +28,7 @@ import isUserLoggedin from "../../../utils/isUserLoggedin";
 import moment from "moment";
 import { MyTooltip } from "../../../components/myTooltip/myTooltip";
 import { isArray } from "../../../utils/dataTypes";
-import ReviewDrawer from "../../../components/Modals/ReviewsPop";
+import ReviewDrawer from "../../../components/sidebar/Reviews";
 
 export default function VehicleCard({
   vehicle,
@@ -161,7 +160,7 @@ export default function VehicleCard({
 
   const handleReviews = (e) => {
     e.stopPropagation();
-    setUserAction({ action: "showReviews" });
+    setUserAction({ action: "showReviews", seller: vehicle?.user });
   };
 
   // console.log("vehicle", vehicle);
