@@ -10,38 +10,87 @@ import star1 from "../../Assets/Images/star-filled.jpeg";
 import star2 from "../../Assets/Images/star-half.jpeg";
 import star3 from "../../Assets/Images/star-empty.jpeg";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { getReviews } from "../../redux/vehicles/thunk";
+import { addReply, getAllReply, getReviews, manageLikes } from "../../redux/vehicles/thunk";
 import { MyTooltip } from "../myTooltip/myTooltip";
 import { TiInfoLarge } from "react-icons/ti";
 import { parseDate } from "../../utils/parseKey";
 import ReviewPop from "../../pages/vehicleDetails/components/reviewPop";
+import { successMsg } from "../../utils/toastMsg";
 
 export default function ReviewDrawer({ userAction, setUserAction }) {
-  const [rating, setRating] = useState("3.8");
-  const [showReplies, setShowReplies] = useState(null);
-  const [addReply, setAddReply] = useState(null);
-  const [likesCount, setLikesCount] = useState({ likes: 10, disLikes: 14 });
   const [reviews, setReviews] = useState({});
+  const [showReplies, setShowReplies] = useState(null);
+  const [showReplyBox, setShowReplyBox] = useState(null);
   const [action, setAction] = useState(null);
+  const [reply, setReply] = useState("");
+  const [replies, setReplies] = useState([]);
+  const [reviewFilter, setReviewFilter] = useState({
+    value: "relevance",
+    label: "Most Relevant",
+    order: 1,
+    key: "_id",
+  });
 
   const closeDrawer = () => {
     setUserAction(null);
   };
 
+  const handleChange = (e) => {
+    setReply(e.target.value);
+  };
+
   const handleReviewList = async () => {
-    const response = await handleApiRequest(getReviews, { seller: userAction?.seller?._id });
+    const request = {
+      seller: userAction?.seller?._id,
+      sortBy: reviewFilter.key || "",
+      order: reviewFilter.order || "",
+    };
+    const response = await handleApiRequest(getReviews, request);
 
     if (response.status) {
       setReviews(response.data);
     }
   };
 
+  const handleLike = async (reviewId, action) => {
+    const request = {
+      reviewId,
+      action,
+    };
+    const response = await handleApiRequest(manageLikes, request);
+    if (response.status) {
+      handleReviewList();
+      successMsg(`Response updated!!`);
+    }
+  };
+
+  const handleReplyList = async (reviewId) => {
+    const request = { reviewId };
+    const response = await handleApiRequest(getAllReply, request);
+    if (response.status) {
+      setReplies(response.data?.items || []);
+    }
+  };
+
+  const handleAddReply = async (reviewId) => {
+    const request = {
+      reviewId,
+      reply,
+    };
+    const response = await handleApiRequest(addReply, request);
+    if (response.status) {
+      successMsg("Reply added!!");
+      setReply("");
+      handleReviewList();
+      if (showReplies) {
+        handleReplyList(showReplies);
+      }
+    }
+  };
+
   useEffect(() => {
     handleReviewList();
-  }, []);
-
-  console.log("userAction", userAction);
-  console.log("reviews", reviews);
+  }, [reviewFilter]);
 
   return (
     <>
@@ -50,7 +99,6 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
         onClose={closeDrawer}
         direction="right"
         className="myDrawer overflow-auto px-3 py-2"
-        style={{ marginTop: 60 }}
       >
         <span className="drawerCloseIcon pointer" onClick={closeDrawer}>
           <RxCross2 />
@@ -88,16 +136,18 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
             <Col lg={6} className="mb-0 d-flex justify-content-end align-items-center">
               <span className="me-2">Sort by</span>
               <Select
-                options={[
-                  { value: "_id", label: "Most Relevant", order: 1 },
-                  { value: "createdAt", label: "Newest first", order: 1 },
-                  { value: "createdAt", label: "oldest first", order: -1 },
-                  { value: "rating", label: "Positive first", order: 1 },
-                  { value: "rating", label: "Negative first", order: -1 },
-                ]}
                 styles={{
                   container: (prev) => ({ ...prev, width: 150 }),
                 }}
+                options={[
+                  { value: "relevance", label: "Most Relevant", order: 1, key: "_id" },
+                  { value: "newestFirst", label: "Newest first", order: -1, key: "createdAt" },
+                  { value: "oldestFirst", label: "Oldest first", order: 1, key: "createdAt" },
+                  { value: "positiveFirst", label: "Positive first", order: -1, key: "rating" },
+                  { value: "negativeFirst", label: "Negative first", order: 1, key: "rating" },
+                ]}
+                value={reviewFilter}
+                onChange={(selected) => setReviewFilter(selected)}
               />
             </Col>
           </Row>
@@ -144,16 +194,19 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
               </p>
               <div className="d-block d-sm-flex align-items-center justify-content-between">
                 <div>
-                  <p className="pointer mb-0">
-                    <span
-                      className="loadReplyBtn pointer small p-1 mx-1"
-                      // onClick={() => {
-                      //   setShowReplies(index);
-                      // }}
-                    >
-                      Load replies
-                    </span>
-                  </p>
+                  {review.repliesCount > 0 && (
+                    <p className="pointer mb-0">
+                      <span
+                        className="loadReplyBtn pointer small p-1 mx-1"
+                        onClick={() => {
+                          setShowReplies(review._id);
+                          handleReplyList(review._id);
+                        }}
+                      >
+                        Load {review.repliesCount} replies
+                      </span>
+                    </p>
+                  )}
                 </div>
                 <div
                   className="text-primary  d-block d-sm-flex align-items-center justify-content-between"
@@ -161,58 +214,62 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
                 >
                   <p
                     className="pointer mb-0"
-                    //  onClick={() => setAddReply(index)}
+                    onClick={() => {
+                      setReply("");
+                      setShowReplyBox(index);
+                    }}
                   >
                     <LuMessagesSquare style={{ fill: "#0d6efd" }} />
                     <span className="mx-1">Reply</span>
                   </p>
-                  <p className="pointer mb-0">
+                  <p className="pointer mb-0" onClick={(e) => handleLike(review._id, "like")}>
                     <HiHandThumbUp />
-                    <span className="mx-1">Helpful ({likesCount.likes})</span>
+                    <span className="mx-1">Helpful ({review.likesCount})</span>
                   </p>
-                  <p className="pointer mb-0">
+                  <p className="pointer mb-0" onClick={(e) => handleLike(review._id, "dislike")}>
                     <HiHandThumbDown />
-                    <span className="mx-1">Not Helpful ({likesCount.disLikes})</span>
+                    <span className="mx-1">Not Helpful ({review.dislikesCount})</span>
                   </p>
                 </div>
               </div>
               <div>
-                {addReply === index && (
+                {showReplyBox === index && (
                   <div className="mx-5 my-4">
                     <textarea
                       className="w-100 border rounded "
                       placeholder="Add a reply"
-                      maxLength={200}
+                      maxLength={120}
+                      value={reply}
+                      onChange={handleChange}
                     />
                     <div className="d-flex justify-content-end">
-                      <Button>Submit</Button>
+                      <Button variant="danger" onClick={() => handleAddReply(review._id)}>
+                        Submit
+                      </Button>
                     </div>
                   </div>
                 )}
 
-                {showReplies === index && (
+                {showReplies === review._id && (
                   <>
-                    {Array.from({ length: 5 }).map((_, index) => (
+                    {replies?.map((reply, index) => (
                       <div className="border-bottom my-3 mx-5 py-3">
                         <div key={index} className="d-flex align-items-center">
                           <p className="rating rounded-circle m-0">M</p>
                           <div className="ms-2" style={{ lineHeight: "15px" }}>
                             <p className="m-0">
-                              Manish <span className="small">(10 Feb. 2024)</span>
+                              {reply.user?.name?.split(" ")[0]}{" "}
+                              <span className="small">({parseDate(reply.createdAt)})</span>
                             </p>
                             <p className="small m-0">
-                              {/* <img src={indiaFlag} width={18} className="me-1" /> */}
-                              India
+                              <img src={reply.user?.country?.flag} width={18} className="me-1" />
+                              {reply.user?.country?.name}
                             </p>
                           </div>
                         </div>
                         <p className="my-2">
                           <b>Reply: </b>
-                          <span>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industry's standard dummy text ever
-                            since the 1500s.
-                          </span>
+                          <span>{reply.reply}</span>
                         </p>
                       </div>
                     ))}

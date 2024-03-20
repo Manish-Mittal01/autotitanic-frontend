@@ -29,6 +29,7 @@ import moment from "moment";
 import { MyTooltip } from "../../../components/myTooltip/myTooltip";
 import { isArray } from "../../../utils/dataTypes";
 import ReviewDrawer from "../../../components/sidebar/Reviews";
+import { reviewMsg } from "../../../utils/constants";
 
 export default function VehicleCard({
   vehicle,
@@ -44,9 +45,10 @@ export default function VehicleCard({
   const { filters } = useSelector((state) => state.filters);
   const [userAction, setUserAction] = useState(null);
 
-  const rating =
+  let rating =
     isArray(vehicle?.sellerReviews)?.reduce((a, b) => a + Number(b.rating), 0) /
-    vehicle?.sellerReviews?.length;
+      vehicle?.sellerReviews?.length || 0;
+  rating = rating ? rating.toFixed(1) : 0;
 
   const handleWishlist = async () => {
     await handleApiRequest(getWishlist);
@@ -284,13 +286,16 @@ export default function VehicleCard({
                     <p className="">{vehicle?.user?.name}</p>
                   )}
                   <p className="">
-                    <img src={star1} className="ratingStar" />
-                    {rating || "No Rating yet"}
+                    {rating ? (
+                      <>
+                        <img src={star1} className="ratingStar" />
+                        {rating || "No Rating yet"}
+                      </>
+                    ) : (
+                      ""
+                    )}
                     <span onClick={handleReviews}> ({vehicle?.sellerReviews?.length} reviews)</span>
-                    <MyTooltip
-                      text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
-                      placement="auto"
-                    >
+                    <MyTooltip text={reviewMsg} placement="auto">
                       <TiInfoLarge className="infoIcon mainDarkColor" />
                     </MyTooltip>
                   </p>

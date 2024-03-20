@@ -42,6 +42,7 @@ import { rentalsDetailsList } from "../../utils/filters/rental";
 import moment from "moment";
 import ReviewPop from "./components/reviewPop";
 import { MyTooltip } from "../../components/myTooltip/myTooltip";
+import { reviewMsg } from "../../utils/constants";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -351,10 +352,7 @@ export default function VehicleDetails() {
                                     >
                                       {`( ${detail?.reviewsCount || 0} reviews )`}
                                     </span>
-                                    <MyTooltip
-                                      text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
-                                      placement="auto"
-                                    >
+                                    <MyTooltip text={reviewMsg} placement="auto">
                                       <TiInfoLarge className="infoIcon mainDarkColor" />
                                     </MyTooltip>
                                   </p>

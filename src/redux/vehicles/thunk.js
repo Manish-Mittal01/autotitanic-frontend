@@ -189,3 +189,30 @@ export const getReviews = createAsyncThunk("vehicles/getReviews", async (details
     return Thunk.rejectWithValue(error);
   }
 });
+
+export const manageLikes = createAsyncThunk("vehicles/manageLikes", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`manageLikes`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const addReply = createAsyncThunk("vehicles/addReply", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`addReply`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const getAllReply = createAsyncThunk("vehicles/getAllReply", async (details, Thunk) => {
+  try {
+    const response = await axios.post(`getAllReply`, details);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
