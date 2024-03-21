@@ -16,6 +16,7 @@ import { TiInfoLarge } from "react-icons/ti";
 import { parseDate } from "../../utils/parseKey";
 import ReviewPop from "../../pages/vehicleDetails/components/reviewPop";
 import { successMsg } from "../../utils/toastMsg";
+import { reviewMsg } from "../../utils/constants";
 
 export default function ReviewDrawer({ userAction, setUserAction }) {
   const [reviews, setReviews] = useState({});
@@ -111,10 +112,7 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
           </div>
           <p className="m-0 text-primary ms-3 d-none d-lg-block">
             We aim for 100% real reviews
-            <MyTooltip
-              text="Reviews are not verified by AutoTitanic however we check and will review fake reviews when it is spotted"
-              placement="auto"
-            >
+            <MyTooltip text={reviewMsg} placement="auto">
               <TiInfoLarge className="infoIcon mainDarkColor" />
             </MyTooltip>
           </p>

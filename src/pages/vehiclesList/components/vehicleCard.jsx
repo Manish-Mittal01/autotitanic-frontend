@@ -270,12 +270,27 @@ export default function VehicleCard({
               <p className={`fw-bold text-danger`}>{vehicle?.title}</p>
               <p className="vehicleCardVehicleDetails mb-3 fw-bold">
                 {vehicle.year ? `${vehicle.year} Reg | ` : ""}
-                {vehicle.bodyStyle ? `${parseCamelKey(vehicle.bodyStyle)} | ` : ""}
+                {vehicle.bodyStyle
+                  ? `${parseCamelKey(vehicle.bodyStyle)} | `
+                  : vehicle.condition
+                  ? `${parseCamelKey(vehicle.condition)} | `
+                  : ""}
                 {vehicle.mileage ? `${vehicle.mileage} Miles | ` : ""}
-                {vehicle.engineSize ? `${vehicle.engineSize} | ` : ""}
+                {vehicle.engineSize
+                  ? `${vehicle.engineSize} | `
+                  : vehicle.enginePower
+                  ? `${vehicle.enginePower} | `
+                  : ""}
                 {vehicle.gearBox ? `${parseCamelKey(vehicle.gearBox)} | ` : ""}
                 {vehicle.fuelType ? `${parseCamelKey(vehicle.fuelType)} | ` : ""}
-                {vehicle.type === "partAndAccessories"
+
+                {(vehicle.type === "caravans" || vehicle.type === "trucks") && vehicle.category
+                  ? `${parseCamelKey(vehicle.category)}`
+                  : ""}
+
+                {vehicle.type === "partAndAccessories" ||
+                vehicle.type === "plants" ||
+                vehicle.type === "farms"
                   ? `${parseCamelKey(vehicle.category)} | ${parseCamelKey(vehicle.subCategory)}`
                   : ""}
               </p>
@@ -285,16 +300,20 @@ export default function VehicleCard({
                   {vehicle?.user?.userType === "dealer" && (
                     <p className="">{vehicle?.user?.name}</p>
                   )}
-                  <p className="">
+                  <p className="d-flex align-items-center">
                     {rating ? (
                       <>
-                        <img src={star1} className="ratingStar" />
+                        {Array.from({ length: 5 }).map((_) => (
+                          <img src={star1} className="ratingStar" />
+                        ))}
                         {rating || "No Rating yet"}
                       </>
                     ) : (
                       ""
                     )}
-                    <span onClick={handleReviews}> ({vehicle?.sellerReviews?.length} reviews)</span>
+                    <span onClick={handleReviews}>
+                      &nbsp;({vehicle?.sellerReviews?.length} reviews)
+                    </span>
                     <MyTooltip text={reviewMsg} placement="auto">
                       <TiInfoLarge className="infoIcon mainDarkColor" />
                     </MyTooltip>
