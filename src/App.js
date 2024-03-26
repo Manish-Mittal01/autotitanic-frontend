@@ -80,7 +80,7 @@ export const NoPage = () => {
   return (
     <div className="text-center my-5">
       <h2>Oops!</h2>
-      <img src={noPage} />
+      <img src={noPage} width={"100%"} />
       <h2 className="fw-bold">PAGE NOT FOUND</h2>
       <p className="fw-bold mb-0">Sorry, the page you're looking for doesn't exist.</p>
       <p className="fw-bold">If you think something is broken, report a problem</p>

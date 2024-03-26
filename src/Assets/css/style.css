@@ -1,4 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@font-face {
+  font-family: 'livvic';
+  src: url('../font/Livvic-Bold.ttf') format('truetype'), ;
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 /**
 * Template Name: NiceAdmin
 * Updated: Sep 18 2023 with Bootstrap v5.3.2
@@ -1712,7 +1722,8 @@ posts-card-wrp .card-cstm .content p {
 
 @media (min-width:600px) {
   .searchBoxWrapper {
-    min-width: 400px;
+    min-width: unset;
+    /* min-width: 400px; */
   }
 }
 
@@ -3214,4 +3225,23 @@ legend {
 .ratingStar {
   width: 15px;
   margin-inline: 1px;
+}
+
+.emailVerificationImage {
+  width: 100%;
+  background-color: #fff;
+}
+
+.companyName {
+  margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: livvic;
+  color: #0173ba;
+  line-height: 28px;
+  letter-spacing: 2px;
+}
+
+.letterHead {
+  font-family: 'Poppins';
 }

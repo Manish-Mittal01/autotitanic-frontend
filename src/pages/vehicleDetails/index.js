@@ -5,11 +5,14 @@ import { Button, Col, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { MdLocalOffer } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { TiInfoLarge } from "react-icons/ti";
-import { FaRegStar } from "react-icons/fa";
+import { FaHeart, FaRegStar } from "react-icons/fa";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { IoMdShare } from "react-icons/io";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import star1 from "../../Assets/Images/star-filled.jpeg";
+import star2 from "../../Assets/Images/star-half.jpeg";
+import star3 from "../../Assets/Images/star-empty.jpeg";
 import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as Heartcon } from "../../Assets/icons/heart.svg";
 import { ReactComponent as WhatsappIcon } from "../../Assets/icons/whatsapp.svg";
@@ -19,6 +22,8 @@ import {
   addToWishlist,
   getRelatedVehicles,
   getVehicleDetails,
+  removeCompareListItem,
+  removeWishlistItem,
 } from "../../redux/vehicles/thunk";
 import parseKey, { parseCamelKey } from "../../utils/parseKey";
 import MediaCarousel from "./components/mediaCrousel";
@@ -43,6 +48,8 @@ import moment from "moment";
 import ReviewPop from "./components/reviewPop";
 import { MyTooltip } from "../../components/myTooltip/myTooltip";
 import { reviewMsg } from "../../utils/constants";
+import ReviewDrawer from "../../components/sidebar/Reviews";
+import { GiCheckMark } from "react-icons/gi";
 
 export default function VehicleDetails() {
   const { pathname, state } = useLocation();
@@ -54,7 +61,6 @@ export default function VehicleDetails() {
   const detail = vehicleDetails.data;
   const [action, setAction] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
-  const [rating, setRating] = useState({ rating: 0, review: "" });
 
   const handleVehicleDetails = async () => {
     await handleApiRequest(getVehicleDetails, id);
@@ -64,29 +70,55 @@ export default function VehicleDetails() {
     await handleApiRequest(getUserProfile);
   };
 
-  const handleAddToCompare = async () => {
-    if (isUserLoggedin()) {
+  const handleCompareItem = async (actionType) => {
+    if (!isUserLoggedin()) {
+      // return errorMsg("Please sign-in or register to compare items");
+      navigate("/login");
+    }
+
+    if (actionType === "add") {
       const response = await handleApiRequest(addToCompare, { vehicle: id });
+
       if (userProfile.data?.compareCount >= 4) {
         navigate("/CompareList");
       }
-      if (response.status) {
-        await handleUserProfile();
+      if (response?.status) {
         successMsg("Added to compare list");
+        await handleUserProfile();
+        handleVehicleDetails();
       }
     } else {
-      navigate("/login");
+      const response = await handleApiRequest(removeCompareListItem, {
+        id: detail?.compareItem?._id,
+      });
+      if (response?.status) {
+        successMsg("Removed from compare list");
+        handleUserProfile();
+        handleVehicleDetails();
+      }
     }
   };
 
-  const handleAddToWishlist = async () => {
-    if (isUserLoggedin()) {
+  const handleWishlistItem = async (actionType) => {
+    if (!isUserLoggedin()) {
+      // return errorMsg("Please sign-in or register to compare items");
+      navigate("/login");
+    }
+
+    if (actionType === "add") {
       const response = await handleApiRequest(addToWishlist, { id });
-      if (response.status) {
-        successMsg("Added to wishlist");
+      if (response?.status) {
+        successMsg("Added to Wishlist");
+        handleVehicleDetails();
       }
     } else {
-      navigate("/login");
+      const response = await handleApiRequest(removeWishlistItem, {
+        id: detail?.wishlistItem?._id,
+      });
+      if (response?.status) {
+        successMsg("Removed from Wishlist");
+        handleVehicleDetails();
+      }
     }
   };
 
@@ -149,9 +181,7 @@ export default function VehicleDetails() {
     }
   }, [vehicleDetails]);
 
-  // console.log("vehicleDetails", vehicleDetails);
-  // console.log("relatedVehicles", relatedVehicles);
-  // console.log("detail", detail);
+  console.log("detail", detail);
 
   return (
     <>
@@ -187,14 +217,41 @@ export default function VehicleDetails() {
                   <MdLocalOffer className="text-danger mx-1" />
                   Make an Offer
                 </p>
-                <p className="small pointer text-center m-0 p-2" onClick={handleAddToCompare}>
-                  <CompareIcon className="redIcon" />
-                  Add to Compare
-                </p>
-                <p className="small pointer text-center m-0 p-2 mx-2" onClick={handleAddToWishlist}>
-                  <Heartcon className="redIcon" />
-                  Add to Wishlist
-                </p>
+                {detail?.compareItem ? (
+                  <p
+                    className="small pointer text-center m-0 p-2"
+                    onClick={() => handleCompareItem("remove")}
+                  >
+                    <CompareIcon className="redIcon" />
+                    Added to Compare
+                    <GiCheckMark className="checkMark ms-1" />
+                  </p>
+                ) : (
+                  <p
+                    className="small pointer text-center m-0 p-2"
+                    onClick={() => handleCompareItem("add")}
+                  >
+                    <CompareIcon className="redIcon" />
+                    Add to Compare
+                  </p>
+                )}
+                {detail?.wishlistItem ? (
+                  <p
+                    className="small pointer text-center m-0 p-2 mx-2"
+                    onClick={() => handleWishlistItem("remove")}
+                  >
+                    <FaHeart className="text-danger" style={{ width: 20 }} />
+                    Added to Wishlist
+                  </p>
+                ) : (
+                  <p
+                    className="small pointer text-center m-0 p-2 mx-2"
+                    onClick={() => handleWishlistItem("add")}
+                  >
+                    <Heartcon className="redIcon" />
+                    Add to Wishlist
+                  </p>
+                )}
               </div>
               <p
                 className="small pointer text-center m-0 p-2"
@@ -232,7 +289,7 @@ export default function VehicleDetails() {
               {detail?.city?.name + ", " + detail?.country?.name}
               <img src={detail?.country?.flag} className="ms-1" style={{ width: 22 }} />
             </div>
-            <p className="primaryColor mb-0 mt-3">
+            <p className="darkColor mb-0 mt-3">
               Posted on {moment(detail?.createdAt).format("DD MMM. YYYY")}
             </p>
             <div className="detailsWrapper">
@@ -258,7 +315,7 @@ export default function VehicleDetails() {
             </div>
             <div className="detailsWrapper sellerDetailsWrapper mt-3">
               <h6 className="detailsHeading bg-danger text-white mb-0 pb-1">
-                <p>Seller's Details</p>
+                <p>Seller Details</p>
               </h6>
               <div className="p-3">
                 {isUserLoggedin() ? (
@@ -334,11 +391,11 @@ export default function VehicleDetails() {
                                     <span className="mx-1">
                                       {Array.from({ length: 5 }).map((_, i) => {
                                         return detail?.rating > i && detail?.rating < i + 1 ? (
-                                          <FaStarHalfAlt className="text-secondary" />
+                                          <img src={star2} className="ratingStar" />
                                         ) : detail?.rating <= i ? (
-                                          <FaRegStar className="text-secondary" />
+                                          <img src={star3} className="ratingStar" />
                                         ) : (
-                                          <FaStar className="text-secondary" />
+                                          <img src={star1} className="ratingStar" />
                                         );
                                       })}
                                     </span>
@@ -400,19 +457,43 @@ export default function VehicleDetails() {
                     </p>
                   </Col>
                   <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
-                    <p className="small pointer primaryColor m-0 p-2" onClick={handleAddToCompare}>
-                      <CompareIcon className="redIcon" />
-                      Add to Compare
-                    </p>
+                    {detail?.compareItem ? (
+                      <p
+                        className="small pointer primaryColor m-0 p-2"
+                        onClick={() => handleCompareItem("remove")}
+                      >
+                        <CompareIcon className="redIcon" />
+                        Added to Compare
+                        <GiCheckMark className="checkMark ms-1" />
+                      </p>
+                    ) : (
+                      <p
+                        className="small pointer primaryColor m-0 p-2"
+                        onClick={() => handleCompareItem("add")}
+                      >
+                        <CompareIcon className="redIcon" />
+                        Add to Compare
+                      </p>
+                    )}
                   </Col>
                   <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
-                    <p
-                      className="small pointer primaryColor m-0 p-2 "
-                      onClick={handleAddToWishlist}
-                    >
-                      <Heartcon className="redIcon" />
-                      Add to Wishlist
-                    </p>
+                    {detail?.wishlistItem ? (
+                      <p
+                        className="small pointer primaryColor m-0 p-2 "
+                        onClick={() => handleWishlistItem("remove")}
+                      >
+                        <FaHeart className="text-danger" style={{ width: 20 }} />
+                        Added to Wishlist
+                      </p>
+                    ) : (
+                      <p
+                        className="small pointer primaryColor m-0 p-2 "
+                        onClick={() => handleWishlistItem("add")}
+                      >
+                        <Heartcon className="redIcon" />
+                        Add to Wishlist
+                      </p>
+                    )}
                   </Col>
                   <Col xs={6} className="small" style={{ wordWrap: "break-word" }}>
                     <p
@@ -450,7 +531,9 @@ export default function VehicleDetails() {
 
       {action?.type === "makeOffer" && <MakeOfferPop action={action} setAction={setAction} />}
       {action?.type === "sharePost" && <SharePop action={action} setAction={setAction} />}
-      {action?.type === "addReview" && <ReviewPop action={action} setAction={setAction} />}
+      {action?.type === "listReview" && (
+        <ReviewDrawer userAction={action} setUserAction={setAction} />
+      )}
     </>
   );
 }

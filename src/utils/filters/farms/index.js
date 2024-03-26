@@ -31,7 +31,7 @@ export const farmsFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",

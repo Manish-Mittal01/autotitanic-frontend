@@ -22,9 +22,7 @@ export const bikesFilters = [
     name: "year",
     filterOptions: {
       From: { options: getYearList(), key: "minYear" },
-      // .slice(0, -2), key: "minYear" },
       To: { options: getYearList(), key: "maxYear" },
-      // .slice(2), key: "maxYear" },
     },
     filterType: "range",
   },
@@ -32,8 +30,8 @@ export const bikesFilters = [
     label: "Mileage",
     name: "mileage",
     filterOptions: {
-      Min: { options: vansMileageList.slice(0, -2), key: "minMileage" },
-      Max: { options: vansMileageList.slice(2), key: "maxMileage" },
+      Min: { options: vansMileageList, key: "minMileage" },
+      Max: { options: vansMileageList, key: "maxMileage" },
     },
     filterType: "range",
   },
@@ -44,7 +42,7 @@ export const bikesFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",

@@ -32,7 +32,7 @@ export const plantsFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",

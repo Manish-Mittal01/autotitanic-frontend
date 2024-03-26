@@ -50,6 +50,7 @@ export const vansEnginePowerOptions = [
 ];
 
 export const vansMileageList = [
+  { value: "", label: "Any" },
   { value: 100, label: "Up to 100 M" },
   { value: 500, label: "Up to 500 M" },
   { value: 1000, label: "Up to 1000 M" },

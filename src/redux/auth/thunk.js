@@ -45,3 +45,24 @@ export const logout = createAsyncThunk("auth/logout", async (_, Thunk) => {
     return Thunk.rejectWithValue(error);
   }
 });
+
+export const verifyEmail = createAsyncThunk("auth/verifyEmail", async (token, Thunk) => {
+  try {
+    const response = await axios.post("verifyEmail", token);
+    return response?.data;
+  } catch (error) {
+    return Thunk.rejectWithValue(error);
+  }
+});
+
+export const resendVerificationEmail = createAsyncThunk(
+  "auth/resendVerificationEmail",
+  async (email, Thunk) => {
+    try {
+      const response = await axios.post("resendVerificationEmail", email);
+      return response?.data;
+    } catch (error) {
+      return Thunk.rejectWithValue(error);
+    }
+  }
+);

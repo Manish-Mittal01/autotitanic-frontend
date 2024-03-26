@@ -10,7 +10,7 @@ import { getAllMake, getAllModel } from "../../redux/makeAndModel/thunk";
 import { getVehicleCount } from "../../redux/vehicles/thunk";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
 import SelectBox from "../selectBox";
-import { preventMinus } from "../../utils";
+import { categories, preventMinus } from "../../utils";
 import { handlePopularCarsMakeList } from "../../utils/filters/cars";
 import parseKey, { parseCamelKey } from "../../utils/parseKey";
 // import { handlePopularMakeList } from "../../utils/filters";
@@ -50,11 +50,16 @@ export default function HeroSection({ showFilterBox = true }) {
   };
 
   const handleMakeList = async () => {
-    handleApiRequest(getAllMake, { type: pathname.replace("/", "") });
+    handleApiRequest(getAllMake, {
+      type: pathname === "/rentals" ? filters.type?.value || "rentals" : pathname.replace("/", ""),
+    });
   };
 
   const handleModelList = async () => {
-    handleApiRequest(getAllModel, { makeId: filters.make.value, type: pathname.replace("/", "") });
+    handleApiRequest(getAllModel, {
+      makeId: filters.make.value,
+      type: pathname === "/rentals" ? filters.type?.value || "rentals" : pathname.replace("/", ""),
+    });
   };
 
   const handleResultCount = async () => {
@@ -107,7 +112,8 @@ export default function HeroSection({ showFilterBox = true }) {
   useEffect(() => {
     switch (pathname) {
       case "/cars":
-        setHeroBanner("/assets/images/carHome.jpg");
+        setHeroBanner("/assets/images/banner.jpg");
+        // setHeroBanner("/assets/images/carHome.jpg");
         break;
       case "/bikes":
         setHeroBanner("/assets/images/bikeHome.jpg");
@@ -163,6 +169,12 @@ export default function HeroSection({ showFilterBox = true }) {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    if (filters.type) {
+      handleMakeList();
+    }
+  }, [filters.type]);
+
   const CountryFilterOptions = ({ data, isDisabled, innerProps, ...props }) => {
     return !isDisabled ? (
       <div {...innerProps} className="pointer p-2">
@@ -177,8 +189,6 @@ export default function HeroSection({ showFilterBox = true }) {
       <span>{data.label}</span>
     </div>
   );
-
-  // console.log("allModels", allModels);
 
   return (
     <div className="mx-0 mx-lg-2">
@@ -203,7 +213,6 @@ export default function HeroSection({ showFilterBox = true }) {
               : pathname.split("/")[1] === "farms"
               ? "Find your perfect Farm Machinery"
               : `Find your perfect ${parseCamelKey(pathname.split("/")[1]?.slice(0, -1))}`}
-            {/* Find your dream {parseCamelKey(pathname.split("/")[1]?.slice(0, -1))} */}
           </h5>
           <SelectBox
             isSearchable={false}
@@ -230,8 +239,27 @@ export default function HeroSection({ showFilterBox = true }) {
               });
             }}
           />
+          {pathname === "/rentals" && (
+            <div className="my-2">
+              <SelectBox
+                placeholder="Select Category"
+                components={{ IndicatorSeparator: null }}
+                options={[...categories]}
+                value={filters.type || ""}
+                onChange={(selected) => {
+                  handleUpdateFilters("type", selected);
+                }}
+              />
+            </div>
+          )}
+
           <div className="d-flex justify-content-between my-2 gap-10">
             <SelectBox
+              styles={{
+                container: (basic) => {
+                  return { ...basic, maxWidth: "150px" };
+                },
+              }}
               classNamePrefix={"makeSelector"}
               formatGroupLabel={MakeGroupLabel}
               placeholder="Make"
@@ -251,6 +279,11 @@ export default function HeroSection({ showFilterBox = true }) {
               }}
             />
             <SelectBox
+              styles={{
+                container: (basic) => {
+                  return { ...basic, maxWidth: "150px" };
+                },
+              }}
               placeholder="Model"
               options={allModels.data?.items || []}
               value={filters.model || ""}
@@ -275,6 +308,11 @@ export default function HeroSection({ showFilterBox = true }) {
           {pathname === "/motorhomes" && (
             <div className="d-flex justify-content-between my-2 gap-10">
               <SelectBox
+                styles={{
+                  container: (basic) => {
+                    return { ...basic, maxWidth: "150px" };
+                  },
+                }}
                 classNamePrefix={"makeSelector"}
                 placeholder="Berth"
                 options={motorhomesBirthOptions}
@@ -284,6 +322,11 @@ export default function HeroSection({ showFilterBox = true }) {
                 }}
               />
               <SelectBox
+                styles={{
+                  container: (basic) => {
+                    return { ...basic, maxWidth: "150px" };
+                  },
+                }}
                 placeholder="Year"
                 options={getYearList()}
                 value={filters.minYear || ""}
@@ -297,6 +340,11 @@ export default function HeroSection({ showFilterBox = true }) {
           {pathname === "/caravans" && (
             <div className="d-flex justify-content-between my-2 gap-10">
               <SelectBox
+                styles={{
+                  container: (basic) => {
+                    return { ...basic, maxWidth: "150px" };
+                  },
+                }}
                 classNamePrefix={"makeSelector"}
                 placeholder="Berth"
                 options={caravansBirthOptions}
@@ -306,6 +354,11 @@ export default function HeroSection({ showFilterBox = true }) {
                 }}
               />
               <SelectBox
+                styles={{
+                  container: (basic) => {
+                    return { ...basic, maxWidth: "150px" };
+                  },
+                }}
                 placeholder="Category"
                 options={caravansCategoryOptions}
                 value={filters.category}
@@ -351,7 +404,7 @@ export default function HeroSection({ showFilterBox = true }) {
             <input
               type="number"
               className="form-control"
-              style={{ height: 40 }}
+              style={{ height: 40, maxWidth: 150 }}
               placeholder="Enter Min Price"
               name="minPrice"
               value={filters.minPrice?.value || ""}
@@ -366,7 +419,7 @@ export default function HeroSection({ showFilterBox = true }) {
             <input
               type="number"
               className="form-control"
-              style={{ height: 40 }}
+              style={{ height: 40, maxWidth: 150 }}
               placeholder="Enter Max Price"
               name="maxPrice"
               value={filters.maxPrice?.value || ""}
@@ -400,7 +453,7 @@ export default function HeroSection({ showFilterBox = true }) {
           <div className="text-center my-3">
             <Button variant="danger" onClick={() => navigate(`${pathname}/all`)}>
               {pathname.includes("rent")
-                ? `Search ${vehiclesCount.data?.totalCount?.toLocaleString()} rental
+                ? `Search ${vehiclesCount.data?.totalCount?.toLocaleString()} 
                 ${parseCamelKey(pathname.split("/")[1])}`
                 : `Search ${vehiclesCount.data?.totalCount?.toLocaleString()} 
               ${parseCamelKey(pathname.replace("/", ""))}`}

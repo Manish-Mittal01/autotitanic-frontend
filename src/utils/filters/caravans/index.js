@@ -28,18 +28,7 @@ export const caravansFilters = [
     name: "year",
     filterOptions: {
       From: { options: getYearList(), key: "minYear" },
-      // .slice(0, -2), key: "minYear" },
       To: { options: getYearList(), key: "maxYear" },
-      // .slice(2), key: "maxYear" },
-    },
-    filterType: "range",
-  },
-  {
-    label: "Mileage",
-    name: "mileage",
-    filterOptions: {
-      Min: { options: vansMileageList.slice(0, -2), key: "minMileage" },
-      Max: { options: vansMileageList.slice(2), key: "maxMileage" },
     },
     filterType: "range",
   },
@@ -50,7 +39,7 @@ export const caravansFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",
@@ -62,7 +51,7 @@ export const caravansFilters = [
     filterType: "normal",
   },
   {
-    label: "Birth",
+    label: "Berth",
     name: "birth",
     filterOptions: caravansBirthOptions,
     filterType: "normal",
@@ -110,7 +99,7 @@ export const caravansPostFeatures = [
     options: caravansCategoryOptions,
   },
   {
-    label: "Birth",
+    label: "Berth",
     value: "birth",
     options: caravansBirthOptions,
   },
@@ -147,9 +136,8 @@ export const caravansDetailsList = [
   { value: "year", label: "Year" },
   { value: "length", label: "Length" },
   { value: "category", label: "Category" },
-  { value: "birth", label: "Birth" },
+  { value: "birth", label: "Berth" },
   { value: "axle", label: "Axle" },
   { value: "mtplm", label: "MTPLM" },
-  { value: "mileage", label: "Mileage" },
   { value: "exteriorColor", label: "Colour" },
 ];

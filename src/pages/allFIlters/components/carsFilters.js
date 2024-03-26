@@ -383,7 +383,7 @@ export default function AllCarsFilters() {
                   />
                 </div>
                 <div className="w-100">
-                  <label>Gear Box</label>
+                  <label>Transmission</label>
                   <Select
                     options={gearBoxOptions}
                     components={{

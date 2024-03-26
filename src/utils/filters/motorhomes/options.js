@@ -85,7 +85,7 @@ export const motorhomesLengthOptions = [
 ];
 
 export const motorhomesBirthOptions = [
-  { value: 1, label: "1 Birth" },
-  { value: 2, label: "2 Birth" },
-  { value: 3, label: "3 Birth" },
+  { value: 1, label: "1 Berth" },
+  { value: 2, label: "2 Berth" },
+  { value: 3, label: "3 Berth" },
 ];

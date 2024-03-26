@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleApiRequest } from "../../services/handleApiRequest";
 import { getCompareList, removeCompareListItem } from "../../redux/vehicles/thunk";
@@ -7,11 +7,21 @@ import { getUserProfile } from "../../redux/profile/thunk";
 import { parseCamelKey } from "../../utils/parseKey";
 import { useNavigate } from "react-router-dom";
 import { compareListDetails } from "../../utils/filters/common";
+import { carsDetailsList } from "../../utils/filters/cars";
+import { bikesDetailsList } from "../../utils/filters/bikes";
+import { vansDetailsList } from "../../utils/filters/vans";
+import { motorhomesDetailsList } from "../../utils/filters/motorhomes";
+import { trucksDetailsList } from "../../utils/filters/trucks";
+import { caravansDetailsList } from "../../utils/filters/caravans";
+import { farmsDetailsList } from "../../utils/filters/farms";
+import { plantsDetailsList } from "../../utils/filters/plants";
+import { partsDetailsList } from "../../utils/filters/partsAndAccessories";
 
 export default function CompareList() {
   const navigate = useNavigate();
   const { compareList } = useSelector((state) => state.vehicles);
   const { userProfile } = useSelector((state) => state.profile);
+  const [itemsToCompare, setItemsToCompare] = useState([]);
 
   const handleCompareList = async () => {
     await handleApiRequest(getCompareList);
@@ -35,6 +45,49 @@ export default function CompareList() {
   useEffect(() => {
     handleCompareList();
   }, []);
+
+  useEffect(() => {
+    if (compareList.data) {
+      const compareListType = compareList.data?.[0]?.vehicle?.type;
+      let newItemsToCompare = [];
+
+      switch (compareListType) {
+        case "cars":
+          newItemsToCompare = [...compareListDetails.common, ...carsDetailsList];
+          break;
+        case "bikes":
+          newItemsToCompare = [...compareListDetails.common, ...bikesDetailsList];
+          break;
+        case "vans":
+          newItemsToCompare = [...compareListDetails.common, ...vansDetailsList];
+          break;
+        case "motorhomes":
+          newItemsToCompare = [...compareListDetails.common, ...motorhomesDetailsList];
+          break;
+        case "trucks":
+          newItemsToCompare = [...compareListDetails.common, ...trucksDetailsList];
+          break;
+        case "caravans":
+          newItemsToCompare = [...compareListDetails.common, ...caravansDetailsList];
+          break;
+        case "farms":
+          newItemsToCompare = [...compareListDetails.common, ...farmsDetailsList];
+          break;
+        case "plants":
+          newItemsToCompare = [...compareListDetails.common, ...plantsDetailsList];
+          break;
+        case "partAndAccessories":
+          newItemsToCompare = [...compareListDetails.common, ...partsDetailsList];
+          break;
+
+        default:
+          break;
+      }
+      setItemsToCompare((prev) => {
+        return newItemsToCompare;
+      });
+    }
+  }, [compareList]);
 
   // console.log("compareList", compareList);
   return (
@@ -73,7 +126,7 @@ export default function CompareList() {
               </tr>
             </thead>
             <tbody>
-              {compareListDetails.cars.map((property, i) => (
+              {itemsToCompare?.map((property, i) => (
                 <tr key={property.value}>
                   <>
                     <td className="comparePropertyContainer darkColor fw-bold">{property.label}</td>

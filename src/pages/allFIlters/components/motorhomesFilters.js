@@ -355,7 +355,7 @@ export default function AllMotorhomesFilters() {
               </fieldset>
               <div className="d-flex justify-content-between my-2 gap-10">
                 <div className="w-100">
-                  <label>Birth</label>
+                  <label>Berth</label>
                   <Select
                     options={motorhomesBirthOptions}
                     components={{
@@ -442,7 +442,7 @@ export default function AllMotorhomesFilters() {
                   />
                 </div>
                 <div className="w-100">
-                  <label>Gear Box</label>
+                  <label>Transmission</label>
                   <Select
                     options={motorhomesGearBoxOptions}
                     components={{

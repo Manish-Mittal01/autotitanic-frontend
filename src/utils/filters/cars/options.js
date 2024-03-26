@@ -22,6 +22,7 @@ export const carsBodyStyleOptions = [
 ];
 
 export const carsMileageList = [
+  { value: "", label: "Any" },
   { value: 50, label: "Up to 50 M" },
   { value: 100, label: "Up to 100 M" },
   { value: 500, label: "Up to 500 M" },

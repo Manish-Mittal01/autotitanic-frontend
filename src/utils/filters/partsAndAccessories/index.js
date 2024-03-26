@@ -20,7 +20,7 @@ export const partsFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",

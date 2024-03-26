@@ -40,9 +40,7 @@ export const carsFilters = [
     name: "year",
     filterOptions: {
       From: { options: getYearList(), key: "minYear" },
-      // .slice(0, -2), key: "minYear" },
       To: { options: getYearList(), key: "maxYear" },
-      // .slice(2), key: "maxYear" },
     },
     filterType: "range",
   },
@@ -50,8 +48,8 @@ export const carsFilters = [
     label: "Mileage",
     name: "mileage",
     filterOptions: {
-      Min: { options: carsMileageList.slice(0, -2), key: "minMileage" },
-      Max: { options: carsMileageList.slice(2), key: "maxMileage" },
+      Min: { options: carsMileageList, key: "minMileage" },
+      Max: { options: carsMileageList, key: "maxMileage" },
     },
     filterType: "range",
   },
@@ -70,7 +68,7 @@ export const carsFilters = [
     filterType: "normal",
   },
   {
-    label: "Private or dealer",
+    label: "Private or Dealer",
     name: "userType",
     filterOptions: sellerOptions,
     filterType: "normal",
@@ -113,7 +111,7 @@ export const carsFilters = [
     filterType: "normal",
   },
   {
-    label: "Gear Box",
+    label: "Transmission",
     name: "gearBox",
     filterOptions: gearBoxOptions,
     filterType: "normal",
@@ -237,7 +235,7 @@ export const carsDetailsList = [
   { value: "year", label: "Year" },
   { value: "bodyStyle", label: "Body" },
   { value: "driverPosition", label: "Driver Position" },
-  { value: "gearBox", label: "Gear Box" },
+  { value: "gearBox", label: "Transmission" },
   { value: "engineSize", label: "Engine Size" },
   { value: "mileage", label: "Mileage" },
   { value: "fuelType", label: "Fuel Type" },

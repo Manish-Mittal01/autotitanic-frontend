@@ -7,7 +7,7 @@ import CarFilters from "./components/carFilters";
 import VehicleCard from "./components/vehicleCard";
 import SelectBox from "../../components/selectBox";
 import { handleApiRequest } from "../../services/handleApiRequest";
-import { getVehicleList, getWishlist } from "../../redux/vehicles/thunk";
+import { getVehicleList } from "../../redux/vehicles/thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { isArray } from "../../utils/dataTypes";
 import { resetFilters, selectFilters } from "../../redux/filters/slice";
@@ -23,7 +23,6 @@ export default function VehiclesList() {
   const navigate = useNavigate();
   const { categoryFilter } = useParams();
   const dispatch = useDispatch();
-
   const { filters } = useSelector((state) => state.filters);
   const { showFilterBar } = useSelector((state) => state.common);
 
@@ -52,21 +51,31 @@ export default function VehiclesList() {
   const handleVehicleList = async () => {
     const newFilters = {};
     Object.entries(filters).forEach((filter) => {
-      newFilters[filter[0]] = filter[1].value || filter[1]._id;
+      if (typeof filter[1] === "object") {
+        newFilters[filter[0]] = filter[1]?.value || filter[1]?._id;
+      } else {
+        newFilters[filter[0]] = filter[1] || "";
+      }
     });
+
     const request = {
-      filters: { ...newFilters, status: "approved" },
+      filters: {
+        ...newFilters,
+        status: "approved",
+        sellOrRent: pathname.includes("rent") ? "rent" : "",
+      },
       paginationDetails: paginationDetails,
     };
+
     const response = await handleApiRequest(getVehicleList, request);
     if (response.status) {
       setVehiclesList(response.data);
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (filters.type || filters.sellOrRent) {
-      handleVehicleList();
+      await handleVehicleList();
     }
   }, [filters, paginationDetails]);
 
@@ -78,41 +87,47 @@ export default function VehiclesList() {
 
   useEffect(() => {
     const category = pathname.split("/");
-    if (pathname.includes("rent")) {
-      let isRentalCategoryFound = false;
-      for (let myCategory of categories) {
-        if (category[1] === myCategory.value) {
-          isRentalCategoryFound = true;
+    if (!filters.type) {
+      if (pathname.includes("rent")) {
+        let isRentalCategoryFound = false;
+        for (let myCategory of categories) {
+          if (category[1] === myCategory.value && category[1] !== "rentals") {
+            isRentalCategoryFound = true;
+          }
         }
-      }
 
-      dispatch(
-        selectFilters({
-          condition: "",
-          type: isRentalCategoryFound ? { value: category[1], label: category[1] } : "",
-          sellOrRent: { value: "rent", label: "rent" },
-        })
-      );
-    } else if (categoryFilter === "used" || categoryFilter === "new") {
-      dispatch(
-        selectFilters({
-          condition: { value: categoryFilter, label: categoryFilter },
-          type: { value: category[1], label: category[1] },
-          sellOrRent: { value: "sell", label: "sell" },
-        })
-      );
-    } else {
-      dispatch(
-        selectFilters({
-          condition: "",
-          type: pathname.includes("rent") ? "" : { value: category[1], label: category[1] },
-          sellOrRent: { value: "sell", label: "sell" },
-        })
-      );
+        dispatch(
+          selectFilters({
+            condition: "",
+            type: isRentalCategoryFound
+              ? { value: category[1], label: category[1] }
+              : filters.type
+              ? filters.type
+              : "",
+            sellOrRent: { value: "rent", label: "Rent" },
+          })
+        );
+      } else if (categoryFilter === "used" || categoryFilter === "new") {
+        dispatch(
+          selectFilters({
+            condition: { value: categoryFilter, label: categoryFilter },
+            type: { value: category[1], label: category[1] },
+            sellOrRent: { value: "sell", label: "sell" },
+          })
+        );
+      } else {
+        dispatch(
+          selectFilters({
+            condition: "",
+            type: pathname.includes("rent") ? "" : { value: category[1], label: category[1] },
+            sellOrRent: { value: "sell", label: "sell" },
+          })
+        );
+      }
     }
   }, [categoryFilter, pathname]);
 
-  // console.log("pathname", pathname);
+  console.log("filters", filters);
 
   return (
     <>

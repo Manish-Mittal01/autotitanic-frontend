@@ -13,6 +13,7 @@ import { getAllCountry } from "../../../redux/countryAndCity/thunk";
 import SelectBox from "../../../components/selectBox";
 import Asterik from "../../../components/common/asterik";
 import { uploadFile } from "../../../redux/common/thunk";
+import { successMsg } from "../../../utils/toastMsg";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -103,6 +104,7 @@ const Register = () => {
 
     const response = await handleApiRequest(register, request);
     if (response.status) {
+      successMsg("A verification link has been sent on your email");
       navigate("/login");
     }
   };
@@ -130,6 +132,8 @@ const Register = () => {
       setSelectedCountry((prev) => ({ ...prev, whatsapp: selectedCountry }));
     }
   }, [userCreds.mobile, userCreds.whatsapp]);
+
+  // manishmittal.tech/verify/email?OTP=${otpResult.otp}
 
   return (
     <>
@@ -261,28 +265,7 @@ const Register = () => {
                               className="countryCodeSelector"
                             >
                               <img src={userCreds.country?.flag || ghanaFlag} width={18} />
-                              {/* <img src={selectedCountry.mobile?.flag || ghanaFlag} width={18} /> */}
                             </Dropdown.Toggle>
-
-                            {/* <Dropdown.Menu className="countryCodeSelectorBox">
-                              {allCountries.data?.items?.map((country) => (
-                                <Dropdown.Item
-                                  className="countryCodeSelectorItem"
-                                  onClick={() => {
-                                    setUserCreds((prev) => ({
-                                      ...prev,
-                                      mobile: `+${country.countryCode}`,
-                                    }));
-                                  }}
-                                >
-                                  <p>
-                                    <img src={country.flag} width={15} className="me-2" />
-                                    {country?.name}
-                                    {` (+${country?.countryCode})`}
-                                  </p>
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu> */}
                           </Dropdown>
                           <input
                             type="text"

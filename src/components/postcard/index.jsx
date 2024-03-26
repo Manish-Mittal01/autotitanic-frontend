@@ -13,7 +13,7 @@ import { addToCompare, addToWishlist } from "../../redux/vehicles/thunk";
 import { successMsg } from "../../utils/toastMsg";
 import { getUserProfile } from "../../redux/profile/thunk";
 import { manageGallery } from "../../redux/common/slice";
-import parseKey from "../../utils/parseKey";
+import parseKey, { parseCamelKey } from "../../utils/parseKey";
 
 export default function PostCard({ post }) {
   const { pathname } = useLocation();
@@ -93,27 +93,31 @@ export default function PostCard({ post }) {
           </div>
           <div className="content">
             <p className="head postCardDetails pb-1 mt-2 mb-0 font-middle">
-              {["/cars", "/vans", "/motorhomes"].includes(pathname)
+              {["cars", "vans", "motorhomes"].includes(post.type)
+                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.gearBox)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`
+                : post.type === "bikes"
+                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.bodyStyle)} | ${parseKey(
+                    post?.mileage
+                  )} Miles`
+                : ["trucks", "farms", "plants"].includes(post.type)
                 ? `${parseKey(post?.year)} Reg | ${parseKey(post?.category)} | ${parseKey(
                     post?.mileage
                   )} Miles`
-                : pathname === "/bikes" || pathname === "/rentals" || pathname.includes("rent")
-                ? `${parseKey(post?.year)} Reg | ${parseKey(post?.condition)} | ${parseKey(
-                    post?.mileage
-                  )} Miles`
-                : ["/caravans", "/trucks", "/farms", "/plants"].includes(pathname)
+                : post.type === "caravans"
                 ? `${parseKey(post?.year)} Reg | ${parseKey(post?.category)} | ${parseKey(
-                    post?.mileage
-                  )} Miles`
-                : pathname === "/partAndAccessories"
-                ? `${parseKey(post?.category)} | ${parseKey(post?.subCategory)} | ${parseKey(
-                    post?.condition
-                  )}`
+                    post?.birth
+                  )} Birth`
+                : post.type === "partAndAccessories"
+                ? `${parseCamelKey(post?.category)} | ${parseCamelKey(
+                    post?.subCategory
+                  )} | ${parseKey(post?.condition)}`
                 : `${parseKey(post?.year)} Reg | ${parseKey(post?.gearBox)} | ${parseKey(
                     post?.mileage
                   )} Miles`}
             </p>
-            {pathname !== "/partAndAccessories" && (
+            {post.type !== "partAndAccessories" && (
               <p className="m-0 text-danger fw-bold postCardMake">
                 {post?.make?.label + " " + post?.model?.label}
               </p>

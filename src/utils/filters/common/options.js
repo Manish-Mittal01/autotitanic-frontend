@@ -119,7 +119,7 @@ export const gearBoxOptions = [
 
 export const sellerOptions = [
   { value: "private", label: "Private" },
-  { value: "Dealer", label: "dealer" },
+  { value: "dealer", label: "Dealer" },
 ];
 export function getYearList() {
   const yearList = [];

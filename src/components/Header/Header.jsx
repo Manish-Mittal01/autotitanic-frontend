@@ -6,7 +6,8 @@ import { ReactComponent as CompareIcon } from "../../Assets/icons/compare.svg";
 import { ReactComponent as GridFilledIcon } from "../../Assets/icons/grid-filled.svg";
 import { ReactComponent as ProfileHolder } from "../../Assets/icons/Profile-holder.svg";
 import { ReactComponent as DownArrow } from "../../Assets/icons/down-arrow.svg";
-import mainLogo from "../../Assets/Images/mainLogo.png";
+import mainLogo from "../../Assets/Images/mainLogo2.png";
+// import mainLogo from "../../Assets/Images/mainLogo.png";
 import { categories } from "../../utils";
 import isUserLoggedin from "../../utils/isUserLoggedin";
 import { handleApiRequest } from "../../services/handleApiRequest";
@@ -129,7 +130,7 @@ const Header = ({ sidebar, setSidebar }) => {
               </div>
               <div className="">
                 <Link to="/cars" className="h-100">
-                  <img src={mainLogo} alt="" className="img-fluid" style={{ height: 30 }} />
+                  <img src={mainLogo} alt="" className="img-fluid" style={{ height: 15 }} />
                 </Link>
               </div>
             </Container>

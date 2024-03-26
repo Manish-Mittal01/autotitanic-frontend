@@ -256,7 +256,7 @@ export default function AllCaravansFilters() {
               </fieldset>
               <div className="d-flex justify-content-between my-2 gap-10">
                 <div className="w-100">
-                  <label>Birth</label>
+                  <label>Berth</label>
                   <Select
                     options={caravansBirthOptions}
                     components={{

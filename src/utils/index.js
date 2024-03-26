@@ -5,8 +5,8 @@ export const categories = [
   { value: "motorhomes", label: "Motorhomes" },
   { value: "caravans", label: "Caravans" },
   { value: "trucks", label: "Trucks" },
-  { value: "farms", label: "Farms" },
-  { value: "plants", label: "Plants" },
+  { value: "farms", label: "Farm" },
+  { value: "plants", label: "Plant" },
   { value: "rentals", label: "Rentals" },
   { value: "partAndAccessories", label: "Parts & Accessories" },
 ];

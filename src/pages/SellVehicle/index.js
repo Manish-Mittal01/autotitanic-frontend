@@ -103,7 +103,8 @@ export default function SellVehicle() {
               </h5>
             )}
             <h4 className="m-0 my-2  text-center">
-              {postDetails.type?.label ? postDetails.type?.label?.slice(0, -1) : "Car"} details
+              Ad details
+              {/* {postDetails.type?.label ? postDetails.type?.label?.slice(0, -1) : "Car"} details */}
             </h4>
           </Row>
           {postUploadStep === 1 ? (
@@ -290,17 +291,21 @@ export const PostStepOne = ({
     postDetails.country &&
     postDetails.city &&
     postDetails.type &&
-    (localImages?.length >= 5 || localImages?.length <= 20)
+    (((postDetails.type?.value === "partAndAccessories" ||
+      postDetails.type === "partAndAccessories") &&
+      localImages?.length >= 2 &&
+      localImages?.length <= 15) ||
+      ((postDetails.type?.value !== "partAndAccessories" ||
+        postDetails.type !== "partAndAccessories") &&
+        localImages?.length >= 5 &&
+        localImages?.length <= 20)) &&
+    (((postDetails.type?.value === "rentals" || postDetails.type === "rentals") &&
+      postDetails?.rentalType) ||
+      (postDetails.type?.value !== "rentals" && postDetails.type !== "rentals"))
   ) {
-    if (
-      (postDetails.type?.value === "rentals" || postDetails.type === "rentals") &&
-      postDetails?.rentalType
-    ) {
-      proceedToNextStep = true;
-    } else if (postDetails.type?.value !== "rentals" && postDetails.type !== "rentals") {
-      proceedToNextStep = true;
-    }
+    proceedToNextStep = true;
   }
+
   return (
     <>
       <Col md={6} className="sellFeatureBoxWrapper">
@@ -387,6 +392,7 @@ export const PostStepOne = ({
 
         <label>
           Images<span className="text-danger">*</span>
+          <span className="small text-muted"> (Support format: *.pnj and *.jpg)</span>
         </label>
         <p className="small text-muted">Add at least 5 and maximum 20 images ( Max 5MB )</p>
         <div className="postImageWrapper d-flex align-items-center">
@@ -541,10 +547,6 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
     });
   };
 
-  const handleVariantList = async () => {
-    handleApiRequest(getAllVariant, postDetails.model?.value);
-  };
-
   useEffect(() => {
     handleMakeList();
   }, []);
@@ -685,7 +687,9 @@ export const PostStepTwo = ({ postDetails, setPostDetails, featuresList, setFeat
         )}
 
         {postDetails.type?.value !== "partAndAccessories" &&
-          postDetails.type !== "partAndAccessories" && (
+          postDetails.type !== "partAndAccessories" &&
+          postDetails.type?.value !== "caravans" &&
+          postDetails.type !== "caravans" && (
             <Col md={6} className="my-2">
               <label htmlFor="" className="form-label mb-0">
                 Mileage (per mile)

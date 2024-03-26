@@ -105,7 +105,7 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
           <RxCross2 />
         </span>
         <div className="d-flex align-items-center mt-4">
-          <p className="rating">{reviews.rating || 0}</p>
+          <p className="rating mainDarkColor">{reviews.rating || 0}</p>
           <div className="ms-2" style={{ lineHeight: "15px" }}>
             <p className="m-0 fw-bold">{reviews?.ratingType}</p>
             <p className="extraSmall m-0">{reviews.totalCount || 0} Reviews</p>
@@ -195,13 +195,13 @@ export default function ReviewDrawer({ userAction, setUserAction }) {
                   {review.repliesCount > 0 && (
                     <p className="pointer mb-0">
                       <span
-                        className="loadReplyBtn pointer small p-1 mx-1"
+                        className="loadReplyBtn mainDarkColor rounded pointer small p-1 px-2 mx-1"
                         onClick={() => {
                           setShowReplies(review._id);
                           handleReplyList(review._id);
                         }}
                       >
-                        Load {review.repliesCount} replies
+                        Read {review.repliesCount} replies
                       </span>
                     </p>
                   )}

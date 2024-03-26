@@ -1,15 +1,22 @@
 export const compareListDetails = {
+  common: [
+    { value: "location", label: "Location" },
+    { value: "price", label: "Price" },
+    { value: "make", label: "Make" },
+    { value: "model", label: "Model" },
+  ],
   cars: [
     { value: "location", label: "Location" },
     { value: "price", label: "Price" },
     { value: "make", label: "Make" },
     { value: "model", label: "Model" },
+
     { value: "condition", label: "Condition" },
     { value: "year", label: "Year" },
     { value: "mileage", label: "Mileage" },
     { value: "fuelType", label: "Fuel Type" },
     { value: "bodyStyle", label: "Body Style" },
-    { value: "gearBox", label: "Gear Box" },
+    { value: "gearBox", label: "Transmission" },
     { value: "engineSize", label: "Engine Size" },
     { value: "door", label: "Door" },
     { value: "seat", label: "Seats" },
@@ -18,7 +25,6 @@ export const compareListDetails = {
     { value: "bootSpace", label: "Boot Space" },
     { value: "accelration", label: "Acceleration" },
     { value: "co2Emission", label: "Co2 Emission" },
-    // { value: "reviews", label: "Reviews" },
   ],
 };
 

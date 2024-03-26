@@ -2,6 +2,7 @@ import SuccessScreen from "./components/successScreen";
 import Login from "./pages/AuthPage/Login/Index";
 import Register from "./pages/AuthPage/register";
 import ResetPassword from "./pages/AuthPage/resetPassword";
+import VerifyEmail from "./pages/AuthPage/verifyEmail";
 import SellVehicle from "./pages/SellVehicle";
 import AllFilters from "./pages/allFIlters";
 import CompareList from "./pages/compareList";
@@ -28,6 +29,10 @@ export const publicRoutes = [
   {
     path: "/details/:id",
     element: <VehicleDetails />,
+  },
+  {
+    path: "/verify/email",
+    element: <VerifyEmail />,
   },
 ];
 
